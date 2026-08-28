@@ -4,15 +4,11 @@
   var PAGE_KEY = "the-meow-sutra:last-id";
   var LANG_KEY = "the-meow-sutra:lang";
   var HEALING_INTERVAL_MS = 12000;
-  var DONGJA_COUNT = 24;
-  var DONGJA_COLS = 6;
-  var DONGJA_ROWS = 4;
 
   var COPY = {
     ko: {
-      siteTitle: "The Threefold Lotus Sutra",
-      siteSubtitle: "법화삼부경",
-      archive: "대승경전 사상과 가르침의 완성 '불경의 왕'",
+      siteTitle: "법화삼부경과 연뿌리 이야기",
+      archive: "법화삼부경을 통한 축복의 여정",
       recitation: "한글번역",
       explanation: "해설",
       english: "English",
@@ -27,9 +23,13 @@
       ad: "광고",
       adHint: "AdSense 영역",
       footer: "한 장의 경전, 한 번의 숨.",
-      toc: "목차",
-      tocOpen: "목차 열기",
-      tocClose: "목차 닫기",
+      toc: "불경",
+      tocOpen: "불경 열기",
+      tocClose: "닫기",
+      categories: "카테고리",
+      journey: "마음의 여정",
+      scripture: "불경",
+      work: "법화삼부경",
       share: "이 페이지 공유",
       shareTitle: "이 페이지 이어보기",
       shareHint: "이 주소를 보내면, 나중에 같은 쪽부터 다시 볼 수 있습니다.",
@@ -47,9 +47,8 @@
       shareText: "법화삼부경 {n}쪽부터 이어서 보기",
     },
     en: {
-      siteTitle: "The Threefold Lotus Sutra",
-      siteSubtitle: "법화삼부경",
-      archive: "The fulfillment of Mahayana thought and teaching, 'King of Sutras'",
+      siteTitle: "Lotus Root & Sutra",
+      archive: "The Journey of Blessing Through The Threefold Lotus Sutra",
       recitation: "Korean Translation",
       explanation: "Commentary",
       english: "English",
@@ -64,9 +63,13 @@
       ad: "Ad",
       adHint: "AdSense slot",
       footer: "One page, one quiet breath.",
-      toc: "Contents",
-      tocOpen: "Open contents",
-      tocClose: "Close contents",
+      toc: "Sutras",
+      tocOpen: "Open sutras",
+      tocClose: "Close",
+      categories: "Categories",
+      journey: "Journey of the Mind",
+      scripture: "Sutras",
+      work: "Threefold Lotus Sutra",
       share: "Share this page",
       shareTitle: "Continue from this page",
       shareHint: "Send this link and you can open it later on the same page.",
@@ -123,23 +126,6 @@
         "</svg>",
     },
     {
-      id: "novice",
-      ko: "동자승이 차를 우려 오는 중입니다.",
-      en: "The novice is brewing a quiet cup of tea.",
-      svg:
-        '<svg viewBox="0 0 220 140" aria-hidden="true">' +
-        '<ellipse cx="110" cy="126" rx="36" ry="8" fill="#d9cbb3"/>' +
-        '<path d="M78 124c6-34 16-46 32-46s26 12 32 46z" fill="#6b5340" stroke="#2c2418" stroke-width="1.6" class="breathe"/>' +
-        '<path d="M92 92 h36 v8 h-36z" fill="#8e1d1d"/>' +
-        '<circle cx="110" cy="58" r="22" fill="#f0dcc4" stroke="#2c2418" stroke-width="1.6"/>' +
-        '<path d="M92 50 q18-16 36 0" fill="#2c2418"/>' +
-        '<g class="eye-blink"><path d="M100 60 q4 4 8 0" fill="none" stroke="#2c2418" stroke-width="1.5"/><path d="M112 60 q4 4 8 0" fill="none" stroke="#2c2418" stroke-width="1.5"/></g>' +
-        '<circle cx="110" cy="54" r="1.4" fill="#8e1d1d"/>' +
-        '<path d="M106 70 q4 5 8 0" fill="none" stroke="#8e1d1d" stroke-width="1.2"/>' +
-        '<circle cx="154" cy="78" r="10" fill="none" stroke="#b8954a" stroke-width="1.4" class="float-y"/>' +
-        "</svg>",
-    },
-    {
       id: "reading",
       ko: "냥. 이 구절이 마음에 든다.",
       en: "Meow. This verse sits well in the heart.",
@@ -153,25 +139,6 @@
         '<g class="eye-blink"><ellipse cx="100" cy="64" rx="3" ry="3.6" fill="#2c2418"/><ellipse cx="120" cy="64" rx="3" ry="3.6" fill="#2c2418"/></g>' +
         '<circle cx="110" cy="74" r="2.2" fill="#8e1d1d"/>' +
         '<path d="M58 70c-10 18 6 34 24 28" fill="none" stroke="#2c2418" stroke-width="1.6" class="tail-wag"/>' +
-        "</svg>",
-    },
-    {
-      id: "together",
-      ko: "함께 읽으면, 글자가 따뜻해집니다.",
-      en: "Read together, and the letters grow warm.",
-      svg:
-        '<svg viewBox="0 0 240 140" aria-hidden="true">' +
-        '<path d="M70 124c6-36 18-50 36-50s30 14 36 50z" fill="#6b5340" stroke="#2c2418" stroke-width="1.5" class="breathe"/>' +
-        '<circle cx="106" cy="56" r="20" fill="#f0dcc4" stroke="#2c2418" stroke-width="1.5"/>' +
-        '<path d="M90 48 q16-14 32 0" fill="#2c2418"/>' +
-        '<g class="eye-blink"><circle cx="98" cy="58" r="2.2" fill="#2c2418"/><circle cx="114" cy="58" r="2.2" fill="#2c2418"/></g>' +
-        '<path d="M102 68 q4 4 8 0" stroke="#8e1d1d" fill="none"/>' +
-        '<ellipse cx="168" cy="112" rx="28" ry="16" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.5"/>' +
-        '<circle cx="178" cy="92" r="16" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.5"/>' +
-        '<path d="M166 82 L164 68 L176 78Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.4"/>' +
-        '<path d="M190 82 L194 68 L180 78Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.4"/>' +
-        '<g class="eye-blink"><circle cx="172" cy="92" r="1.8" fill="#2c2418"/><circle cx="184" cy="92" r="1.8" fill="#2c2418"/></g>' +
-        '<path d="M198 108c14 2 20 12 12 18" fill="none" stroke="#2c2418" stroke-width="1.5" class="tail-wag"/>' +
         "</svg>",
     },
     {
@@ -206,23 +173,6 @@
         '<path d="M168 78c0-10 14-18 14-4 8-2 16 10 4 16-12 2-18-4-18-12z" fill="#f4eee0" stroke="#8e1d1d" stroke-width="1.4" class="float-y"/>' +
         "</svg>",
     },
-    {
-      id: "quiet",
-      ko: "마음이 고요해지는 시간입니다.",
-      en: "A quiet hour for the heart.",
-      svg:
-        '<svg viewBox="0 0 220 140" aria-hidden="true">' +
-        '<ellipse cx="110" cy="126" rx="36" ry="8" fill="#d9cbb3"/>' +
-        '<path d="M78 124c6-34 16-46 32-46s26 12 32 46z" fill="#6b5340" stroke="#2c2418" stroke-width="1.6" class="breathe"/>' +
-        '<path d="M92 92 h36 v8 h-36z" fill="#8e1d1d"/>' +
-        '<circle cx="110" cy="58" r="22" fill="#f0dcc4" stroke="#2c2418" stroke-width="1.6"/>' +
-        '<path d="M92 50 q18-16 36 0" fill="#2c2418"/>' +
-        '<g class="eye-blink"><path d="M100 60 q4 4 8 0" fill="none" stroke="#2c2418" stroke-width="1.5"/><path d="M112 60 q4 4 8 0" fill="none" stroke="#2c2418" stroke-width="1.5"/></g>' +
-        '<circle cx="110" cy="54" r="1.4" fill="#8e1d1d"/>' +
-        '<path d="M106 70 q4 5 8 0" fill="none" stroke="#8e1d1d" stroke-width="1.2"/>' +
-        '<circle cx="154" cy="78" r="10" fill="none" stroke="#b8954a" stroke-width="1.4" class="float-y"/>' +
-        "</svg>",
-    },
   ];
 
   var SCRIPT_EL = document.currentScript;
@@ -236,11 +186,12 @@
     healingTimer: null,
     fadeTimer: null,
     resumeTimer: null,
-    dongjaPose: -1,
-    dongjaTimer: null,
     toc: [],
     tocOpen: {},
-    tocDrawer: false,
+    treeOpen: {
+      scripture: false,
+      work: false,
+    },
     shareOpen: false,
     shareCopyTimer: null,
   };
@@ -397,6 +348,7 @@
     renderChrome();
     renderPage(false);
     renderHealingCaption();
+    syncGreetingMode();
   }
 
   function goTo(nextIndex, dir, options) {
@@ -410,17 +362,22 @@
     hideResumeToast();
     ensureActiveTocOpen();
     renderPage(true);
-    swapHealing(true);
-    swapDongja();
+    if (!isGreetingIndex(nextIndex)) swapHealing(true);
     if (!options.skipUrl) syncUrl(!!options.replace);
   }
 
   function goPrev() {
-    goTo(state.index - 1, -1);
+    if (isGreetingView()) return;
+    var prevIndex = adjacentScriptureIndex(state.index, -1);
+    if (prevIndex < 0) return;
+    goTo(prevIndex, -1);
   }
 
   function goNext() {
-    goTo(state.index + 1, 1);
+    if (isGreetingView()) return;
+    var nextIndex = adjacentScriptureIndex(state.index, 1);
+    if (nextIndex < 0) return;
+    goTo(nextIndex, 1);
   }
 
   function isPageJumpOpen() {
@@ -438,16 +395,18 @@
   }
 
   function openPageJump() {
+    if (isGreetingView()) return;
     var form = $("page-jump-form");
     var btn = $("page-jump-btn");
     var input = $("page-jump-input");
     if (!form || !input) return;
 
-    var total = state.sutras.length;
+    var total = scriptureCount();
+    var current = scriptureOrdinal(state.index);
     input.min = "1";
     input.max = String(total);
-    input.value = String(state.index + 1);
-    input.setAttribute("placeholder", pad2(state.index + 1));
+    input.value = String(current);
+    input.setAttribute("placeholder", pad2(current));
     if (btn) btn.hidden = true;
     form.hidden = false;
     window.setTimeout(function () {
@@ -459,12 +418,13 @@
   function submitPageJump(event) {
     if (event) event.preventDefault();
     var input = $("page-jump-input");
-    var total = state.sutras.length;
+    var total = scriptureCount();
     var raw = input ? String(input.value || "").trim() : "";
     var nextPage = parseInt(raw, 10);
     closePageJump();
     if (!nextPage || nextPage < 1 || nextPage > total) return;
-    var nextIndex = nextPage - 1;
+    var nextIndex = indexFromScriptureOrdinal(nextPage);
+    if (nextIndex < 0) return;
     goTo(nextIndex, nextIndex >= state.index ? 1 : -1);
   }
 
@@ -472,7 +432,6 @@
     var copy = t();
     setText("archive-label", copy.archive);
     setText("site-title", copy.siteTitle);
-    setText("site-subtitle", copy.siteSubtitle);
     setText("hanja-label", copy.hanja);
     setText("btn-prev-label", copy.prev);
     setText("btn-next-label", copy.next);
@@ -493,15 +452,13 @@
     }
     if (jumpInput) jumpInput.setAttribute("aria-label", copy.goToPage);
     setText("site-footer", copy.footer);
-    setText("toc-heading", copy.toc);
-    setText("btn-toc", copy.toc);
-    var tocBtn = $("btn-toc");
-    var tocClose = $("btn-toc-close");
-    if (tocBtn) tocBtn.setAttribute("aria-label", copy.tocOpen);
-    if (tocClose) {
-      tocClose.textContent = copy.tocClose;
-      tocClose.setAttribute("aria-label", copy.tocClose);
-    }
+    setText("toc-journey-label", copy.journey);
+    setText("toc-scripture-label", copy.scripture);
+    setText("toc-work-label", copy.work);
+    var catBar = $("cat-bar");
+    if (catBar) catBar.setAttribute("aria-label", copy.categories);
+    syncCategoryTabs();
+    syncTreeOpen();
     setText("ad-desktop-label", copy.ad);
     setText("ad-desktop-hint", copy.adHint);
     setText("ad-mobile-label", copy.ad + " · " + copy.adHint + " · 320×50");
@@ -561,53 +518,75 @@
     if (!page) return;
 
     var copy = t();
-    var total = state.sutras.length;
-    var current = state.index + 1;
+    var greeting = isGreetingView();
+    var total = greeting ? state.sutras.length : scriptureCount();
+    var current = greeting ? state.index + 1 : scriptureOrdinal(state.index);
     var columns = $("columns");
     var progress = $("progress-bar");
     var prevBtn = $("btn-prev");
     var nextBtn = $("btn-next");
     var card = $("sutra-card");
 
-    setText(
-      "chapter-title",
-      state.lang === "en" && page.chapterEn ? page.chapterEn : page.chapter
-    );
+    var titleEl = $("chapter-title");
+    if (titleEl) titleEl.innerHTML = pageHeadingHtml();
     setText("hanja-text", page.hanja);
+    var hanjaText = $("hanja-text");
+    if (hanjaText && hanjaText.parentElement) {
+      hanjaText.parentElement.hidden = !String(page.hanja || "").trim();
+    }
     setText("page-current", pad2(current));
     setText("page-total", pad2(total));
     setText("page-jump-total", pad2(total));
 
-    if (progress) progress.style.width = (current / total) * 100 + "%";
-    setNavLink(prevBtn, state.index - 1, state.index <= 0);
-    setNavLink(nextBtn, state.index + 1, state.index >= total - 1);
+    if (progress) progress.style.width = greeting || !total ? "0%" : (current / total) * 100 + "%";
+    var prevIndex = adjacentScriptureIndex(state.index, -1);
+    var nextIndex = adjacentScriptureIndex(state.index, 1);
+    setNavLink(prevBtn, prevIndex, greeting || prevIndex < 0);
+    setNavLink(nextBtn, nextIndex, greeting || nextIndex < 0);
     updateDocumentMeta();
 
-    var order =
-      state.lang === "en"
-        ? [
-            { kicker: copy.english, body: page.english, emphasize: true, serif: false },
-            { kicker: copy.explanation, body: page.explanationEn, emphasize: false, serif: true },
-          ]
-        : [
-            { kicker: copy.recitation, body: page.recitation, emphasize: true, serif: true },
-            { kicker: copy.explanation, body: page.explanation, emphasize: false, serif: true },
-          ];
+    if (greeting) {
+      var greetBody =
+        state.lang === "en"
+          ? page.english || page.explanationEn || page.recitation || ""
+          : page.recitation || page.explanation || page.english || "";
+      if (columns) {
+        columns.innerHTML = String(greetBody).trim()
+          ? '<section class="flex flex-col px-6 py-8 sm:px-10 sm:py-12">' +
+            '<p class="whitespace-pre-wrap font-serif text-[1.05rem] sm:text-lg leading-loose text-ink">' +
+            escapeHtml(greetBody) +
+            "</p></section>"
+          : "";
+      }
+      if (card) card.hidden = !String(greetBody).trim();
+    } else {
+      if (card) card.hidden = false;
+      var order =
+        state.lang === "en"
+          ? [
+              { kicker: copy.english, body: page.english, emphasize: true, serif: false },
+              { kicker: copy.explanation, body: page.explanationEn, emphasize: false, serif: true },
+            ]
+          : [
+              { kicker: copy.recitation, body: page.recitation, emphasize: true, serif: true },
+              { kicker: copy.explanation, body: page.explanation, emphasize: false, serif: true },
+            ];
 
-    var html = "";
-    var shown = 0;
-    for (var i = 0; i < order.length; i += 1) {
-      if (!String(order[i].body || "").trim()) continue;
-      html += columnHtml(
-        order[i].kicker,
-        order[i].body,
-        order[i].emphasize,
-        order[i].serif,
-        shown > 0
-      );
-      shown += 1;
+      var html = "";
+      var shown = 0;
+      for (var i = 0; i < order.length; i += 1) {
+        if (!String(order[i].body || "").trim()) continue;
+        html += columnHtml(
+          order[i].kicker,
+          order[i].body,
+          order[i].emphasize,
+          order[i].serif,
+          shown > 0
+        );
+        shown += 1;
+      }
+      if (columns) columns.innerHTML = html;
     }
-    if (columns) columns.innerHTML = html;
 
     if (card) {
       card.classList.remove("turn-next", "turn-prev");
@@ -618,6 +597,8 @@
     }
 
     renderToc();
+    syncCategoryTabs();
+    syncGreetingMode();
     if (state.shareOpen) fillShareUrl();
   }
 
@@ -694,52 +675,82 @@
     }, HEALING_INTERVAL_MS);
   }
 
-  function placeDongja() {
-    var stage = $("dongja-stage");
-    var fig = $("dongja");
-    if (!stage || !fig) return;
-
-    var next = Math.floor(Math.random() * DONGJA_COUNT);
-    if (state.dongjaPose >= 0 && DONGJA_COUNT > 1) {
-      while (next === state.dongjaPose) {
-        next = Math.floor(Math.random() * DONGJA_COUNT);
-      }
-    }
-    state.dongjaPose = next;
-
-    var col = next % DONGJA_COLS;
-    var row = Math.floor(next / DONGJA_COLS);
-    fig.style.backgroundPosition =
-      (col / (DONGJA_COLS - 1)) * 100 + "% " + (row / (DONGJA_ROWS - 1)) * 100 + "%";
-
-    var maxLeft = Math.max(0, stage.clientWidth - fig.offsetWidth);
-    fig.style.left = Math.floor(Math.random() * (maxLeft + 1)) + "px";
-    fig.classList.add("is-visible");
-  }
-
-  function swapDongja() {
-    var fig = $("dongja");
-    if (!fig) return;
-    fig.classList.remove("is-visible");
-    if (state.dongjaTimer) window.clearTimeout(state.dongjaTimer);
-    state.dongjaTimer = window.setTimeout(placeDongja, 180);
-  }
-
-  function clampDongja() {
-    var stage = $("dongja-stage");
-    var fig = $("dongja");
-    if (!stage || !fig) return;
-    var maxLeft = Math.max(0, stage.clientWidth - fig.offsetWidth);
-    var current = parseFloat(fig.style.left) || 0;
-    if (current > maxLeft) fig.style.left = maxLeft + "px";
-  }
-
   function loadToc() {
     return Array.isArray(window.SUTRAS_TOC) ? window.SUTRAS_TOC : [];
   }
 
+  function isCategorySutra(sutra) {
+    return !!(sutra && sutra.kind === "category");
+  }
+
+  function isGreetingIndex(index) {
+    var loc = locationOfIndex(index);
+    return !!(loc && loc.sutra && isCategorySutra(loc.sutra));
+  }
+
+  function isGreetingView() {
+    return isGreetingIndex(state.index);
+  }
+
+  function scriptureCount() {
+    var n = 0;
+    for (var i = 0; i < state.sutras.length; i += 1) {
+      if (!isGreetingIndex(i)) n += 1;
+    }
+    return n;
+  }
+
+  function scriptureOrdinal(index) {
+    var n = 0;
+    for (var i = 0; i <= index && i < state.sutras.length; i += 1) {
+      if (!isGreetingIndex(i)) n += 1;
+    }
+    return n;
+  }
+
+  function indexFromScriptureOrdinal(ordinal) {
+    var n = 0;
+    for (var i = 0; i < state.sutras.length; i += 1) {
+      if (isGreetingIndex(i)) continue;
+      n += 1;
+      if (n === ordinal) return i;
+    }
+    return -1;
+  }
+
+  function adjacentScriptureIndex(from, dir) {
+    var i = from + dir;
+    while (i >= 0 && i < state.sutras.length) {
+      if (!isGreetingIndex(i)) return i;
+      i += dir;
+    }
+    return -1;
+  }
+
+  function syncGreetingMode() {
+    var greeting = isGreetingView();
+    document.body.classList.toggle("is-greeting", greeting);
+    if (greeting) {
+      setShareSheet(false);
+      if (state.healingTimer) {
+        window.clearInterval(state.healingTimer);
+        state.healingTimer = null;
+      }
+    } else if (!state.healingTimer) {
+      restartHealingTimer();
+    }
+  }
+
   function sutraHasChapters(sutra) {
     return !!(sutra && sutra.chapters && sutra.chapters.length);
+  }
+
+  function scriptureSutras() {
+    var list = [];
+    for (var i = 0; i < state.toc.length; i += 1) {
+      if (!isCategorySutra(state.toc[i])) list.push(state.toc[i]);
+    }
+    return list;
   }
 
   function pageNumOf(item) {
@@ -845,14 +856,14 @@
     var root = $("toc-nav");
     if (!root) return;
 
-    var drawer = $("toc-drawer");
-    var savedScroll = drawer ? drawer.scrollTop : 0;
+    var savedScroll = root.scrollTop;
     var pageNum = state.index + 1;
     var active = findActiveToc(pageNum);
 
     var html = "";
-    for (var i = 0; i < state.toc.length; i += 1) {
-      var sutra = state.toc[i];
+    var sutras = scriptureSutras();
+    for (var i = 0; i < sutras.length; i += 1) {
+      var sutra = sutras[i];
       var hasKids = sutraHasChapters(sutra);
       var isOpen = hasKids && !!state.tocOpen[sutra.id];
       var sutraActive = active.sutraId === sutra.id && !active.chapterId;
@@ -903,7 +914,7 @@
       html += "</section>";
     }
     root.innerHTML = html;
-    if (drawer) drawer.scrollTop = savedScroll;
+    root.scrollTop = savedScroll;
 
     var activeEl = root.querySelector(".is-active");
     if (activeEl && typeof activeEl.scrollIntoView === "function") {
@@ -1083,7 +1094,67 @@
         chapter: active.chapterId ? findChapter(active.chapterId) : null,
       };
     }
-    return { sutra: state.toc[0] || null, chapter: null };
+    return { sutra: scriptureSutras()[0] || state.toc[0] || null, chapter: null };
+  }
+
+  function withHanja(name, hanja) {
+    if (!hanja) return escapeHtml(name);
+    return escapeHtml(name) + '<span class="chapter-hanja">(' + escapeHtml(hanja) + ")</span>";
+  }
+
+  function pageHeadingLines(index) {
+    var loc = locationOfIndex(index);
+    var sutra = loc && loc.sutra;
+    var chapter = loc && loc.chapter;
+    var page = state.sutras[index] || currentPage();
+    var sutraLine = "";
+    var chapterLine = "";
+
+    if (state.lang === "en") {
+      if (sutra) sutraLine = sutra.en || sutra.ko || "";
+      if (chapter) {
+        chapterLine = "Chapter " + chapter.no + " · " + (chapter.en || chapter.ko || "");
+        if (chapter.noteEn) chapterLine += " (" + chapter.noteEn + ")";
+      }
+    } else {
+      if (sutra) sutraLine = sutra.ko || "";
+      if (chapter) {
+        chapterLine = "제" + chapter.no + "품 " + (chapter.ko || "");
+        if (chapter.note) chapterLine += " (" + chapter.note + ")";
+      }
+    }
+
+    if (!sutraLine && !chapterLine && page) {
+      sutraLine = state.lang === "en" && page.chapterEn ? page.chapterEn : page.chapter || "";
+    }
+
+    return { sutraLine: sutraLine, chapterLine: chapterLine, sutra: sutra, chapter: chapter };
+  }
+
+  function pageHeadingHtml() {
+    var parts = pageHeadingLines(state.index);
+    var html = "";
+    if (parts.sutraLine) {
+      var sutraHtml =
+        state.lang === "en" || !parts.sutra
+          ? escapeHtml(parts.sutraLine)
+          : withHanja(parts.sutra.ko, parts.sutra.hanja);
+      html += '<span class="chapter-line is-sutra">' + sutraHtml + "</span>";
+    }
+    if (parts.chapterLine) {
+      var chapterHtml;
+      if (state.lang === "en" || !parts.chapter) {
+        chapterHtml = escapeHtml(parts.chapterLine);
+      } else {
+        chapterHtml = withHanja("제" + parts.chapter.no + "품 " + parts.chapter.ko, parts.chapter.hanja);
+        if (parts.chapter.note) {
+          chapterHtml +=
+            ' <span class="chapter-hanja">(' + escapeHtml(parts.chapter.note) + ")</span>";
+        }
+      }
+      html += '<span class="chapter-line is-chapter">' + chapterHtml + "</span>";
+    }
+    return html;
   }
 
   function appBase() {
@@ -1110,8 +1181,10 @@
     var loc = locationOfIndex(index);
     var segs = [];
     if (loc.sutra) segs.push(sutraPrimarySlug(loc.sutra));
+    if (loc.sutra && isCategorySutra(loc.sutra)) return segs;
     if (loc.chapter) segs.push(chapterPrimarySlug(loc.chapter));
-    segs.push(String(index + 1));
+    var ordinal = scriptureOrdinal(index);
+    if (ordinal) segs.push(String(ordinal));
     return segs;
   }
 
@@ -1134,7 +1207,7 @@
   }
 
   function shareMessage() {
-    return t().shareText.replace("{n}", String(state.index + 1));
+    return t().shareText.replace("{n}", String(scriptureOrdinal(state.index)));
   }
 
   function parsePageToken(token) {
@@ -1169,12 +1242,16 @@
     }
     if (segs.length) sutraSlug = segs[segs.length - 1];
 
-    if (pageNum > 0) {
-      var idx = pageNum - 1;
-      if (idx >= 0 && idx < state.sutras.length) return idx;
+    var sutra = findSutraBySlug(sutraSlug);
+    if (sutra && isCategorySutra(sutra)) {
+      return firstStartPage(sutra) ? firstStartPage(sutra) - 1 : 0;
     }
 
-    var sutra = findSutraBySlug(sutraSlug);
+    if (pageNum > 0) {
+      var fromOrdinal = indexFromScriptureOrdinal(pageNum);
+      if (fromOrdinal >= 0) return fromOrdinal;
+    }
+
     if (chapterSlug && sutra) {
       var chapter = findChapterBySlug(sutra, chapterSlug);
       if (chapter && pageNumOf(chapter)) return pageNumOf(chapter) - 1;
@@ -1185,13 +1262,17 @@
 
   function updateDocumentMeta() {
     var page = currentPage();
-    var pageNum = state.index + 1;
-    var chapterLabel =
-      state.lang === "en" && page.chapterEn ? page.chapterEn : page.chapter;
+    var heading = pageHeadingLines(state.index);
+    var chapterLabel = [heading.sutraLine, heading.chapterLine].filter(Boolean).join(" · ");
+    if (!chapterLabel) {
+      chapterLabel = state.lang === "en" && page.chapterEn ? page.chapterEn : page.chapter;
+    }
     var titleParts = [];
     if (chapterLabel) titleParts.push(chapterLabel);
-    titleParts.push(state.lang === "en" ? "Page " + pageNum : pageNum + "쪽");
-    document.title = titleParts.join(" · ") + " · 법화삼부경";
+    if (!isGreetingView()) {
+      titleParts.push(state.lang === "en" ? "Page " + scriptureOrdinal(state.index) : scriptureOrdinal(state.index) + "쪽");
+    }
+    document.title = titleParts.join(" · ") + " · " + t().siteTitle;
 
     var descSource =
       (state.lang === "en" ? page.english || page.explanationEn : page.recitation || page.explanation) ||
@@ -1281,8 +1362,33 @@
     );
   }
 
-  function closeTocIfMobile() {
-    if (window.matchMedia("(max-width: 1023px)").matches) setTocDrawer(false);
+  function closeCategoryMenu() {
+    setTreeLevel("scripture", false);
+  }
+
+  function syncCategoryTabs() {
+    var loc = locationOfIndex(state.index);
+    var onJourney = !!(loc && loc.sutra && isCategorySutra(loc.sutra));
+    var journeyWrap = $("toc-journey-wrap");
+    var scriptureWrap = $("toc-scripture-wrap");
+    if (journeyWrap) journeyWrap.classList.toggle("is-current", onJourney);
+    if (scriptureWrap) scriptureWrap.classList.toggle("is-current", !onJourney);
+
+    var journeyLink = $("toc-journey");
+    if (journeyLink) {
+      var journey = findSutra("journey");
+      var start = journey ? firstStartPage(journey) : 1;
+      journeyLink.setAttribute("href", pathForIndex(start ? start - 1 : 0));
+    }
+  }
+
+  function onJourneyClick(event) {
+    if (shouldLetBrowserNavigate(event)) return;
+    event.preventDefault();
+    closeCategoryMenu();
+    var journey = findSutra("journey");
+    var start = journey ? firstStartPage(journey) : 1;
+    goToPageNumber(start || 1);
   }
 
   function goToPageNumber(pageNum) {
@@ -1301,27 +1407,35 @@
       renderToc();
       return;
     }
-    if (goToPageNumber(firstStartPage(sutra))) closeTocIfMobile();
+    if (goToPageNumber(firstStartPage(sutra))) closeCategoryMenu();
   }
 
   function onTocChapterClick(chapterId) {
     var chapter = findChapter(chapterId);
     if (!chapter) return;
-    if (goToPageNumber(pageNumOf(chapter))) closeTocIfMobile();
+    if (goToPageNumber(pageNumOf(chapter))) closeCategoryMenu();
   }
 
-  function setTocDrawer(open) {
-    state.tocDrawer = !!open;
-    var drawer = $("toc-drawer");
-    var backdrop = $("toc-backdrop");
-    var btn = $("btn-toc");
-    if (drawer) drawer.classList.toggle("is-open", state.tocDrawer);
-    if (backdrop) {
-      backdrop.hidden = !state.tocDrawer;
-      backdrop.classList.toggle("is-open", state.tocDrawer);
-    }
-    if (btn) btn.setAttribute("aria-expanded", state.tocDrawer ? "true" : "false");
-    document.body.style.overflow = state.tocDrawer && window.matchMedia("(max-width: 1023px)").matches ? "hidden" : "";
+  function syncTreeOpen() {
+    var scriptureWrap = $("toc-scripture-wrap");
+    var workWrap = $("toc-work-wrap");
+    var scriptureBtn = $("toc-scripture");
+    var workBtn = $("toc-work");
+    if (scriptureWrap) scriptureWrap.classList.toggle("is-open", !!state.treeOpen.scripture);
+    if (workWrap) workWrap.classList.toggle("is-open", !!state.treeOpen.work);
+    if (scriptureBtn) scriptureBtn.setAttribute("aria-expanded", state.treeOpen.scripture ? "true" : "false");
+    if (workBtn) workBtn.setAttribute("aria-expanded", state.treeOpen.work ? "true" : "false");
+  }
+
+  function setTreeLevel(level, open) {
+    if (level !== "scripture" && level !== "work") return;
+    state.treeOpen[level] = !!open;
+    if (level === "scripture" && !open) state.treeOpen.work = false;
+    syncTreeOpen();
+  }
+
+  function toggleTreeLevel(level) {
+    setTreeLevel(level, !state.treeOpen[level]);
   }
 
   function canNativeShare() {
@@ -1368,7 +1482,7 @@
 
   function setShareSheet(open) {
     state.shareOpen = !!open;
-    if (state.shareOpen && state.tocDrawer) setTocDrawer(false);
+    if (state.shareOpen) closeCategoryMenu();
     var sheet = $("share-sheet");
     var backdrop = $("share-backdrop");
     var btn = $("btn-share");
@@ -1550,20 +1664,16 @@
         setShareSheet(false);
         return;
       }
-      if (event.key === "Escape" && state.tocDrawer) {
-        setTocDrawer(false);
+      if (event.key === "Escape" && (state.treeOpen.scripture || state.treeOpen.work)) {
+        closeCategoryMenu();
         return;
       }
       if (isPageJumpOpen()) return;
       if (state.shareOpen) return;
+      if (isGreetingView()) return;
       if (event.key === "ArrowLeft") goPrev();
       if (event.key === "ArrowRight") goNext();
     });
-    window.addEventListener("resize", function () {
-      clampDongja();
-      if (window.matchMedia("(min-width: 1024px)").matches) setTocDrawer(false);
-    });
-
     window.addEventListener("popstate", applyLocationFromUrl);
     window.addEventListener("hashchange", function () {
       if (location.protocol === "file:" || location.hash.indexOf("#/") === 0) {
@@ -1571,6 +1681,33 @@
       }
     });
 
+    var journeyLink = $("toc-journey");
+    if (journeyLink) {
+      journeyLink.addEventListener("click", function (event) {
+        event.stopPropagation();
+        onJourneyClick(event);
+      });
+    }
+    var scriptureBtn = $("toc-scripture");
+    if (scriptureBtn) {
+      scriptureBtn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        toggleTreeLevel("scripture");
+      });
+    }
+    var workBtn = $("toc-work");
+    if (workBtn) {
+      workBtn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        if (!state.treeOpen.scripture) setTreeLevel("scripture", true);
+        toggleTreeLevel("work");
+      });
+    }
+    document.addEventListener("click", function (event) {
+      var bar = $("cat-bar");
+      if (!bar || bar.contains(event.target)) return;
+      if (state.treeOpen.scripture || state.treeOpen.work) closeCategoryMenu();
+    });
     var tocNav = $("toc-nav");
     if (tocNav) {
       tocNav.addEventListener("click", function (event) {
@@ -1587,24 +1724,6 @@
           event.preventDefault();
           onTocChapterClick(chBtn.getAttribute("data-toc-chapter"));
         }
-      });
-    }
-    var tocBtn = $("btn-toc");
-    if (tocBtn) {
-      tocBtn.addEventListener("click", function () {
-        setTocDrawer(!state.tocDrawer);
-      });
-    }
-    var tocClose = $("btn-toc-close");
-    if (tocClose) {
-      tocClose.addEventListener("click", function () {
-        setTocDrawer(false);
-      });
-    }
-    var backdrop = $("toc-backdrop");
-    if (backdrop) {
-      backdrop.addEventListener("click", function () {
-        setTocDrawer(false);
       });
     }
 
@@ -1658,7 +1777,8 @@
     state.sutras = sutras && sutras.length ? sutras : [emptyPage()];
     state.toc = loadToc();
     hydrateTocFromPages();
-    if (state.toc[0]) state.tocOpen[state.toc[0].id] = true;
+    var firstScripture = scriptureSutras()[0];
+    if (firstScripture) state.tocOpen[firstScripture.id] = true;
     state.lang = readSavedLang();
     var fromUrl = indexFromLocation();
     var saved = readSavedIndex(state.sutras);
@@ -1682,10 +1802,9 @@
     renderPage(false);
     syncUrl(true);
     applyMoment(pickMoment());
-    restartHealingTimer();
-    placeDongja();
+    if (!isGreetingView()) restartHealingTimer();
 
-    if (usedResume && !isPreviewMode()) showResumeToast();
+    if (usedResume && !isPreviewMode() && !isGreetingView()) showResumeToast();
   }
 
   loadSutrasFromJson().then(init);

@@ -6,6 +6,9 @@
     <script>
       (function () {
         var SLUGS = {
+          journey: 1,
+          mind: 1,
+          "journey-of-the-mind": 1,
           muryangui: 1,
           lotus: 1,
           fugen: 1,
@@ -57,18 +60,18 @@
     </script>
     <meta
       name="description"
-      content="The Threefold Lotus Sutra — 법화삼부경 · 대승경전 사상과 가르침의 완성 '불경의 왕'"
+      content="법화삼부경과 연뿌리 이야기 — 법화삼부경을 통한 축복의 여정"
     />
     <meta property="og:type" content="article" />
-    <meta property="og:site_name" content="법화삼부경" />
-    <meta property="og:title" content="The Threefold Lotus Sutra · 법화삼부경" />
-    <meta property="og:description" content="법화삼부경 · 대승경전 사상과 가르침의 완성 '불경의 왕'" />
+    <meta property="og:site_name" content="법화삼부경과 연뿌리 이야기" />
+    <meta property="og:title" content="법화삼부경과 연뿌리 이야기 · Lotus Root &amp; Sutra" />
+    <meta property="og:description" content="법화삼부경을 통한 축복의 여정 · The Journey of Blessing Through The Threefold Lotus Sutra" />
     <meta property="og:url" content="" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="The Threefold Lotus Sutra · 법화삼부경" />
-    <meta name="twitter:description" content="법화삼부경 · 대승경전 사상과 가르침의 완성 '불경의 왕'" />
+    <meta name="twitter:title" content="법화삼부경과 연뿌리 이야기 · Lotus Root &amp; Sutra" />
+    <meta name="twitter:description" content="법화삼부경을 통한 축복의 여정 · The Journey of Blessing Through The Threefold Lotus Sutra" />
     <link rel="canonical" href="" />
-    <title>The Threefold Lotus Sutra · 법화삼부경</title>
+    <title>법화삼부경과 연뿌리 이야기 · Lotus Root &amp; Sutra</title>
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23F6F1E6'/%3E%3Crect x='10' y='10' width='44' height='44' rx='3' fill='%238E1D1D'/%3E%3Cpath fill='%23F6F1E6' d='M32 18c-1.2 3.2-4 5.4-7.2 6.2 3.4.6 6.2 2.8 7.2 6.1 1-3.3 3.8-5.5 7.2-6.1C36 23.4 33.2 21.2 32 18z'/%3E%3Ccircle cx='32' cy='40' r='7.5' fill='none' stroke='%23F6F1E6' stroke-width='2'/%3E%3Cpath d='M24 46.5c2.6 2 5.2 3 8 3s5.4-1 8-3' fill='none' stroke='%23F6F1E6' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"
@@ -76,7 +79,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Serif+KR:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -95,8 +98,9 @@
               gold: "#b8954a",
             },
             fontFamily: {
-              serif: ['"Noto Serif KR"', "Source Han Serif", "serif"],
-              display: ['"Cormorant Garamond"', '"Noto Serif KR"', "serif"],
+              sans: ["var(--font-cjk)"],
+              serif: ["var(--font-cjk)"],
+              display: ["var(--font-cjk)"],
             },
           },
         },
@@ -107,11 +111,21 @@
         scroll-behavior: smooth;
       }
 
+      :root {
+        --font-cjk: "Noto Sans KR", "Noto Sans CJK KR", "Noto Sans SC", "Source Han Sans K",
+          "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      }
+
       body {
         margin: 0;
         min-height: 100svh;
         color: #2c2418;
-        font-family: "Noto Serif KR", "Source Han Serif", serif;
+        font-family: var(--font-cjk);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        word-break: keep-all;
+        overflow-wrap: break-word;
         background-color: #ffffff;
         background-image: url("images/background.jpeg");
         background-size: cover;
@@ -283,7 +297,7 @@
       }
 
       .page-nav-label {
-        font-family: "Noto Serif KR", "Source Han Serif", serif;
+        font-family: var(--font-cjk);
         font-size: 0.8rem;
         letter-spacing: 0.04em;
       }
@@ -321,7 +335,7 @@
       .page-jump-input {
         width: 3.6rem;
         text-align: center;
-        font-family: "Cormorant Garamond", "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 0.95rem;
         letter-spacing: 0.12em;
         color: #8e1d1d;
@@ -355,69 +369,186 @@
         }
       }
 
-      .dongja-figure {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 6.2rem;
-        height: 4.65rem;
-        background-color: transparent;
-        background-image: url("images/dongja-sheet.webp");
-        background-repeat: no-repeat;
-        background-size: 600% 400%;
-        background-position: 0 0;
-        filter: drop-shadow(0 3px 5px rgba(44, 36, 24, 0.22));
-        animation: monk-step 4.2s ease-in-out infinite;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.35s ease;
+      .page-heading-stage {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        min-height: 4.75rem;
+        margin-bottom: 0.35rem;
+        padding-left: 0.15rem;
+        text-align: left;
       }
 
-      .dongja-figure.is-visible {
-        opacity: 1;
+      .chapter-heading {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.12rem;
+        margin: 0;
+        max-width: 100%;
+        text-align: left;
+      }
+
+      .chapter-line {
+        display: block;
+        font-weight: 700;
+        line-height: 1.35;
+      }
+
+      .chapter-line.is-sutra {
+        font-size: 1.2rem;
+      }
+
+      .chapter-line.is-chapter {
+        font-size: 1rem;
+        color: #4a3f32;
+      }
+
+      .chapter-hanja {
+        color: #8a7760;
+        font-weight: 500;
       }
 
       @media (min-width: 640px) {
-        .dongja-figure {
-          width: 7.1rem;
-          height: 5.325rem;
+        .page-heading-stage {
+          min-height: 5.5rem;
+        }
+
+        .chapter-line.is-sutra {
+          font-size: 1.4rem;
+        }
+
+        .chapter-line.is-chapter {
+          font-size: 1.15rem;
         }
       }
 
-      .toc-drawer {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
+      .cat-bar {
+        position: relative;
         z-index: 50;
-        display: flex;
-        width: min(20rem, 88vw);
-        transform: translateX(-105%);
-        flex-direction: column;
-        border-right: 1px solid #e5dac4;
-        background: rgba(255, 253, 248, 0.97);
-        box-shadow: 18px 0 40px -24px rgba(44, 36, 24, 0.28);
+        flex-shrink: 0;
+        border-bottom: 1px solid #e5dac4;
+        background: rgba(255, 255, 255, 0.92);
         backdrop-filter: blur(10px);
-        transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
       }
 
-      .toc-drawer.is-open {
-        transform: translateX(0);
+      .cat-bar-inner {
+        display: flex;
+        align-items: stretch;
+        gap: 0.15rem;
+        padding: 0 1rem;
       }
 
-      .toc-backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: 45;
-        background: rgba(44, 36, 24, 0.28);
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.28s ease;
+      .cat-item {
+        position: relative;
+        flex: 0 0 auto;
       }
 
-      .toc-backdrop.is-open {
-        opacity: 1;
-        pointer-events: auto;
+      .cat-tab {
+        display: inline-flex;
+        align-items: center;
+        height: 100%;
+        border: 0;
+        background: transparent;
+        padding: 0.72rem 0.9rem 0.58rem;
+        margin-bottom: -1px;
+        border-bottom: 3px solid transparent;
+        color: #6b5a45;
+        cursor: pointer;
+        font-family: var(--font-cjk);
+        font-size: 0.92rem;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: color 0.2s ease, border-color 0.2s ease;
+      }
+
+      .cat-tab:hover,
+      .cat-tab:focus-visible {
+        color: #2c2418;
+        outline: none;
+      }
+
+      .cat-item.is-current > .cat-tab {
+        color: #8e1d1d;
+        font-weight: 600;
+        border-bottom-color: #8e1d1d;
+      }
+
+      .cat-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 60;
+        min-width: 17.5rem;
+        max-width: min(22rem, 88vw);
+        padding: 0.35rem 0;
+        border: 1px solid #e5dac4;
+        background: rgba(255, 253, 248, 0.98);
+        box-shadow: 0 16px 40px -24px rgba(44, 36, 24, 0.45);
+      }
+
+      .cat-work-btn {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        border: 0;
+        background: transparent;
+        padding: 0.7rem 1rem;
+        text-align: left;
+        cursor: pointer;
+        color: #2c2418;
+        font-family: var(--font-cjk);
+        font-size: 0.92rem;
+        letter-spacing: 0.06em;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .cat-work-btn:hover,
+      .cat-work-btn:focus-visible {
+        background: rgba(142, 29, 29, 0.05);
+        color: #8e1d1d;
+        outline: none;
+      }
+
+      .cat-work-btn .toc-chevron {
+        margin-top: 0;
+        color: #8a7760;
+      }
+
+      .cat-submenu {
+        display: none;
+        max-height: min(62vh, 32rem);
+        overflow-y: auto;
+        border-top: 1px solid #e5dac4;
+      }
+
+      .cat-item.is-open > .cat-menu,
+      .cat-work.is-open > .cat-submenu {
+        display: block;
+      }
+
+      .cat-work.is-open .cat-work-btn .toc-chevron {
+        transform: rotate(90deg);
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .cat-item:hover > .cat-menu {
+          display: block;
+        }
+
+        .cat-work:hover > .cat-submenu,
+        .cat-work:focus-within > .cat-submenu {
+          display: block;
+        }
+
+        .cat-work:hover .cat-work-btn .toc-chevron,
+        .cat-work:focus-within .cat-work-btn .toc-chevron {
+          transform: rotate(90deg);
+        }
       }
 
       .toc-nav {
@@ -482,7 +613,7 @@
 
       .toc-role {
         display: block;
-        font-family: "Cormorant Garamond", "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 10px;
         letter-spacing: 0.22em;
         color: #b8954a;
@@ -491,7 +622,7 @@
       .toc-title {
         display: block;
         margin-top: 0.15rem;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 0.92rem;
         line-height: 1.45;
         color: #2c2418;
@@ -530,7 +661,7 @@
         cursor: pointer;
         color: #6b5a45;
         border-radius: 2px;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 0.8rem;
         line-height: 1.45;
         transition: background 0.25s ease, color 0.25s ease;
@@ -552,7 +683,7 @@
         border: 1px solid #dcd2be;
         background: #faf6ed;
         color: #6b5a45;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 0.8rem;
         letter-spacing: 0.08em;
         padding: 0.4rem 0.7rem;
@@ -568,22 +699,25 @@
         outline: none;
       }
 
-      @media (min-width: 1024px) {
-        .toc-drawer {
-          position: sticky;
-          top: 0;
-          align-self: flex-start;
-          z-index: 20;
-          height: 100svh;
-          width: 18.5rem;
-          transform: none;
-          box-shadow: none;
-          background: rgba(255, 253, 248, 0.82);
+      @media (min-width: 640px) {
+        .cat-bar-inner {
+          padding: 0 1.5rem;
         }
+      }
 
-        .toc-backdrop {
-          display: none;
+      @media (min-width: 1024px) {
+        .cat-bar-inner {
+          padding: 0 2rem;
         }
+      }
+
+      body.is-greeting #progress-wrap,
+      body.is-greeting #page-nav,
+      body.is-greeting #share-wrap,
+      body.is-greeting #healing-section,
+      body.is-greeting #site-footer,
+      body.is-greeting .seal-in {
+        display: none !important;
       }
 
       .share-trigger {
@@ -594,7 +728,7 @@
         border: 1px solid #dcd2be;
         background: #faf6ed;
         color: #6b5a45;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 0.82rem;
         letter-spacing: 0.08em;
         padding: 0.48rem 1.05rem;
@@ -674,14 +808,14 @@
 
       .share-heading {
         margin: 0;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 1.05rem;
         color: #2c2418;
       }
 
       .share-hint {
         margin: 0.35rem 0 0;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 0.82rem;
         line-height: 1.55;
         color: #6b5a45;
@@ -714,7 +848,7 @@
       .share-url {
         min-width: 0;
         flex: 1;
-        font-family: "Cormorant Garamond", "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 0.82rem;
         letter-spacing: 0.02em;
         color: #2c2418;
@@ -736,7 +870,7 @@
         border: 1px solid #8e1d1d;
         background: #8e1d1d;
         color: #fbf6ea;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 0.78rem;
         letter-spacing: 0.06em;
         padding: 0.48rem 0.75rem;
@@ -785,7 +919,7 @@
         border: 1px solid #e5dac4;
         background: #fff;
         color: #6b5a45;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 0.72rem;
         letter-spacing: 0.02em;
         padding: 0.55rem 0.2rem 0.45rem;
@@ -835,29 +969,22 @@
     </div>
 
     <div class="relative flex min-h-svh flex-col pb-32 lg:pb-10">
-      <div class="h-[3px] shrink-0 bg-paper-deep">
+      <div id="progress-wrap" class="h-[3px] shrink-0 bg-paper-deep">
         <div id="progress-bar" class="h-full bg-seal transition-all duration-500" style="width: 0%"></div>
       </div>
       <div id="preview-banner" class="hidden shrink-0 border-b border-seal/30 bg-[#faf6ed] px-4 py-2 text-center font-serif text-sm text-seal">
         미리보기 · 아직 사이트 파일에는 반영되지 않은 작성 중인 글입니다
       </div>
 
-      <header class="relative shrink-0 border-b border-[#e5dac4] bg-white/85 backdrop-blur-md">
+      <header class="relative shrink-0 bg-white/85 backdrop-blur-md">
         <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:max-w-none lg:px-8">
-          <div class="flex min-w-0 items-center gap-3">
-            <button id="btn-toc" type="button" class="toc-btn shrink-0 lg:hidden" aria-expanded="false" aria-controls="toc-drawer">
-              목차
-            </button>
-            <div class="min-w-0">
-            <p id="archive-label" class="font-display text-[11px] tracking-[0.12em] text-seal">
-              대승경전 사상과 가르침의 완성 '불경의 왕'
+          <div class="min-w-0">
+            <p id="archive-label" class="font-display text-[11px] tracking-[0.08em] text-seal sm:tracking-[0.12em]">
+              법화삼부경을 통한 축복의 여정
             </p>
             <h1 class="mt-1 truncate font-display text-2xl leading-none text-ink sm:text-3xl">
-              <span id="site-title">The Threefold Lotus Sutra</span>
-              <span class="mx-2 text-seal">/</span>
-              <span id="site-subtitle" class="font-serif text-[1.05rem] sm:text-xl">법화삼부경</span>
+              <span id="site-title">법화삼부경과 연뿌리 이야기</span>
             </h1>
-            </div>
           </div>
 
           <div class="flex shrink-0 rounded-full border border-[#dcd2be] bg-[#faf6ed] p-1 shadow-inner" role="group" aria-label="Language">
@@ -871,23 +998,57 @@
         </div>
       </header>
 
+      <nav id="cat-bar" class="cat-bar" aria-label="카테고리">
+        <div class="cat-bar-inner">
+          <div id="toc-journey-wrap" class="cat-item">
+            <a
+              id="toc-journey"
+              class="cat-tab"
+              href="./"
+              data-toc-level="journey"
+            >
+              <span id="toc-journey-label">마음의 여정</span>
+            </a>
+          </div>
+          <div id="toc-scripture-wrap" class="cat-item is-current">
+            <button
+              id="toc-scripture"
+              type="button"
+              class="cat-tab"
+              data-toc-level="scripture"
+              aria-expanded="false"
+              aria-controls="cat-menu-scripture"
+            >
+              <span id="toc-scripture-label">불경</span>
+            </button>
+            <div id="cat-menu-scripture" class="cat-menu" role="menu">
+              <div id="toc-work-wrap" class="cat-work">
+                <button
+                  id="toc-work"
+                  type="button"
+                  class="cat-work-btn"
+                  data-toc-level="work"
+                  aria-expanded="false"
+                  aria-controls="toc-nav"
+                >
+                  <span id="toc-work-label">법화삼부경</span>
+                  <span class="toc-chevron" aria-hidden="true">▸</span>
+                </button>
+                <nav id="toc-nav" class="toc-nav cat-submenu" aria-labelledby="toc-work-label"></nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       <div id="resume-toast" class="pointer-events-none fixed top-20 right-4 z-[80] hidden rounded-sm border border-seal/30 bg-white/95 px-4 py-2 font-serif text-sm text-seal shadow-sm fade-up" role="status"></div>
 
-      <div id="toc-backdrop" class="toc-backdrop lg:hidden" hidden></div>
-      <div class="relative flex min-h-0 flex-1">
-      <aside id="toc-drawer" class="toc-drawer" aria-label="목차">
-        <div class="flex items-center justify-between gap-2 border-b border-[#e5dac4] px-4 py-3 lg:py-4">
-          <p id="toc-heading" class="font-display text-xs tracking-[0.22em] text-seal">목차</p>
-          <button id="btn-toc-close" type="button" class="toc-btn lg:hidden" aria-label="목차 닫기">닫기</button>
-        </div>
-        <nav id="toc-nav" class="toc-nav min-h-0 flex-1 overflow-y-auto" aria-labelledby="toc-heading"></nav>
-      </aside>
       <main class="relative mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6 lg:py-10">
         <div class="my-auto w-full">
-        <div id="dongja-stage" class="relative mb-1 h-[4.75rem] w-full sm:h-[5.5rem]" aria-hidden="true">
-          <div id="dongja" class="dongja-figure"></div>
+        <div class="page-heading-stage">
+          <h2 id="chapter-title" class="chapter-heading font-serif text-ink lang-fade"></h2>
         </div>
-        <article id="sutra-card" class="hanji-card relative overflow-hidden rounded-sm lang-fade">
+        <article id="sutra-card" class="hanji-card relative overflow-hidden rounded-sm lang-fade" aria-labelledby="chapter-title">
           <div class="binding absolute inset-y-0 left-0 w-[6px]" aria-hidden="true"></div>
           <div class="seal-in pointer-events-none absolute top-5 right-5 hidden h-12 w-12 items-center justify-center border-2 border-seal/80 font-serif text-[10px] leading-tight text-seal sm:flex" aria-hidden="true">
             猫<br />經
@@ -898,15 +1059,14 @@
             <p id="hanja-label" class="font-display text-xs uppercase tracking-[0.22em] text-gold">
               원문
             </p>
-            <h2 id="chapter-title" class="mt-2 font-serif text-xl sm:text-2xl font-bold text-ink"></h2>
-            <p id="hanja-text" class="mt-4 whitespace-pre-wrap font-serif text-lg sm:text-xl leading-loose tracking-[0.04em] text-ink"></p>
+            <p id="hanja-text" class="mt-3 whitespace-pre-wrap font-serif text-lg sm:text-xl leading-loose tracking-[0.04em] text-ink"></p>
           </header>
 
           <!-- 하단 영역: 한글번역·영문 / 해설·영문해설 -->
           <div id="columns" class="grid grid-cols-1"></div>
         </article>
 
-        <nav class="mt-6 flex items-center justify-between gap-3" aria-label="Pagination">
+        <nav id="page-nav" class="mt-6 flex items-center justify-between gap-3" aria-label="Pagination">
           <a id="btn-prev" class="page-nav-btn" href="./" rel="prev" aria-label="이전 페이지">
             <img class="page-nav-figure" src="images/page-prev.png" alt="" width="541" height="520" />
             <span id="btn-prev-label" class="page-nav-label">이전 페이지</span>
@@ -940,7 +1100,7 @@
           </a>
         </nav>
 
-        <div class="mt-4 flex justify-center">
+        <div id="share-wrap" class="mt-4 flex justify-center">
           <button id="btn-share" type="button" class="share-trigger" aria-haspopup="dialog" aria-controls="share-sheet">
             <svg class="share-trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" />
@@ -951,7 +1111,7 @@
           </button>
         </div>
 
-        <section class="mt-5 flex items-end justify-between gap-4 border-t border-dashed border-[#dcd2be] pt-4" aria-live="polite">
+        <section id="healing-section" class="mt-5 flex items-end justify-between gap-4 border-t border-dashed border-[#dcd2be] pt-4" aria-live="polite">
           <div id="healing-zone" class="flex min-w-0 flex-1 items-end gap-3 transition-all duration-500">
             <div id="healing-art" class="healing-scene shrink-0"></div>
             <p id="healing-caption" class="mb-3 font-serif text-sm leading-relaxed text-ink-muted sm:text-base"></p>
@@ -963,7 +1123,6 @@
         </footer>
         </div>
       </main>
-      </div>
 
       <aside class="fixed inset-x-0 bottom-0 z-40 border-t border-[#e5dac4] bg-white/95 px-3 py-2 backdrop-blur lg:hidden" aria-label="광고">
         <div class="mx-auto flex h-14 max-w-xl items-center justify-center rounded-sm border border-dashed border-[#dcd2be] bg-white/60">

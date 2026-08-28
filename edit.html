@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600&family=Noto+Serif+KR:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,14 +28,19 @@
               gold: "#b8954a",
             },
             fontFamily: {
-              serif: ['"Noto Serif KR"', "serif"],
-              display: ['"Cormorant Garamond"', '"Noto Serif KR"', "serif"],
+              sans: ["var(--font-cjk)"],
+              serif: ["var(--font-cjk)"],
+              display: ["var(--font-cjk)"],
             },
           },
         },
       };
     </script>
     <style>
+      :root {
+        --font-cjk: "Noto Sans KR", "Noto Sans CJK KR", "Noto Sans SC", "Source Han Sans K",
+          "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      }
       html,
       body {
         height: 100%;
@@ -43,7 +48,12 @@
       body {
         margin: 0;
         color: #2c2418;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        word-break: keep-all;
+        overflow-wrap: break-word;
         background: #f4eee0;
       }
       textarea {
@@ -66,7 +76,7 @@
       .toc-range {
         width: 3.4rem;
         text-align: center;
-        font-family: "Noto Serif KR", serif;
+        font-family: var(--font-cjk);
         font-size: 12px;
         color: #8e1d1d;
         background: #fff;

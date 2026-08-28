@@ -1,5 +1,19 @@
 window.SUTRAS_TOC = [
   {
+    "id": "journey",
+    "slug": "journey",
+    "aliases": ["mind", "journey-of-the-mind"],
+    "ko": "마음의 여정",
+    "hanja": "",
+    "role": "",
+    "en": "Journey of the Mind",
+    "roleEn": "",
+    "kind": "category",
+    "startPage": null,
+    "endPage": null,
+    "chapters": []
+  },
+  {
     "id": "muryangui",
     "slug": "muryangui",
     "aliases": ["opening", "opening-sutra"],
