@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>페이지 작성 · 법화삼부경</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23F6F1E6'/%3E%3Crect x='10' y='10' width='44' height='44' rx='3' fill='%238E1D1D'/%3E%3Cpath fill='%23F6F1E6' d='M32 18c-1.2 3.2-4 5.4-7.2 6.2 3.4.6 6.2 2.8 7.2 6.1 1-3.3 3.8-5.5 7.2-6.1C36 23.4 33.2 21.2 32 18z'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600&family=Noto+Serif+KR:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: "#2c2418",
+              "ink-muted": "#6b5a45",
+              "ink-faint": "#8a7760",
+              seal: "#8e1d1d",
+              gold: "#b8954a",
+            },
+            fontFamily: {
+              serif: ['"Noto Serif KR"', "serif"],
+              display: ['"Cormorant Garamond"', '"Noto Serif KR"', "serif"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        color: #2c2418;
+        font-family: "Noto Serif KR", serif;
+        background: #f4eee0;
+      }
+      textarea {
+        resize: vertical;
+      }
+      .field:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #8e1d1d;
+        box-shadow: 0 0 0 3px rgba(142, 29, 29, 0.12);
+      }
+      .list-item.active {
+        background: #fff;
+        border-color: #8e1d1d;
+      }
+      .tab-on {
+        background: #8e1d1d;
+        color: #fbf6ea;
+      }
+      .toc-range {
+        width: 3.4rem;
+        text-align: center;
+        font-family: "Noto Serif KR", serif;
+        font-size: 12px;
+        color: #8e1d1d;
+        background: #fff;
+        border: 1px solid #dcd2be;
+        border-radius: 2px;
+        padding: 0.2rem 0.2rem;
+      }
+      .toc-range:focus {
+        outline: none;
+        border-color: #8e1d1d;
+        box-shadow: 0 0 0 2px rgba(142, 29, 29, 0.12);
+      }
+      .toc-range::-webkit-outer-spin-button,
+      .toc-range::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .toc-range[type="number"] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+      }
+    </style>
+  </head>
+  <body class="h-full overflow-hidden">
+    <div class="flex h-full min-h-0 flex-col">
+      <header class="shrink-0 border-b border-[#e5dac4] bg-white/90 px-4 py-3 backdrop-blur sm:px-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="min-w-0">
+            <p class="font-display text-[11px] tracking-[0.18em] text-seal">작성자 전용 · 방문자는 열지 않습니다</p>
+            <h1 class="font-serif text-xl text-ink sm:text-2xl">페이지 입력 · 수정</h1>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="dirty-flag" class="hidden font-serif text-sm text-seal">저장하지 않은 입력</span>
+            <button id="btn-preview" type="button" class="rounded-sm border border-[#dcd2be] bg-white px-3 py-2 font-serif text-sm hover:border-seal hover:text-seal">
+              미리보기
+            </button>
+            <button id="btn-save" type="button" class="rounded-sm bg-seal px-4 py-2 font-serif text-sm text-[#fbf6ea] shadow-sm hover:bg-[#7a1818]">
+              사이트에 반영
+            </button>
+          </div>
+        </div>
+        <p id="status" class="mt-2 hidden font-serif text-sm text-ink-muted"></p>
+        <div id="restore-banner" class="mt-3 hidden rounded-sm border border-seal/30 bg-[#faf6ed] px-3 py-2 font-serif text-sm">
+          이 브라우저에 저장하지 않은 입력이 있습니다.
+          <button id="btn-restore" type="button" class="ml-2 text-seal underline">이어서 쓰기</button>
+          <button id="btn-discard-draft" type="button" class="ml-2 text-ink-muted underline">버리기</button>
+        </div>
+      </header>
+
+      <div class="flex min-h-0 flex-1">
+        <aside class="flex w-[min(100%,20rem)] shrink-0 flex-col border-r border-[#e5dac4] bg-[#faf6ed]">
+          <div class="flex border-b border-[#e5dac4] p-1">
+            <button id="view-pages" type="button" class="tab-on flex-1 rounded-sm px-2 py-1.5 font-serif text-xs">페이지</button>
+            <button id="view-toc" type="button" class="flex-1 rounded-sm px-2 py-1.5 font-serif text-xs text-ink-muted hover:text-ink">목차</button>
+          </div>
+          <div id="page-panel" class="flex min-h-0 flex-1 flex-col">
+          <div class="flex items-center justify-between gap-2 border-b border-[#e5dac4] px-3 py-2">
+            <p class="font-display text-xs tracking-[0.16em] text-ink-muted">페이지 목록</p>
+            <span id="page-count" class="font-serif text-xs text-seal">0</span>
+          </div>
+          <div id="page-list" class="min-h-0 flex-1 overflow-y-auto p-2"></div>
+          <div class="grid grid-cols-2 gap-1 border-t border-[#e5dac4] p-2">
+            <button id="btn-new" type="button" class="rounded-sm border border-[#dcd2be] bg-white px-2 py-1.5 font-serif text-xs hover:border-seal">새 페이지</button>
+            <button id="btn-dup" type="button" class="rounded-sm border border-[#dcd2be] bg-white px-2 py-1.5 font-serif text-xs hover:border-seal">복제</button>
+            <button id="btn-up" type="button" class="rounded-sm border border-[#dcd2be] bg-white px-2 py-1.5 font-serif text-xs hover:border-seal">위로</button>
+            <button id="btn-down" type="button" class="rounded-sm border border-[#dcd2be] bg-white px-2 py-1.5 font-serif text-xs hover:border-seal">아래로</button>
+            <button id="btn-del" type="button" class="col-span-2 rounded-sm border border-seal/40 bg-white px-2 py-1.5 font-serif text-xs text-seal hover:bg-seal hover:text-[#fbf6ea]">
+              이 페이지 삭제
+            </button>
+          </div>
+          </div>
+          <div id="toc-panel" class="hidden min-h-0 flex-1 flex-col">
+            <div class="border-b border-[#e5dac4] px-3 py-2">
+              <p class="font-display text-xs tracking-[0.16em] text-ink-muted">품별 페이지 범위</p>
+            </div>
+            <div id="toc-editor" class="min-h-0 flex-1 overflow-y-auto p-2"></div>
+            <p class="border-t border-[#e5dac4] px-3 py-2 font-serif text-[11px] leading-relaxed text-ink-faint">
+              각 품의 시작·끝 쪽을 적으면, 방문자가 목차에서 그 품을 눌렀을 때 해당 페이지로 이동합니다. 비워 두면 목록만 보입니다.
+            </p>
+          </div>
+        </aside>
+
+        <main class="flex min-w-0 flex-1 flex-col bg-[#fffdf8]">
+          <div class="flex flex-wrap items-center gap-2 border-b border-[#e5dac4] px-4 py-2 sm:px-6">
+            <div id="tabs" class="flex flex-wrap gap-1" role="tablist">
+              <button type="button" data-tab="all" class="tab-on rounded-full px-3 py-1 font-serif text-xs">전체</button>
+              <button type="button" data-tab="hanja" class="rounded-full px-3 py-1 font-serif text-xs text-ink-muted hover:text-ink">원문</button>
+              <button type="button" data-tab="recitation" class="rounded-full px-3 py-1 font-serif text-xs text-ink-muted hover:text-ink">한글번역</button>
+              <button type="button" data-tab="explanation" class="rounded-full px-3 py-1 font-serif text-xs text-ink-muted hover:text-ink">해설</button>
+              <button type="button" data-tab="english" class="rounded-full px-3 py-1 font-serif text-xs text-ink-muted hover:text-ink">영문</button>
+              <button type="button" data-tab="explanationEn" class="rounded-full px-3 py-1 font-serif text-xs text-ink-muted hover:text-ink">영문해설</button>
+            </div>
+            <p class="ml-auto font-serif text-xs text-ink-faint">Enter로 줄바꿈 · Ctrl+S 로 저장</p>
+          </div>
+
+          <div class="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
+            <div class="mx-auto flex max-w-4xl flex-col gap-4">
+              <label class="block">
+                <span class="mb-1 block font-display text-[11px] tracking-[0.2em] text-seal">품 · 경전 이름</span>
+                <input id="field-chapter" class="field w-full rounded-sm border border-[#dcd2be] bg-white px-3 py-2 font-serif" placeholder="예: 묘법연화경 · 방편품 第二" />
+              </label>
+              <label class="block">
+                <span class="mb-1 block font-display text-[11px] tracking-[0.2em] text-gold">English title</span>
+                <input id="field-chapterEn" class="field w-full rounded-sm border border-[#dcd2be] bg-white px-3 py-2 font-serif" placeholder="Lotus Sutra · Expedient Means, Chapter 2" />
+              </label>
+
+              <label id="box-hanja" class="block">
+                <span class="mb-1 flex items-center justify-between font-display text-[11px] tracking-[0.2em] text-seal">
+                  <span>원문</span><span id="count-hanja" class="font-serif text-ink-faint">0</span>
+                </span>
+                <textarea id="field-hanja" class="field w-full rounded-sm border border-[#dcd2be] bg-white px-3 py-3 font-serif leading-loose" rows="8" placeholder="한문 원문을 그대로 타이핑하세요."></textarea>
+              </label>
+              <label id="box-recitation" class="block">
+                <span class="mb-1 flex items-center justify-between font-display text-[11px] tracking-[0.2em] text-seal">
+                  <span>한글번역</span><span id="count-recitation" class="font-serif text-ink-faint">0</span>
+                </span>
+                <textarea id="field-recitation" class="field w-full rounded-sm border border-[#dcd2be] bg-white px-3 py-3 font-serif leading-loose" rows="8" placeholder="한국어 번역·독송을 타이핑하세요."></textarea>
+              </label>
+              <label id="box-explanation" class="block">
+                <span class="mb-1 flex items-center justify-between font-display text-[11px] tracking-[0.2em] text-seal">
+                  <span>해설</span><span id="count-explanation" class="font-serif text-ink-faint">0</span>
+                </span>
+                <textarea id="field-explanation" class="field w-full rounded-sm border border-[#dcd2be] bg-white px-3 py-3 font-serif leading-relaxed" rows="6" placeholder="이 구절의 해설을 타이핑하세요."></textarea>
+              </label>
+              <label id="box-english" class="block">
+                <span class="mb-1 flex items-center justify-between font-display text-[11px] tracking-[0.2em] text-gold">
+                  <span>English</span><span id="count-english" class="font-serif text-ink-faint">0</span>
+                </span>
+                <textarea id="field-english" class="field w-full rounded-sm border border-[#dcd2be] bg-white px-3 py-3 font-serif leading-relaxed" rows="6" placeholder="English translation of the Korean recitation"></textarea>
+              </label>
+              <label id="box-explanationEn" class="block">
+                <span class="mb-1 flex items-center justify-between font-display text-[11px] tracking-[0.2em] text-gold">
+                  <span>Commentary (EN)</span><span id="count-explanationEn" class="font-serif text-ink-faint">0</span>
+                </span>
+                <textarea id="field-explanationEn" class="field w-full rounded-sm border border-[#dcd2be] bg-white px-3 py-3 font-serif leading-relaxed" rows="6" placeholder="English translation of the commentary"></textarea>
+              </label>
+            </div>
+          </div>
+
+          <footer class="shrink-0 border-t border-[#e5dac4] bg-white/80 px-4 py-3 sm:px-6">
+            <div class="flex flex-wrap items-center gap-2">
+              <button id="btn-import" type="button" class="rounded-sm border border-[#dcd2be] bg-white px-3 py-1.5 font-serif text-xs hover:border-seal">
+                텍스트/JSON 불러오기
+              </button>
+              <input id="file-import" type="file" class="hidden" accept=".txt,.json,.js" multiple />
+              <button id="btn-download-data" type="button" class="rounded-sm border border-[#dcd2be] bg-white px-3 py-1.5 font-serif text-xs hover:border-seal">
+                방문자 파일 받기
+              </button>
+              <button id="btn-download-txt" type="button" class="rounded-sm border border-[#dcd2be] bg-white px-3 py-1.5 font-serif text-xs hover:border-seal">
+                텍스트로 받기
+              </button>
+              <p class="w-full font-serif text-[11px] leading-relaxed text-ink-faint sm:ml-auto sm:w-auto sm:text-right">
+                타이핑은 여기 또는 <code class="text-ink-muted">pages</code> 폴더의 <code class="text-ink-muted">001.txt</code>에서.
+                방문자는 <code class="text-ink-muted">index.html</code>만 엽니다.
+              </p>
+            </div>
+          </footer>
+        </main>
+      </div>
+    </div>
+
+    <script src="toc.data.js"></script>
+    <script src="sutras.data.js"></script>
+    <script src="editor.js"></script>
+  </body>
+</html>
