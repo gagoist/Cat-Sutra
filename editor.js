@@ -359,14 +359,19 @@
       } else {
         for (var ci = 0; ci < chapters.length; ci += 1) {
           var ch = chapters[ci];
+          var chLabel =
+            sutra.kind === "category"
+              ? String(ch.no).padStart(2, "0") + ". " + escapeHtml(ch.ko)
+              : "제" +
+                ch.no +
+                "품 " +
+                escapeHtml(ch.ko) +
+                (ch.hanja ? ' <span class="text-ink-faint">(' + escapeHtml(ch.hanja) + ")</span>" : "") +
+                (ch.note ? ' <span class="text-gold">(' + escapeHtml(ch.note) + ")</span>" : "");
           html +=
             '<div class="mt-2 border-t border-[#efe6d4] pt-2">' +
-            '<p class="font-serif text-xs text-ink">제' +
-            ch.no +
-            "품 " +
-            escapeHtml(ch.ko) +
-            (ch.hanja ? ' <span class="text-ink-faint">(' + escapeHtml(ch.hanja) + ")</span>" : "") +
-            (ch.note ? ' <span class="text-gold">(' + escapeHtml(ch.note) + ")</span>" : "") +
+            '<p class="font-serif text-xs text-ink">' +
+            chLabel +
             "</p>" +
             rangeRow(si, ci, ch) +
             "</div>";

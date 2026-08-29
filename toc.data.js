@@ -11,7 +11,52 @@ window.SUTRAS_TOC = [
     "kind": "category",
     "startPage": null,
     "endPage": null,
-    "chapters": []
+    "chapters": [
+      {
+        "id": "journey-1",
+        "no": 1,
+        "slug": "beginning-this-journey",
+        "aliases": ["beginning", "how-this-journey-began"],
+        "ko": "이 길을 시작하며",
+        "hanja": "",
+        "en": "How This Journey Began",
+        "startPage": 1,
+        "endPage": 1
+      },
+      {
+        "id": "journey-2",
+        "no": 2,
+        "slug": "roots-of-compassion",
+        "aliases": ["roots"],
+        "ko": "나눔의 뿌리",
+        "hanja": "",
+        "en": "Roots of Compassion",
+        "startPage": 2,
+        "endPage": 2
+      },
+      {
+        "id": "journey-3",
+        "no": 3,
+        "slug": "story-of-myohyeonsa",
+        "aliases": ["myohyeonsa"],
+        "ko": "묘현사의 이야기",
+        "hanja": "",
+        "en": "The Story of Myohyeonsa",
+        "startPage": 3,
+        "endPage": 3
+      },
+      {
+        "id": "journey-4",
+        "no": 4,
+        "slug": "encountering-the-lotus-sutra",
+        "aliases": ["encountering-lotus"],
+        "ko": "법화경을 만나다",
+        "hanja": "",
+        "en": "Encountering the Lotus Sutra",
+        "startPage": 4,
+        "endPage": 4
+      }
+    ]
   },
   {
     "id": "muryangui",

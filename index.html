@@ -9,6 +9,15 @@
           journey: 1,
           mind: 1,
           "journey-of-the-mind": 1,
+          "beginning-this-journey": 1,
+          beginning: 1,
+          "how-this-journey-began": 1,
+          "roots-of-compassion": 1,
+          roots: 1,
+          "story-of-myohyeonsa": 1,
+          myohyeonsa: 1,
+          "encountering-the-lotus-sutra": 1,
+          "encountering-lotus": 1,
           muryangui: 1,
           lotus: 1,
           fugen: 1,
@@ -25,7 +34,7 @@
           var segs = path.split("/").filter(Boolean);
           if (segs.length && /^\d+(?:page)?$/i.test(segs[segs.length - 1])) segs.pop();
           if (segs.length && /^chapter-?\d+$/i.test(segs[segs.length - 1])) segs.pop();
-          if (segs.length && SLUGS[String(segs[segs.length - 1]).toLowerCase()]) segs.pop();
+          while (segs.length && SLUGS[String(segs[segs.length - 1]).toLowerCase()]) segs.pop();
           return segs.length ? "/" + segs.join("/") + "/" : "/";
         }
 
@@ -531,6 +540,55 @@
         display: block;
       }
 
+      .cat-sections {
+        margin: 0;
+        padding: 0.2rem 0;
+        list-style: none;
+      }
+
+      .cat-section {
+        display: block;
+        width: 100%;
+        border: 0;
+        background: transparent;
+        padding: 0.65rem 1rem;
+        text-align: left;
+        text-decoration: none;
+        color: #2c2418;
+        font-family: var(--font-cjk);
+        font-size: 0.88rem;
+        letter-spacing: 0.04em;
+        line-height: 1.45;
+        cursor: pointer;
+        box-sizing: border-box;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .cat-section:hover,
+      .cat-section:focus-visible {
+        background: rgba(142, 29, 29, 0.05);
+        color: #8e1d1d;
+        outline: none;
+      }
+
+      .cat-section.is-active {
+        background: rgba(142, 29, 29, 0.08);
+        color: #8e1d1d;
+        font-weight: 600;
+      }
+
+      .cat-section.is-empty {
+        color: #8a7760;
+        cursor: default;
+        opacity: 0.72;
+      }
+
+      .cat-section.is-empty:hover,
+      .cat-section.is-empty:focus-visible {
+        background: transparent;
+        color: #8a7760;
+      }
+
       .cat-work.is-open .cat-work-btn .toc-chevron {
         transform: rotate(90deg);
       }
@@ -1001,14 +1059,19 @@
       <nav id="cat-bar" class="cat-bar" aria-label="카테고리">
         <div class="cat-bar-inner">
           <div id="toc-journey-wrap" class="cat-item">
-            <a
+            <button
               id="toc-journey"
+              type="button"
               class="cat-tab"
-              href="./"
               data-toc-level="journey"
+              aria-expanded="false"
+              aria-controls="cat-menu-journey"
             >
               <span id="toc-journey-label">마음의 여정</span>
-            </a>
+            </button>
+            <div id="cat-menu-journey" class="cat-menu" role="menu">
+              <nav id="toc-journey-nav" aria-labelledby="toc-journey-label"></nav>
+            </div>
           </div>
           <div id="toc-scripture-wrap" class="cat-item is-current">
             <button

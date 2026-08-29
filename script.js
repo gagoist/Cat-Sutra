@@ -191,6 +191,7 @@
     treeOpen: {
       scripture: false,
       work: false,
+      journey: false,
     },
     shareOpen: false,
     shareCopyTimer: null,
@@ -548,8 +549,11 @@
     if (greeting) {
       var greetBody =
         state.lang === "en"
-          ? page.english || page.explanationEn || page.recitation || ""
-          : page.recitation || page.explanation || page.english || "";
+          ? page.english || page.explanationEn || page.recitation || page.hanja || ""
+          : page.recitation || page.explanation || page.hanja || page.english || "";
+      if (hanjaText && hanjaText.parentElement) {
+        hanjaText.parentElement.hidden = true;
+      }
       if (columns) {
         columns.innerHTML = String(greetBody).trim()
           ? '<section class="flex flex-col px-6 py-8 sm:px-10 sm:py-12">' +
@@ -826,7 +830,26 @@
     );
   }
 
-  function chapterTitleHtml(chapter) {
+  function chapterLineText(chapter, sutra) {
+    if (!chapter) return "";
+    if (isCategorySutra(sutra)) {
+      var label = (state.lang === "en" ? chapter.en : chapter.ko) || chapter.ko || chapter.en || "";
+      return pad2(chapter.no) + ". " + label;
+    }
+    if (state.lang === "en") {
+      var enLine = "Chapter " + chapter.no + " · " + (chapter.en || chapter.ko || "");
+      if (chapter.noteEn) enLine += " (" + chapter.noteEn + ")";
+      return enLine;
+    }
+    var koLine = "제" + chapter.no + "품 " + (chapter.ko || "");
+    if (chapter.note) koLine += " (" + chapter.note + ")";
+    return koLine;
+  }
+
+  function chapterTitleHtml(chapter, sutra) {
+    if (isCategorySutra(sutra)) {
+      return escapeHtml(chapterLineText(chapter, sutra));
+    }
     if (state.lang === "en") {
       return (
         "Chapter " +
@@ -906,7 +929,7 @@
             '" data-toc-chapter="' +
             escapeHtml(ch.id) +
             '">' +
-            chapterTitleHtml(ch) +
+            chapterTitleHtml(ch, sutra) +
             "</a></li>";
         }
         html += "</ul>";
@@ -915,11 +938,50 @@
     }
     root.innerHTML = html;
     root.scrollTop = savedScroll;
+    renderJourneyNav();
 
     var activeEl = root.querySelector(".is-active");
     if (activeEl && typeof activeEl.scrollIntoView === "function") {
       activeEl.scrollIntoView({ block: "nearest" });
     }
+  }
+
+  function renderJourneyNav() {
+    var root = $("toc-journey-nav");
+    if (!root) return;
+    var journey = findSutra("journey");
+    if (!journey || !sutraHasChapters(journey)) {
+      root.innerHTML = "";
+      return;
+    }
+
+    var active = findActiveToc(state.index + 1);
+    var html = '<ul class="cat-sections">';
+    for (var c = 0; c < journey.chapters.length; c += 1) {
+      var ch = journey.chapters[c];
+      var chStart = pageNumOf(ch);
+      var chActive = active.chapterId === ch.id;
+      var title = chapterTitleHtml(ch, journey);
+      if (chStart) {
+        html +=
+          '<li><a class="cat-section' +
+          (chActive ? " is-active" : "") +
+          '" href="' +
+          escapeHtml(pathForIndex(chStart - 1)) +
+          '" data-toc-chapter="' +
+          escapeHtml(ch.id) +
+          '" role="menuitem">' +
+          title +
+          "</a></li>";
+      } else {
+        html +=
+          '<li><span class="cat-section is-empty" role="menuitem" aria-disabled="true">' +
+          title +
+          "</span></li>";
+      }
+    }
+    html += "</ul>";
+    root.innerHTML = html;
   }
 
   function findSutra(id) {
@@ -989,14 +1051,28 @@
     return null;
   }
 
+  function chapterSlugSet(chapter) {
+    var set = {};
+    var primary = chapterPrimarySlug(chapter);
+    if (primary) set[primary] = true;
+    if (chapter && chapter.id) set[String(chapter.id).toLowerCase()] = true;
+    var aliases = (chapter && chapter.aliases) || [];
+    for (var i = 0; i < aliases.length; i += 1) {
+      var key = normalizeChapterSlug(aliases[i]);
+      if (key) set[key] = true;
+    }
+    return set;
+  }
+
   function findChapterBySlug(sutra, slug) {
     if (!sutra || !sutraHasChapters(sutra)) return null;
     var key = normalizeChapterSlug(slug);
     var raw = String(slug || "").toLowerCase();
+    if (!key && !raw) return null;
     for (var i = 0; i < sutra.chapters.length; i += 1) {
       var ch = sutra.chapters[i];
-      if (chapterPrimarySlug(ch) === key) return ch;
-      if (String(ch.id).toLowerCase() === raw) return ch;
+      var slugs = chapterSlugSet(ch);
+      if (slugs[key] || slugs[raw]) return ch;
     }
     return null;
   }
@@ -1112,16 +1188,10 @@
 
     if (state.lang === "en") {
       if (sutra) sutraLine = sutra.en || sutra.ko || "";
-      if (chapter) {
-        chapterLine = "Chapter " + chapter.no + " · " + (chapter.en || chapter.ko || "");
-        if (chapter.noteEn) chapterLine += " (" + chapter.noteEn + ")";
-      }
+      if (chapter) chapterLine = chapterLineText(chapter, sutra);
     } else {
       if (sutra) sutraLine = sutra.ko || "";
-      if (chapter) {
-        chapterLine = "제" + chapter.no + "품 " + (chapter.ko || "");
-        if (chapter.note) chapterLine += " (" + chapter.note + ")";
-      }
+      if (chapter) chapterLine = chapterLineText(chapter, sutra);
     }
 
     if (!sutraLine && !chapterLine && page) {
@@ -1143,7 +1213,7 @@
     }
     if (parts.chapterLine) {
       var chapterHtml;
-      if (state.lang === "en" || !parts.chapter) {
+      if (state.lang === "en" || !parts.chapter || isCategorySutra(parts.sutra)) {
         chapterHtml = escapeHtml(parts.chapterLine);
       } else {
         chapterHtml = withHanja("제" + parts.chapter.no + "품 " + parts.chapter.ko, parts.chapter.hanja);
@@ -1181,7 +1251,10 @@
     var loc = locationOfIndex(index);
     var segs = [];
     if (loc.sutra) segs.push(sutraPrimarySlug(loc.sutra));
-    if (loc.sutra && isCategorySutra(loc.sutra)) return segs;
+    if (loc.sutra && isCategorySutra(loc.sutra)) {
+      if (loc.chapter) segs.push(chapterPrimarySlug(loc.chapter));
+      return segs;
+    }
     if (loc.chapter) segs.push(chapterPrimarySlug(loc.chapter));
     var ordinal = scriptureOrdinal(index);
     if (ordinal) segs.push(String(ordinal));
@@ -1244,6 +1317,10 @@
 
     var sutra = findSutraBySlug(sutraSlug);
     if (sutra && isCategorySutra(sutra)) {
+      if (chapterSlug) {
+        var categoryChapter = findChapterBySlug(sutra, chapterSlug);
+        if (categoryChapter && pageNumOf(categoryChapter)) return pageNumOf(categoryChapter) - 1;
+      }
       return firstStartPage(sutra) ? firstStartPage(sutra) - 1 : 0;
     }
 
@@ -1364,6 +1441,7 @@
 
   function closeCategoryMenu() {
     setTreeLevel("scripture", false);
+    setTreeLevel("journey", false);
   }
 
   function syncCategoryTabs() {
@@ -1373,22 +1451,11 @@
     var scriptureWrap = $("toc-scripture-wrap");
     if (journeyWrap) journeyWrap.classList.toggle("is-current", onJourney);
     if (scriptureWrap) scriptureWrap.classList.toggle("is-current", !onJourney);
-
-    var journeyLink = $("toc-journey");
-    if (journeyLink) {
-      var journey = findSutra("journey");
-      var start = journey ? firstStartPage(journey) : 1;
-      journeyLink.setAttribute("href", pathForIndex(start ? start - 1 : 0));
-    }
   }
 
   function onJourneyClick(event) {
-    if (shouldLetBrowserNavigate(event)) return;
     event.preventDefault();
-    closeCategoryMenu();
-    var journey = findSutra("journey");
-    var start = journey ? firstStartPage(journey) : 1;
-    goToPageNumber(start || 1);
+    toggleTreeLevel("journey");
   }
 
   function goToPageNumber(pageNum) {
@@ -1419,18 +1486,27 @@
   function syncTreeOpen() {
     var scriptureWrap = $("toc-scripture-wrap");
     var workWrap = $("toc-work-wrap");
+    var journeyWrap = $("toc-journey-wrap");
     var scriptureBtn = $("toc-scripture");
     var workBtn = $("toc-work");
+    var journeyBtn = $("toc-journey");
     if (scriptureWrap) scriptureWrap.classList.toggle("is-open", !!state.treeOpen.scripture);
     if (workWrap) workWrap.classList.toggle("is-open", !!state.treeOpen.work);
+    if (journeyWrap) journeyWrap.classList.toggle("is-open", !!state.treeOpen.journey);
     if (scriptureBtn) scriptureBtn.setAttribute("aria-expanded", state.treeOpen.scripture ? "true" : "false");
     if (workBtn) workBtn.setAttribute("aria-expanded", state.treeOpen.work ? "true" : "false");
+    if (journeyBtn) journeyBtn.setAttribute("aria-expanded", state.treeOpen.journey ? "true" : "false");
   }
 
   function setTreeLevel(level, open) {
-    if (level !== "scripture" && level !== "work") return;
+    if (level !== "scripture" && level !== "work" && level !== "journey") return;
     state.treeOpen[level] = !!open;
     if (level === "scripture" && !open) state.treeOpen.work = false;
+    if (level === "scripture" && open) state.treeOpen.journey = false;
+    if (level === "journey" && open) {
+      state.treeOpen.scripture = false;
+      state.treeOpen.work = false;
+    }
     syncTreeOpen();
   }
 
@@ -1664,7 +1740,7 @@
         setShareSheet(false);
         return;
       }
-      if (event.key === "Escape" && (state.treeOpen.scripture || state.treeOpen.work)) {
+      if (event.key === "Escape" && (state.treeOpen.scripture || state.treeOpen.work || state.treeOpen.journey)) {
         closeCategoryMenu();
         return;
       }
@@ -1706,8 +1782,18 @@
     document.addEventListener("click", function (event) {
       var bar = $("cat-bar");
       if (!bar || bar.contains(event.target)) return;
-      if (state.treeOpen.scripture || state.treeOpen.work) closeCategoryMenu();
+      if (state.treeOpen.scripture || state.treeOpen.work || state.treeOpen.journey) closeCategoryMenu();
     });
+    var journeyNav = $("toc-journey-nav");
+    if (journeyNav) {
+      journeyNav.addEventListener("click", function (event) {
+        var chBtn = event.target.closest("[data-toc-chapter]");
+        if (!chBtn) return;
+        if (shouldLetBrowserNavigate(event)) return;
+        event.preventDefault();
+        onTocChapterClick(chBtn.getAttribute("data-toc-chapter"));
+      });
+    }
     var tocNav = $("toc-nav");
     if (tocNav) {
       tocNav.addEventListener("click", function (event) {
