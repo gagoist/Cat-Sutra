@@ -91,87 +91,28 @@
   var MOMENTS = [
     {
       id: "lotus",
-      ko: "연꽃 옆에 앉아, 한 장을 기다립니다.",
+      ko: "연꽃 곁에서, 한 장을 기다립니다.",
       en: "Beside a lotus, waiting for the next page.",
-      svg:
-        '<svg viewBox="0 0 220 140" aria-hidden="true">' +
-        '<ellipse class="breathe" cx="108" cy="108" rx="40" ry="22" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<path d="M146 100c18 4 28 18 22 28" fill="none" stroke="#2c2418" stroke-width="1.7" stroke-linecap="round" class="tail-wag"/>' +
-        '<circle cx="100" cy="72" r="28" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<path d="M78 58 L74 34 L94 50Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<path d="M122 58 L126 34 L106 50Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<g class="eye-blink"><ellipse cx="90" cy="72" rx="3.2" ry="4" fill="#2c2418"/><ellipse cx="110" cy="72" rx="3.2" ry="4" fill="#2c2418"/></g>' +
-        '<path d="M100 80 c-3 6 3 6 0 0" fill="none" stroke="#8e1d1d" stroke-width="1.3"/>' +
-        '<path d="M88 84 h-12 M112 84 h12" stroke="#2c2418" stroke-width="1"/>' +
-        '<path d="M168 78c0-10 14-18 14-4 8-2 16 10 4 16-12 2-18-4-18-12z" fill="#f4eee0" stroke="#8e1d1d" stroke-width="1.4" class="float-y"/>' +
-        '<circle cx="176" cy="86" r="2" fill="#8e1d1d"/>' +
-        "</svg>",
     },
     {
       id: "sleep",
       ko: "경전을 덮어도, 숨은 고르게 이어집니다.",
       en: "Even with the sutra closed, the breath stays even.",
-      svg:
-        '<svg viewBox="0 0 220 140" aria-hidden="true">' +
-        '<ellipse cx="110" cy="108" rx="52" ry="18" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7" class="breathe"/>' +
-        '<circle cx="68" cy="92" r="24" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<path d="M50 80 L46 58 L66 74Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.6"/>' +
-        '<path d="M86 80 L90 58 L70 74Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.6"/>' +
-        '<path d="M58 92 q4 3 8 0" fill="none" stroke="#2c2418" stroke-width="1.4"/>' +
-        '<path d="M70 92 q4 3 8 0" fill="none" stroke="#2c2418" stroke-width="1.4"/>' +
-        '<path d="M68 100 c-2 4 2 4 0 0" stroke="#8e1d1d" fill="none"/>' +
-        '<path d="M162 96c16 8 24 2 18-10" fill="none" stroke="#2c2418" stroke-width="1.7" class="tail-wag"/>' +
-        '<text x="150" y="48" fill="#8a7760" font-size="18" class="float-y">z</text>' +
-        '<text x="164" y="34" fill="#8a7760" font-size="13" class="float-y">z</text>' +
-        "</svg>",
     },
     {
       id: "reading",
-      ko: "냥. 이 구절이 마음에 든다.",
-      en: "Meow. This verse sits well in the heart.",
-      svg:
-        '<svg viewBox="0 0 220 140" aria-hidden="true">' +
-        '<rect x="78" y="86" width="70" height="36" rx="3" fill="#f4eee0" stroke="#2c2418" stroke-width="1.5"/>' +
-        '<line x1="113" y1="86" x2="113" y2="122" stroke="#8e1d1d" stroke-width="1.2"/>' +
-        '<circle cx="110" cy="62" r="26" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<path d="M88 48 L84 26 L104 42Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.6"/>' +
-        '<path d="M132 48 L136 26 L116 42Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.6"/>' +
-        '<g class="eye-blink"><ellipse cx="100" cy="64" rx="3" ry="3.6" fill="#2c2418"/><ellipse cx="120" cy="64" rx="3" ry="3.6" fill="#2c2418"/></g>' +
-        '<circle cx="110" cy="74" r="2.2" fill="#8e1d1d"/>' +
-        '<path d="M58 70c-10 18 6 34 24 28" fill="none" stroke="#2c2418" stroke-width="1.6" class="tail-wag"/>' +
-        "</svg>",
+      ko: "이 구절이 마음에 든다.",
+      en: "This verse sits well in the heart.",
     },
     {
       id: "stretch",
       ko: "오늘도 한 장, 천천히.",
       en: "One page today — slowly, kindly.",
-      svg:
-        '<svg viewBox="0 0 220 140" aria-hidden="true">' +
-        '<ellipse cx="120" cy="100" rx="48" ry="16" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7" class="breathe"/>' +
-        '<circle cx="58" cy="86" r="22" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<path d="M42 74 L28 58 L54 70Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.5"/>' +
-        '<path d="M74 74 L86 54 L62 70Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.5"/>' +
-        '<g class="eye-blink"><path d="M48 86 q6 -6 10 0" fill="none" stroke="#2c2418" stroke-width="1.5"/><path d="M60 86 q6 -6 10 0" fill="none" stroke="#2c2418" stroke-width="1.5"/></g>' +
-        '<circle cx="56" cy="94" r="2" fill="#8e1d1d"/>' +
-        '<path d="M170 96c18-16 28-2 22 14" fill="none" stroke="#2c2418" stroke-width="1.7" class="tail-wag"/>' +
-        '<path d="M36 108 v16 M48 108 v18 M152 108 v16 M166 108 v18" stroke="#2c2418" stroke-width="1.5" stroke-linecap="round"/>' +
-        "</svg>",
     },
     {
       id: "samantabhadra",
       ko: "한 걸음이 곧 보현행입니다.",
       en: "A single step is already Samantabhadra’s path.",
-      svg:
-        '<svg viewBox="0 0 220 140" aria-hidden="true">' +
-        '<ellipse class="breathe" cx="108" cy="108" rx="40" ry="22" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<path d="M146 100c18 4 28 18 22 28" fill="none" stroke="#2c2418" stroke-width="1.7" stroke-linecap="round" class="tail-wag"/>' +
-        '<circle cx="100" cy="72" r="28" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<path d="M78 58 L74 34 L94 50Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<path d="M122 58 L126 34 L106 50Z" fill="#e8d4b0" stroke="#2c2418" stroke-width="1.7"/>' +
-        '<g class="eye-blink"><ellipse cx="90" cy="72" rx="3.2" ry="4" fill="#2c2418"/><ellipse cx="110" cy="72" rx="3.2" ry="4" fill="#2c2418"/></g>' +
-        '<path d="M100 80 c-3 6 3 6 0 0" fill="none" stroke="#8e1d1d" stroke-width="1.3"/>' +
-        '<path d="M168 78c0-10 14-18 14-4 8-2 16 10 4 16-12 2-18-4-18-12z" fill="#f4eee0" stroke="#8e1d1d" stroke-width="1.4" class="float-y"/>' +
-        "</svg>",
     },
   ];
 
@@ -471,37 +412,52 @@
     if (koBtn) {
       koBtn.setAttribute("aria-pressed", koOn ? "true" : "false");
       koBtn.className =
-        "rounded-full px-3 py-1.5 font-serif text-sm transition-all duration-300 sm:px-4 " +
-        (koOn ? "bg-seal text-[#fbf6ea] shadow-sm" : "text-ink-muted hover:text-ink");
+        "rounded-full px-3.5 py-1.5 font-sans text-sm tracking-wide transition-all duration-300 sm:px-4 " +
+        (koOn ? "bg-seal text-paper-deep" : "text-ink-muted hover:text-ivory");
     }
     if (enBtn) {
       enBtn.setAttribute("aria-pressed", koOn ? "false" : "true");
       enBtn.className =
-        "rounded-full px-3 py-1.5 font-serif text-sm transition-all duration-300 sm:px-4 " +
-        (!koOn ? "bg-seal text-[#fbf6ea] shadow-sm" : "text-ink-muted hover:text-ink");
+        "rounded-full px-3.5 py-1.5 font-sans text-sm tracking-wide transition-all duration-300 sm:px-4 " +
+        (!koOn ? "bg-seal text-paper-deep" : "text-ink-muted hover:text-ivory");
     }
   }
 
-  function columnHtml(kicker, body, emphasize, serif, bordered) {
-    var sectionClass = "flex flex-col px-6 py-6 sm:px-8 sm:py-8 transition-all duration-500";
-    if (bordered) sectionClass += " border-t border-[#e5dac4]";
-    sectionClass += emphasize ? " bg-[#faf6ed]/50" : " bg-transparent";
-    var textClass = serif ? "font-serif " : "font-display ";
-    textClass += emphasize
-      ? "text-[1.05rem] sm:text-lg leading-loose text-ink"
-      : "text-[0.95rem] leading-relaxed text-ink-muted sm:text-base";
+  function readingParagraphs(text) {
+    var chunks = String(text || "")
+      .replace(/\r\n/g, "\n")
+      .split(/\n+/);
+    var html = "";
+    var i;
+    for (i = 0; i < chunks.length; i += 1) {
+      if (!chunks[i].trim()) continue;
+      html += '<p class="sutra-para">' + escapeHtml(chunks[i]) + "</p>";
+    }
+    return html;
+  }
+
+  function columnHtml(kicker, body, kind, bordered) {
+    var isPrimary = kind === "ko" || kind === "en";
+    var sectionClass = "sutra-section" + (bordered ? " is-bordered" : "") + (isPrimary ? " is-primary" : " is-secondary");
+    var bodyClass = "sutra-body";
+    if (kind === "ko") bodyClass += " sutra-ko";
+    else if (kind === "en") bodyClass += " sutra-en";
+    else if (kind === "commentary-en") bodyClass += " sutra-commentary sutra-en";
+    else bodyClass += " sutra-commentary";
     return (
       '<section class="' +
       sectionClass +
       '">' +
-      '<p class="mb-2 font-display text-[11px] uppercase tracking-[0.32em] text-seal">' +
+      '<div class="sutra-measure">' +
+      '<p class="column-kicker">' +
       escapeHtml(kicker) +
       "</p>" +
-      '<p class="whitespace-pre-wrap ' +
-      textClass +
+      '<div class="' +
+      bodyClass +
       '">' +
-      escapeHtml(body) +
-      "</p>" +
+      readingParagraphs(body) +
+      "</div>" +
+      "</div>" +
       "</section>"
     );
   }
@@ -529,11 +485,19 @@
     var card = $("sutra-card");
 
     var titleEl = $("chapter-title");
-    if (titleEl) titleEl.innerHTML = pageHeadingHtml();
+    if (titleEl) {
+      titleEl.classList.remove("turn-next", "turn-prev");
+      titleEl.innerHTML = pageHeadingHtml();
+      if (animate) {
+        void titleEl.offsetWidth;
+        titleEl.classList.add(state.direction < 0 ? "turn-prev" : "turn-next");
+      }
+    }
     setText("hanja-text", page.hanja);
     var hanjaText = $("hanja-text");
-    if (hanjaText && hanjaText.parentElement) {
-      hanjaText.parentElement.hidden = !String(page.hanja || "").trim();
+    var hanjaHeader = hanjaText && hanjaText.closest("header");
+    if (hanjaHeader) {
+      hanjaHeader.hidden = !String(page.hanja || "").trim();
     }
     setText("page-current", pad2(current));
     setText("page-total", pad2(total));
@@ -551,15 +515,18 @@
         state.lang === "en"
           ? page.english || page.explanationEn || page.recitation || page.hanja || ""
           : page.recitation || page.explanation || page.hanja || page.english || "";
-      if (hanjaText && hanjaText.parentElement) {
-        hanjaText.parentElement.hidden = true;
+      if (hanjaHeader) {
+        hanjaHeader.hidden = true;
       }
       if (columns) {
         columns.innerHTML = String(greetBody).trim()
-          ? '<section class="flex flex-col px-6 py-8 sm:px-10 sm:py-12">' +
-            '<p class="whitespace-pre-wrap font-serif text-[1.05rem] sm:text-lg leading-loose text-ink">' +
-            escapeHtml(greetBody) +
-            "</p></section>"
+          ? '<section class="sutra-section is-primary">' +
+            '<div class="sutra-measure">' +
+            '<div class="sutra-body ' +
+            (state.lang === "en" ? "sutra-en" : "sutra-ko") +
+            '">' +
+            readingParagraphs(greetBody) +
+            "</div></div></section>"
           : "";
       }
       if (card) card.hidden = !String(greetBody).trim();
@@ -568,25 +535,19 @@
       var order =
         state.lang === "en"
           ? [
-              { kicker: copy.english, body: page.english, emphasize: true, serif: false },
-              { kicker: copy.explanation, body: page.explanationEn, emphasize: false, serif: true },
+              { kicker: copy.english, body: page.english, kind: "en" },
+              { kicker: copy.explanation, body: page.explanationEn, kind: "commentary-en" },
             ]
           : [
-              { kicker: copy.recitation, body: page.recitation, emphasize: true, serif: true },
-              { kicker: copy.explanation, body: page.explanation, emphasize: false, serif: true },
+              { kicker: copy.recitation, body: page.recitation, kind: "ko" },
+              { kicker: copy.explanation, body: page.explanation, kind: "commentary" },
             ];
 
       var html = "";
       var shown = 0;
       for (var i = 0; i < order.length; i += 1) {
         if (!String(order[i].body || "").trim()) continue;
-        html += columnHtml(
-          order[i].kicker,
-          order[i].body,
-          order[i].emphasize,
-          order[i].serif,
-          shown > 0
-        );
+        html += columnHtml(order[i].kicker, order[i].body, order[i].kind, shown > 0);
         shown += 1;
       }
       if (columns) columns.innerHTML = html;
@@ -645,7 +606,6 @@
 
   function applyMoment(moment) {
     state.moment = moment;
-    $("healing-art").innerHTML = moment.svg;
     renderHealingCaption();
   }
 
@@ -910,7 +870,7 @@
             '" data-toc-sutra="' +
             escapeHtml(sutra.id) +
             '">') +
-        '<span class="toc-chevron" aria-hidden="true">▸</span>' +
+        '<span class="toc-chevron" aria-hidden="true">›</span>' +
         "<span>" +
         sutraTitleHtml(sutra) +
         "</span>" +

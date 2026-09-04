@@ -83,13 +83,18 @@
     <title>법화삼부경과 연뿌리 이야기 · Lotus Root &amp; Sutra</title>
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23F6F1E6'/%3E%3Crect x='10' y='10' width='44' height='44' rx='3' fill='%238E1D1D'/%3E%3Cpath fill='%23F6F1E6' d='M32 18c-1.2 3.2-4 5.4-7.2 6.2 3.4.6 6.2 2.8 7.2 6.1 1-3.3 3.8-5.5 7.2-6.1C36 23.4 33.2 21.2 32 18z'/%3E%3Ccircle cx='32' cy='40' r='7.5' fill='none' stroke='%23F6F1E6' stroke-width='2'/%3E%3Cpath d='M24 46.5c2.6 2 5.2 3 8 3s5.4-1 8-3' fill='none' stroke='%23F6F1E6' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230E131F'/%3E%3Cpath fill='none' stroke='%23C5A059' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' d='M32 48c-3-14-14-22-22-24 10 3 16 12 22 24 6-12 12-21 22-24-8 2-19 10-22 24z'/%3E%3Cpath fill='none' stroke='%23D4AF37' stroke-width='1.4' stroke-linecap='round' d='M32 48c0-16 2-28 0-36'/%3E%3C/svg%3E"
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
     />
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -97,1099 +102,227 @@
         theme: {
           extend: {
             colors: {
-              paper: "#ffffff",
-              "paper-deep": "#f0f0f0",
-              ink: "#2c2418",
-              "ink-muted": "#6b5a45",
-              "ink-faint": "#8a7760",
-              seal: "#8e1d1d",
-              "seal-soft": "#a83a3a",
-              gold: "#b8954a",
+              paper: "#2c3546",
+              "paper-deep": "#1e2736",
+              ink: "#e2e2e2",
+              "ink-muted": "#a39e94",
+              "ink-faint": "#6e6a62",
+              seal: "#c5a059",
+              "seal-soft": "#d4af37",
+              gold: "#d4af37",
+              ivory: "#f3efe6",
             },
             fontFamily: {
-              sans: ["var(--font-cjk)"],
-              serif: ["var(--font-cjk)"],
-              display: ["var(--font-cjk)"],
+              sans: ["var(--font-sans)"],
+              serif: ["var(--font-serif)"],
+              display: ["var(--font-sans)"],
             },
           },
         },
       };
     </script>
-    <style>
-      html {
-        scroll-behavior: smooth;
-      }
-
-      :root {
-        --font-cjk: "Noto Sans KR", "Noto Sans CJK KR", "Noto Sans SC", "Source Han Sans K",
-          "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100svh;
-        color: #2c2418;
-        font-family: var(--font-cjk);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
-        word-break: keep-all;
-        overflow-wrap: break-word;
-        background-color: #ffffff;
-        background-image: url("images/background.jpeg");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-      }
-
-      ::selection {
-        background: rgba(142, 29, 29, 0.18);
-        color: #2c2418;
-      }
-
-      .hanji-card {
-        background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 248, 248, 0.98)),
-          #ffffff;
-        box-shadow:
-          0 1px 0 rgba(255, 255, 255, 0.9) inset,
-          0 18px 40px -18px rgba(0, 0, 0, 0.1),
-          0 0 0 1px rgba(200, 200, 200, 0.3);
-      }
-
-      .binding {
-        background: linear-gradient(
-          90deg,
-          #7a1818 0%,
-          #a32626 18%,
-          #7a1818 36%,
-          #911f1f 58%,
-          #6e1414 100%
-        );
-      }
-
-      @keyframes page-next {
-        from {
-          opacity: 0;
-          transform: translateY(12px);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-
-      @keyframes page-prev {
-        from {
-          opacity: 0;
-          transform: translateY(-12px);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-
-      .turn-next {
-        animation: page-next 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-
-      .turn-prev {
-        animation: page-prev 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-
-      @keyframes blink {
-        0%, 88%, 100% { transform: scaleY(1); }
-        93% { transform: scaleY(0.08); }
-      }
-
-      @keyframes tail-wag {
-        0%, 100% { transform: rotate(-12deg); }
-        50% { transform: rotate(16deg); }
-      }
-
-      @keyframes float-y {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-7px); }
-      }
-
-      @keyframes breathe {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.035); }
-      }
-
-      @keyframes petal-fall {
-        0% { transform: translate3d(0, -10%, 0) rotate(0deg); opacity: 0; }
-        12% { opacity: 0.55; }
-        100% { transform: translate3d(40px, 110vh, 0) rotate(220deg); opacity: 0; }
-      }
-
-      @keyframes seal-press {
-        0% { transform: scale(1.15) rotate(-8deg); opacity: 0; }
-        100% { transform: scale(1) rotate(-8deg); opacity: 0.92; }
-      }
-
-      @keyframes fade-up {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: none; }
-      }
-
-      .eye-blink { transform-origin: center; animation: blink 4.2s ease-in-out infinite; }
-      .tail-wag { transform-origin: 8px 8px; animation: tail-wag 2.4s ease-in-out infinite; }
-      .float-y { animation: float-y 4.5s ease-in-out infinite; }
-      .breathe { transform-origin: center bottom; animation: breathe 3.6s ease-in-out infinite; }
-      .petal { animation: petal-fall 16s linear infinite; }
-      .seal-in { animation: seal-press 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
-      .fade-up { animation: fade-up 0.45s ease both; }
-      .lang-fade { transition: opacity 0.35s ease, transform 0.35s ease; }
-
-      .healing-scene svg { height: 7rem; width: auto; }
-      @media (min-width: 640px) { .healing-scene svg { height: 8rem; } }
-
-      @keyframes monk-step {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-5px); }
-      }
-
-      .page-nav-btn {
-        display: flex;
-        min-width: 7.5rem;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.35rem;
-        padding: 0.15rem 0.4rem;
-        border: 0;
-        background: transparent;
-        cursor: pointer;
-        color: #6b5a45;
-        text-decoration: none;
-        transition: color 0.3s ease, opacity 0.3s ease;
-      }
-
-      .page-nav-btn:hover:not(:disabled):not([aria-disabled="true"]) {
-        color: #8e1d1d;
-      }
-
-      .page-nav-btn:disabled,
-      .page-nav-btn[aria-disabled="true"] {
-        cursor: not-allowed;
-        opacity: 0.28;
-        pointer-events: none;
-      }
-
-      .page-nav-figure {
-        display: block;
-        height: 5.25rem;
-        width: auto;
-        max-width: 7.5rem;
-        object-fit: contain;
-        filter: drop-shadow(0 10px 14px rgba(44, 36, 24, 0.22));
-        animation: monk-step 3.8s ease-in-out infinite;
-        transition: transform 0.35s ease, filter 0.35s ease;
-      }
-
-      #btn-next .page-nav-figure {
-        animation-delay: 0.45s;
-      }
-
-      .page-nav-btn:hover:not(:disabled):not([aria-disabled="true"]) .page-nav-figure {
-        animation-play-state: paused;
-        filter: drop-shadow(0 0 16px rgba(184, 149, 74, 0.55));
-      }
-
-      #btn-prev:hover:not(:disabled):not([aria-disabled="true"]) .page-nav-figure {
-        transform: translateX(-8px);
-      }
-
-      #btn-next:hover:not(:disabled):not([aria-disabled="true"]) .page-nav-figure {
-        transform: translateX(8px);
-      }
-
-      .page-nav-label {
-        font-family: var(--font-cjk);
-        font-size: 0.8rem;
-        letter-spacing: 0.04em;
-      }
-
-      .page-jump-btn {
-        font: inherit;
-        letter-spacing: inherit;
-        color: inherit;
-        background: transparent;
-        border: 0;
-        cursor: pointer;
-        padding: 0.35rem 0.55rem;
-        border-radius: 2px;
-        transition: color 0.3s ease, background 0.3s ease;
-      }
-
-      .page-jump-btn:hover,
-      .page-jump-btn:focus-visible {
-        color: #8e1d1d;
-        background: rgba(142, 29, 29, 0.06);
-        outline: none;
-      }
-
-      .page-jump-form {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.35rem;
-      }
-
-      .page-jump-form[hidden] {
-        display: none;
-      }
-
-      .page-jump-input {
-        width: 3.6rem;
-        text-align: center;
-        font-family: var(--font-cjk);
-        font-size: 0.95rem;
-        letter-spacing: 0.12em;
-        color: #8e1d1d;
-        background: #faf6ed;
-        border: 1px solid #dcd2be;
-        border-radius: 2px;
-        padding: 0.2rem 0.25rem;
-      }
-
-      .page-jump-input:focus {
-        outline: none;
-        border-color: #8e1d1d;
-        box-shadow: 0 0 0 2px rgba(142, 29, 29, 0.12);
-      }
-
-      .page-jump-input::-webkit-outer-spin-button,
-      .page-jump-input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-      }
-
-      .page-jump-input[type="number"] {
-        -moz-appearance: textfield;
-        appearance: textfield;
-      }
-
-      @media (min-width: 640px) {
-        .page-nav-figure {
-          height: 6.5rem;
-          max-width: 9rem;
-        }
-      }
-
-      .page-heading-stage {
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-start;
-        min-height: 4.75rem;
-        margin-bottom: 0.35rem;
-        padding-left: 0.15rem;
-        text-align: left;
-      }
-
-      .chapter-heading {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.12rem;
-        margin: 0;
-        max-width: 100%;
-        text-align: left;
-      }
-
-      .chapter-line {
-        display: block;
-        font-weight: 700;
-        line-height: 1.35;
-      }
-
-      .chapter-line.is-sutra {
-        font-size: 1.2rem;
-      }
-
-      .chapter-line.is-chapter {
-        font-size: 1rem;
-        color: #4a3f32;
-      }
-
-      .chapter-hanja {
-        color: #8a7760;
-        font-weight: 500;
-      }
-
-      @media (min-width: 640px) {
-        .page-heading-stage {
-          min-height: 5.5rem;
-        }
-
-        .chapter-line.is-sutra {
-          font-size: 1.4rem;
-        }
-
-        .chapter-line.is-chapter {
-          font-size: 1.15rem;
-        }
-      }
-
-      .cat-bar {
-        position: relative;
-        z-index: 50;
-        flex-shrink: 0;
-        border-bottom: 1px solid #e5dac4;
-        background: rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(10px);
-      }
-
-      .cat-bar-inner {
-        display: flex;
-        align-items: stretch;
-        gap: 0.15rem;
-        padding: 0 1rem;
-      }
-
-      .cat-item {
-        position: relative;
-        flex: 0 0 auto;
-      }
-
-      .cat-tab {
-        display: inline-flex;
-        align-items: center;
-        height: 100%;
-        border: 0;
-        background: transparent;
-        padding: 0.72rem 0.9rem 0.58rem;
-        margin-bottom: -1px;
-        border-bottom: 3px solid transparent;
-        color: #6b5a45;
-        cursor: pointer;
-        font-family: var(--font-cjk);
-        font-size: 0.92rem;
-        letter-spacing: 0.04em;
-        white-space: nowrap;
-        text-decoration: none;
-        transition: color 0.2s ease, border-color 0.2s ease;
-      }
-
-      .cat-tab:hover,
-      .cat-tab:focus-visible {
-        color: #2c2418;
-        outline: none;
-      }
-
-      .cat-item.is-current > .cat-tab {
-        color: #8e1d1d;
-        font-weight: 600;
-        border-bottom-color: #8e1d1d;
-      }
-
-      .cat-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        z-index: 60;
-        min-width: 17.5rem;
-        max-width: min(22rem, 88vw);
-        padding: 0.35rem 0;
-        border: 1px solid #e5dac4;
-        background: rgba(255, 253, 248, 0.98);
-        box-shadow: 0 16px 40px -24px rgba(44, 36, 24, 0.45);
-      }
-
-      .cat-work-btn {
-        display: flex;
-        width: 100%;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.75rem;
-        border: 0;
-        background: transparent;
-        padding: 0.7rem 1rem;
-        text-align: left;
-        cursor: pointer;
-        color: #2c2418;
-        font-family: var(--font-cjk);
-        font-size: 0.92rem;
-        letter-spacing: 0.06em;
-        transition: background 0.2s ease, color 0.2s ease;
-      }
-
-      .cat-work-btn:hover,
-      .cat-work-btn:focus-visible {
-        background: rgba(142, 29, 29, 0.05);
-        color: #8e1d1d;
-        outline: none;
-      }
-
-      .cat-work-btn .toc-chevron {
-        margin-top: 0;
-        color: #8a7760;
-      }
-
-      .cat-submenu {
-        display: none;
-        max-height: min(62vh, 32rem);
-        overflow-y: auto;
-        border-top: 1px solid #e5dac4;
-      }
-
-      .cat-item.is-open > .cat-menu,
-      .cat-work.is-open > .cat-submenu {
-        display: block;
-      }
-
-      .cat-sections {
-        margin: 0;
-        padding: 0.2rem 0;
-        list-style: none;
-      }
-
-      .cat-section {
-        display: block;
-        width: 100%;
-        border: 0;
-        background: transparent;
-        padding: 0.65rem 1rem;
-        text-align: left;
-        text-decoration: none;
-        color: #2c2418;
-        font-family: var(--font-cjk);
-        font-size: 0.88rem;
-        letter-spacing: 0.04em;
-        line-height: 1.45;
-        cursor: pointer;
-        box-sizing: border-box;
-        transition: background 0.2s ease, color 0.2s ease;
-      }
-
-      .cat-section:hover,
-      .cat-section:focus-visible {
-        background: rgba(142, 29, 29, 0.05);
-        color: #8e1d1d;
-        outline: none;
-      }
-
-      .cat-section.is-active {
-        background: rgba(142, 29, 29, 0.08);
-        color: #8e1d1d;
-        font-weight: 600;
-      }
-
-      .cat-section.is-empty {
-        color: #8a7760;
-        cursor: default;
-        opacity: 0.72;
-      }
-
-      .cat-section.is-empty:hover,
-      .cat-section.is-empty:focus-visible {
-        background: transparent;
-        color: #8a7760;
-      }
-
-      .cat-work.is-open .cat-work-btn .toc-chevron {
-        transform: rotate(90deg);
-      }
-
-      @media (hover: hover) and (pointer: fine) {
-        .cat-item:hover > .cat-menu {
-          display: block;
-        }
-
-        .cat-work:hover > .cat-submenu,
-        .cat-work:focus-within > .cat-submenu {
-          display: block;
-        }
-
-        .cat-work:hover .cat-work-btn .toc-chevron,
-        .cat-work:focus-within .cat-work-btn .toc-chevron {
-          transform: rotate(90deg);
-        }
-      }
-
-      .toc-nav {
-        padding: 0.5rem 0.65rem 1.5rem;
-      }
-
-      .toc-group + .toc-group {
-        margin-top: 0.35rem;
-        padding-top: 0.35rem;
-        border-top: 1px dashed #e5dac4;
-      }
-
-      .toc-sutra {
-        display: flex;
-        width: 100%;
-        align-items: flex-start;
-        gap: 0.45rem;
-        border: 0;
-        background: transparent;
-        padding: 0.7rem 0.55rem 0.55rem;
-        text-align: left;
-        cursor: pointer;
-        color: inherit;
-        border-radius: 2px;
-        transition: background 0.25s ease, color 0.25s ease;
-      }
-
-      .toc-sutra:hover,
-      .toc-chapter:hover {
-        background: rgba(142, 29, 29, 0.05);
-      }
-
-      a.toc-sutra,
-      a.toc-chapter {
-        text-decoration: none;
-        color: inherit;
-        box-sizing: border-box;
-      }
-
-      .toc-sutra.is-active,
-      .toc-chapter.is-active {
-        background: rgba(142, 29, 29, 0.08);
-        color: #8e1d1d;
-      }
-
-      .toc-chevron {
-        display: inline-block;
-        margin-top: 0.28rem;
-        flex-shrink: 0;
-        font-size: 0.65rem;
-        color: #b8954a;
-        transition: transform 0.22s ease;
-      }
-
-      .toc-sutra.is-open .toc-chevron {
-        transform: rotate(90deg);
-      }
-
-      .toc-sutra.has-no-children .toc-chevron {
-        visibility: hidden;
-      }
-
-      .toc-role {
-        display: block;
-        font-family: var(--font-cjk);
-        font-size: 10px;
-        letter-spacing: 0.22em;
-        color: #b8954a;
-      }
-
-      .toc-title {
-        display: block;
-        margin-top: 0.15rem;
-        font-family: var(--font-cjk);
-        font-size: 0.92rem;
-        line-height: 1.45;
-        color: #2c2418;
-      }
-
-      .toc-hanja {
-        color: #8a7760;
-        font-size: 0.78rem;
-      }
-
-      .toc-sutra.is-active .toc-title,
-      .toc-chapter.is-active .toc-title {
-        color: #8e1d1d;
-      }
-
-      .toc-chapters {
-        display: none;
-        margin: 0 0 0.35rem;
-        padding: 0 0 0.2rem 0.85rem;
-        list-style: none;
-        border-left: 1px solid #e5dac4;
-        margin-left: 0.85rem;
-      }
-
-      .toc-sutra.is-open + .toc-chapters {
-        display: block;
-      }
-
-      .toc-chapter {
-        display: block;
-        width: 100%;
-        border: 0;
-        background: transparent;
-        padding: 0.38rem 0.5rem;
-        text-align: left;
-        cursor: pointer;
-        color: #6b5a45;
-        border-radius: 2px;
-        font-family: var(--font-cjk);
-        font-size: 0.8rem;
-        line-height: 1.45;
-        transition: background 0.25s ease, color 0.25s ease;
-      }
-
-      .toc-chapter .toc-hanja {
-        display: inline;
-        font-size: 0.72rem;
-      }
-
-      .toc-note {
-        color: #b8954a;
-      }
-
-      .toc-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #dcd2be;
-        background: #faf6ed;
-        color: #6b5a45;
-        font-family: var(--font-cjk);
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        padding: 0.4rem 0.7rem;
-        border-radius: 999px;
-        cursor: pointer;
-        transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-      }
-
-      .toc-btn:hover,
-      .toc-btn:focus-visible {
-        color: #8e1d1d;
-        border-color: #8e1d1d;
-        outline: none;
-      }
-
-      @media (min-width: 640px) {
-        .cat-bar-inner {
-          padding: 0 1.5rem;
-        }
-      }
-
-      @media (min-width: 1024px) {
-        .cat-bar-inner {
-          padding: 0 2rem;
-        }
-      }
-
-      body.is-greeting #progress-wrap,
-      body.is-greeting #page-nav,
-      body.is-greeting #share-wrap,
-      body.is-greeting #healing-section,
-      body.is-greeting #site-footer,
-      body.is-greeting .seal-in {
-        display: none !important;
-      }
-
-      .share-trigger {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.45rem;
-        border: 1px solid #dcd2be;
-        background: #faf6ed;
-        color: #6b5a45;
-        font-family: var(--font-cjk);
-        font-size: 0.82rem;
-        letter-spacing: 0.08em;
-        padding: 0.48rem 1.05rem;
-        border-radius: 999px;
-        cursor: pointer;
-        scroll-margin-bottom: 7rem;
-        transition: color 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-      }
-
-      .share-trigger:hover,
-      .share-trigger:focus-visible {
-        color: #8e1d1d;
-        border-color: #8e1d1d;
-        outline: none;
-      }
-
-      .share-trigger-icon {
-        width: 1rem;
-        height: 1rem;
-        flex-shrink: 0;
-      }
-
-      .share-backdrop {
-        position: fixed;
-        inset: 0;
-        z-index: 70;
-        background: rgba(44, 36, 24, 0.32);
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.28s ease;
-      }
-
-      .share-backdrop.is-open {
-        opacity: 1;
-        pointer-events: auto;
-      }
-
-      .share-sheet {
-        position: fixed;
-        z-index: 75;
-        left: 50%;
-        top: 50%;
-        width: min(24.5rem, calc(100vw - 1.5rem));
-        transform: translate(-50%, -46%) scale(0.98);
-        opacity: 0;
-        pointer-events: none;
-        overflow: hidden;
-        border: 1px solid #e5dac4;
-        background:
-          linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(250, 246, 237, 0.98)),
-          #fffdf8;
-        box-shadow: 0 22px 48px -18px rgba(44, 36, 24, 0.28);
-        transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-      }
-
-      .share-sheet.is-open {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translate(-50%, -50%) scale(1);
-      }
-
-      .share-sheet-bar {
-        height: 3px;
-        background: #8e1d1d;
-      }
-
-      .share-sheet-inner {
-        padding: 1.15rem 1.2rem 1.25rem;
-      }
-
-      .share-sheet-head {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 0.75rem;
-      }
-
-      .share-heading {
-        margin: 0;
-        font-family: var(--font-cjk);
-        font-size: 1.05rem;
-        color: #2c2418;
-      }
-
-      .share-hint {
-        margin: 0.35rem 0 0;
-        font-family: var(--font-cjk);
-        font-size: 0.82rem;
-        line-height: 1.55;
-        color: #6b5a45;
-      }
-
-      .share-close {
-        flex-shrink: 0;
-        width: 2rem;
-        height: 2rem;
-        border: 0;
-        background: transparent;
-        color: #8a7760;
-        font-size: 1.35rem;
-        line-height: 1;
-        cursor: pointer;
-      }
-
-      .share-close:hover,
-      .share-close:focus-visible {
-        color: #8e1d1d;
-        outline: none;
-      }
-
-      .share-url-row {
-        display: flex;
-        gap: 0.4rem;
-        margin-top: 1rem;
-      }
-
-      .share-url {
-        min-width: 0;
-        flex: 1;
-        font-family: var(--font-cjk);
-        font-size: 0.82rem;
-        letter-spacing: 0.02em;
-        color: #2c2418;
-        background: #fff;
-        border: 1px solid #dcd2be;
-        border-radius: 2px;
-        padding: 0.48rem 0.55rem;
-      }
-
-      .share-url:focus {
-        outline: none;
-        border-color: #8e1d1d;
-        box-shadow: 0 0 0 2px rgba(142, 29, 29, 0.12);
-      }
-
-      .share-copy,
-      .share-native {
-        flex-shrink: 0;
-        border: 1px solid #8e1d1d;
-        background: #8e1d1d;
-        color: #fbf6ea;
-        font-family: var(--font-cjk);
-        font-size: 0.78rem;
-        letter-spacing: 0.06em;
-        padding: 0.48rem 0.75rem;
-        border-radius: 2px;
-        cursor: pointer;
-      }
-
-      .share-copy:hover,
-      .share-native:hover,
-      .share-copy:focus-visible,
-      .share-native:focus-visible {
-        background: #a83a3a;
-        outline: none;
-      }
-
-      .share-native {
-        display: none;
-        width: 100%;
-        margin-top: 0.7rem;
-        background: #faf6ed;
-        color: #8e1d1d;
-      }
-
-      .share-native.is-available {
-        display: block;
-      }
-
-      .share-native:hover,
-      .share-native:focus-visible {
-        background: #f3ead6;
-        color: #8e1d1d;
-      }
-
-      .share-channels {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.45rem;
-        margin-top: 0.9rem;
-      }
-
-      .share-channel {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.28rem;
-        border: 1px solid #e5dac4;
-        background: #fff;
-        color: #6b5a45;
-        font-family: var(--font-cjk);
-        font-size: 0.72rem;
-        letter-spacing: 0.02em;
-        padding: 0.55rem 0.2rem 0.45rem;
-        border-radius: 2px;
-        cursor: pointer;
-        text-decoration: none;
-        transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-      }
-
-      .share-channel:hover,
-      .share-channel:focus-visible {
-        color: #8e1d1d;
-        border-color: #8e1d1d;
-        background: rgba(142, 29, 29, 0.04);
-        outline: none;
-      }
-
-      .share-channel-icon {
-        width: 1.15rem;
-        height: 1.15rem;
-      }
-
-      @media (max-width: 639px) {
-        .share-sheet {
-          top: auto;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          width: 100%;
-          transform: translateY(12px);
-          border-radius: 14px 14px 0 0;
-        }
-
-        .share-sheet.is-open {
-          transform: translateY(0);
-        }
-      }
-    </style>
+    <meta name="theme-color" content="#1E2736" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body class="min-h-svh">
-    <div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
-      <span class="petal absolute top-[-8%] text-seal/25" style="left: 12%; animation-delay: 0s; font-size: 14px">✿</span>
-      <span class="petal absolute top-[-8%] text-seal/25" style="left: 30%; animation-delay: 2.4s; font-size: 20px">✿</span>
-      <span class="petal absolute top-[-8%] text-seal/25" style="left: 48%; animation-delay: 4.8s; font-size: 16px">✿</span>
-      <span class="petal absolute top-[-8%] text-seal/25" style="left: 66%; animation-delay: 7.2s; font-size: 22px">✿</span>
-      <span class="petal absolute top-[-8%] text-seal/25" style="left: 84%; animation-delay: 9.6s; font-size: 14px">✿</span>
+    <div class="zen-atmosphere" aria-hidden="true">
+      <div class="zen-mist zen-mist-1"></div>
+      <div class="zen-mist zen-mist-2"></div>
+      <div class="zen-mist zen-mist-3"></div>
+      <div class="zen-pattern"></div>
+      <div class="zen-grain"></div>
     </div>
 
-    <div class="relative flex min-h-svh flex-col pb-32 lg:pb-10">
-      <div id="progress-wrap" class="h-[3px] shrink-0 bg-paper-deep">
-        <div id="progress-bar" class="h-full bg-seal transition-all duration-500" style="width: 0%"></div>
+    <div class="relative flex min-h-svh flex-col pb-32 lg:pb-16">
+      <div id="progress-wrap" class="progress-track shrink-0">
+        <div id="progress-bar" class="progress-bar transition-all duration-700" style="width: 0%"></div>
       </div>
-      <div id="preview-banner" class="hidden shrink-0 border-b border-seal/30 bg-[#faf6ed] px-4 py-2 text-center font-serif text-sm text-seal">
+      <div id="preview-banner" class="preview-banner hidden shrink-0 px-4 py-3 text-center font-sans text-sm">
         미리보기 · 아직 사이트 파일에는 반영되지 않은 작성 중인 글입니다
       </div>
 
-      <header class="relative shrink-0 bg-white/85 backdrop-blur-md">
-        <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:max-w-none lg:px-8">
-          <div class="min-w-0">
-            <p id="archive-label" class="font-display text-[11px] tracking-[0.08em] text-seal sm:tracking-[0.12em]">
-              법화삼부경을 통한 축복의 여정
-            </p>
-            <h1 class="mt-1 truncate font-display text-2xl leading-none text-ink sm:text-3xl">
-              <span id="site-title">법화삼부경과 연뿌리 이야기</span>
-            </h1>
+      <header class="site-header relative shrink-0">
+        <div class="mx-auto flex max-w-3xl items-center justify-between gap-5 px-6 py-7 sm:px-10 lg:max-w-4xl lg:px-12 lg:py-9">
+          <div class="flex min-w-0 items-center gap-4">
+            <span class="site-mark" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M24 40C20 26 10 18 4 16c10 3 16 12 20 24 4-12 10-21 20-24-6 2-16 10-20 24z" />
+                <path d="M24 40c0-16 2-28 0-34" />
+                <path d="M16 22c2.5 5 5.5 11 8 18 2.5-7 5.5-13 8-18" />
+              </svg>
+            </span>
+            <div class="min-w-0">
+              <p id="archive-label" class="font-sans text-[11px] tracking-[0.18em] text-gold sm:tracking-[0.22em]">
+                법화삼부경을 통한 축복의 여정
+              </p>
+              <h1 class="mt-1.5 truncate font-serif text-2xl font-medium leading-none text-ivory sm:text-[1.85rem]">
+                <span id="site-title">법화삼부경과 연뿌리 이야기</span>
+              </h1>
+            </div>
           </div>
 
-          <div class="flex shrink-0 rounded-full border border-[#dcd2be] bg-[#faf6ed] p-1 shadow-inner" role="group" aria-label="Language">
-            <button id="lang-ko" type="button" class="rounded-full px-3 py-1.5 font-serif text-sm transition-all duration-300 sm:px-4 bg-seal text-[#fbf6ea] shadow-sm" aria-pressed="true">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button id="lang-ko" type="button" class="rounded-full px-3.5 py-1.5 font-sans text-sm tracking-wide transition-all duration-300 sm:px-4 bg-seal text-paper-deep" aria-pressed="true">
               한국어
             </button>
-            <button id="lang-en" type="button" class="rounded-full px-3 py-1.5 font-serif text-sm transition-all duration-300 sm:px-4 text-ink-muted hover:text-ink" aria-pressed="false">
+            <button id="lang-en" type="button" class="rounded-full px-3.5 py-1.5 font-sans text-sm tracking-wide transition-all duration-300 sm:px-4 text-ink-muted hover:text-ivory" aria-pressed="false">
               English
             </button>
           </div>
         </div>
       </header>
 
-      <nav id="cat-bar" class="cat-bar" aria-label="카테고리">
-        <div class="cat-bar-inner">
-          <div id="toc-journey-wrap" class="cat-item">
-            <button
-              id="toc-journey"
-              type="button"
-              class="cat-tab"
-              data-toc-level="journey"
-              aria-expanded="false"
-              aria-controls="cat-menu-journey"
-            >
-              <span id="toc-journey-label">마음의 여정</span>
-            </button>
-            <div id="cat-menu-journey" class="cat-menu" role="menu">
-              <nav id="toc-journey-nav" aria-labelledby="toc-journey-label"></nav>
-            </div>
-          </div>
-          <div id="toc-scripture-wrap" class="cat-item is-current">
-            <button
-              id="toc-scripture"
-              type="button"
-              class="cat-tab"
-              data-toc-level="scripture"
-              aria-expanded="false"
-              aria-controls="cat-menu-scripture"
-            >
-              <span id="toc-scripture-label">불경</span>
-            </button>
-            <div id="cat-menu-scripture" class="cat-menu" role="menu">
-              <div id="toc-work-wrap" class="cat-work">
+      <div id="resume-toast" class="resume-toast pointer-events-none fixed top-24 right-4 z-[80] hidden rounded-sm px-4 py-2.5 font-sans text-sm fade-up" role="status"></div>
+
+      <main class="site-main relative mx-auto flex w-full flex-1 flex-col px-6 py-10 sm:px-10 lg:px-12 lg:py-16">
+        <div class="page-enter reading-shell my-auto w-full">
+        <div class="page-heading-stage">
+          <nav id="cat-bar" class="cat-bar" aria-label="카테고리">
+            <div class="cat-bar-inner">
+              <div id="toc-journey-wrap" class="cat-item">
                 <button
-                  id="toc-work"
+                  id="toc-journey"
                   type="button"
-                  class="cat-work-btn"
-                  data-toc-level="work"
+                  class="cat-tab"
+                  data-toc-level="journey"
                   aria-expanded="false"
-                  aria-controls="toc-nav"
+                  aria-controls="cat-menu-journey"
                 >
-                  <span id="toc-work-label">법화삼부경</span>
-                  <span class="toc-chevron" aria-hidden="true">▸</span>
+                  <span id="toc-journey-label">마음의 여정</span>
                 </button>
-                <nav id="toc-nav" class="toc-nav cat-submenu" aria-labelledby="toc-work-label"></nav>
+                <div id="cat-menu-journey" class="cat-menu" role="menu">
+                  <nav id="toc-journey-nav" aria-labelledby="toc-journey-label"></nav>
+                </div>
+              </div>
+              <div id="toc-scripture-wrap" class="cat-item is-current">
+                <button
+                  id="toc-scripture"
+                  type="button"
+                  class="cat-tab"
+                  data-toc-level="scripture"
+                  aria-expanded="false"
+                  aria-controls="cat-menu-scripture"
+                >
+                  <span id="toc-scripture-label">불경</span>
+                </button>
+                <div id="cat-menu-scripture" class="cat-menu" role="menu">
+                  <div id="toc-work-wrap" class="cat-work">
+                    <button
+                      id="toc-work"
+                      type="button"
+                      class="cat-work-btn"
+                      data-toc-level="work"
+                      aria-expanded="false"
+                      aria-controls="toc-nav"
+                    >
+                      <span id="toc-work-label">법화삼부경</span>
+                      <span class="toc-chevron" aria-hidden="true">›</span>
+                    </button>
+                    <nav id="toc-nav" class="toc-nav cat-submenu" aria-labelledby="toc-work-label"></nav>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          </nav>
+          <h2 id="chapter-title" class="chapter-heading lang-fade"></h2>
         </div>
-      </nav>
 
-      <div id="resume-toast" class="pointer-events-none fixed top-20 right-4 z-[80] hidden rounded-sm border border-seal/30 bg-white/95 px-4 py-2 font-serif text-sm text-seal shadow-sm fade-up" role="status"></div>
-
-      <main class="relative mx-auto flex w-full max-w-5xl flex-1 flex-col px-4 py-6 sm:px-6 lg:py-10">
-        <div class="my-auto w-full">
-        <div class="page-heading-stage">
-          <h2 id="chapter-title" class="chapter-heading font-serif text-ink lang-fade"></h2>
+        <div class="page-nav-rail page-nav-rail-prev">
+          <a id="btn-prev" class="page-nav-btn" href="./" rel="prev" aria-label="이전 페이지">
+            <svg class="page-nav-figure" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M28 12 16 24l12 12" />
+            </svg>
+            <span id="btn-prev-label" class="page-nav-label">이전 페이지</span>
+          </a>
         </div>
+
         <article id="sutra-card" class="hanji-card relative overflow-hidden rounded-sm lang-fade" aria-labelledby="chapter-title">
-          <div class="binding absolute inset-y-0 left-0 w-[6px]" aria-hidden="true"></div>
-          <div class="seal-in pointer-events-none absolute top-5 right-5 hidden h-12 w-12 items-center justify-center border-2 border-seal/80 font-serif text-[10px] leading-tight text-seal sm:flex" aria-hidden="true">
-            猫<br />經
+          <div class="binding absolute inset-y-8 left-0" aria-hidden="true"></div>
+          <div class="lotus-seal seal-in" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M24 40C20 26 10 18 4 16c10 3 16 12 20 24 4-12 10-21 20-24-6 2-16 10-20 24z" />
+              <path d="M24 40c0-16 2-28 0-34" />
+              <path d="M16 22c2.5 5 5.5 11 8 18 2.5-7 5.5-13 8-18" />
+            </svg>
           </div>
 
           <!-- 상단 영역: 경전 이름 및 원문 -->
-          <header class="border-b border-[#e5dac4] px-6 py-6 sm:px-10 sm:py-8">
-            <p id="hanja-label" class="font-display text-xs uppercase tracking-[0.22em] text-gold">
-              원문
-            </p>
-            <p id="hanja-text" class="mt-3 whitespace-pre-wrap font-serif text-lg sm:text-xl leading-loose tracking-[0.04em] text-ink"></p>
+          <header class="sutra-hanja-header border-b border-seal/15">
+            <div class="sutra-measure">
+              <p id="hanja-label" class="column-kicker">
+                원문
+              </p>
+              <p id="hanja-text" class="sutra-hanja"></p>
+            </div>
           </header>
 
           <!-- 하단 영역: 한글번역·영문 / 해설·영문해설 -->
           <div id="columns" class="grid grid-cols-1"></div>
         </article>
 
-        <nav id="page-nav" class="mt-6 flex items-center justify-between gap-3" aria-label="Pagination">
-          <a id="btn-prev" class="page-nav-btn" href="./" rel="prev" aria-label="이전 페이지">
-            <img class="page-nav-figure" src="images/page-prev.png" alt="" width="541" height="520" />
-            <span id="btn-prev-label" class="page-nav-label">이전 페이지</span>
-          </a>
-          <div class="relative min-w-[7.5rem] text-center font-display text-sm tracking-[0.18em] text-ink-muted">
-            <button id="page-jump-btn" type="button" class="page-jump-btn" aria-label="페이지로 이동">
-              <span id="page-current" class="text-seal">01</span>
-              <span id="page-of" class="mx-2">/</span>
-              <span id="page-total">18</span>
-              <span id="page-word" class="ml-2 hidden sm:inline">쪽</span>
-            </button>
-            <form id="page-jump-form" class="page-jump-form" hidden>
-              <label id="page-jump-label" class="sr-only" for="page-jump-input">페이지로 이동</label>
-              <input
-                id="page-jump-input"
-                class="page-jump-input"
-                type="number"
-                inputmode="numeric"
-                min="1"
-                step="1"
-                autocomplete="off"
-              />
-              <span id="page-jump-of" class="mx-1">/</span>
-              <span id="page-jump-total"></span>
-              <span id="page-jump-suffix" class="ml-1 hidden sm:inline"></span>
-            </form>
-          </div>
+        <div class="page-nav-rail page-nav-rail-next">
           <a id="btn-next" class="page-nav-btn" href="./" rel="next" aria-label="다음 페이지">
-            <img class="page-nav-figure" src="images/page-next.png" alt="" width="541" height="520" />
+            <svg class="page-nav-figure" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 12l12 12-12 12" />
+            </svg>
             <span id="btn-next-label" class="page-nav-label">다음 페이지</span>
           </a>
-        </nav>
-
-        <div id="share-wrap" class="mt-4 flex justify-center">
-          <button id="btn-share" type="button" class="share-trigger" aria-haspopup="dialog" aria-controls="share-sheet">
-            <svg class="share-trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" />
-              <path d="M12 16V4" />
-              <path d="M8 8l4-4 4 4" />
-            </svg>
-            <span id="btn-share-label">이 페이지 공유</span>
-          </button>
         </div>
 
-        <section id="healing-section" class="mt-5 flex items-end justify-between gap-4 border-t border-dashed border-[#dcd2be] pt-4" aria-live="polite">
-          <div id="healing-zone" class="flex min-w-0 flex-1 items-end gap-3 transition-all duration-500">
-            <div id="healing-art" class="healing-scene shrink-0"></div>
-            <p id="healing-caption" class="mb-3 font-serif text-sm leading-relaxed text-ink-muted sm:text-base"></p>
+        <div class="page-actions">
+          <nav id="page-nav" class="page-pager" aria-label="Pagination">
+            <div class="page-pager-inner">
+              <button id="page-jump-btn" type="button" class="page-jump-btn" aria-label="페이지로 이동">
+                <span id="page-current" class="page-current-num">01</span>
+                <span id="page-of" class="page-of-mark">/</span>
+                <span id="page-total" class="page-total-num">18</span>
+                <span id="page-word" class="page-word">쪽</span>
+              </button>
+              <form id="page-jump-form" class="page-jump-form" hidden>
+                <label id="page-jump-label" class="sr-only" for="page-jump-input">페이지로 이동</label>
+                <input
+                  id="page-jump-input"
+                  class="page-jump-input"
+                  type="number"
+                  inputmode="numeric"
+                  min="1"
+                  step="1"
+                  autocomplete="off"
+                />
+                <span id="page-jump-of" class="mx-1">/</span>
+                <span id="page-jump-total"></span>
+                <span id="page-jump-suffix" class="page-jump-suffix"></span>
+              </form>
+            </div>
+          </nav>
+
+          <div id="share-wrap" class="page-share">
+            <button id="btn-share" type="button" class="share-trigger" aria-haspopup="dialog" aria-controls="share-sheet">
+              <svg class="share-trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7" />
+                <path d="M12 16V4" />
+                <path d="M8 8l4-4 4 4" />
+              </svg>
+              <span id="btn-share-label">이 페이지 공유</span>
+            </button>
+          </div>
+        </div>
+
+        <section id="healing-section" class="mt-12 border-t border-seal/15 pt-10" aria-live="polite">
+          <div id="healing-zone" class="transition-all duration-700">
+            <p id="healing-caption" class="healing-quote"></p>
           </div>
         </section>
 
-        <footer id="site-footer" class="mt-12 mb-2 text-center font-display text-xs tracking-[0.22em] text-ink-faint">
+        <footer id="site-footer" class="mt-16 mb-4 text-center font-serif text-xs tracking-[0.28em] text-ink-faint">
           한 장의 경전, 한 번의 숨.
         </footer>
         </div>
       </main>
 
-      <aside class="fixed inset-x-0 bottom-0 z-40 border-t border-[#e5dac4] bg-white/95 px-3 py-2 backdrop-blur lg:hidden" aria-label="광고">
-        <div class="mx-auto flex h-14 max-w-xl items-center justify-center rounded-sm border border-dashed border-[#dcd2be] bg-white/60">
-          <p id="ad-mobile-label" class="font-display text-[11px] uppercase tracking-[0.22em] text-ink-faint">
+      <aside class="ad-slot fixed inset-x-0 bottom-0 z-40 px-4 py-3 backdrop-blur lg:hidden" aria-label="광고">
+        <div class="ad-slot-inner mx-auto flex h-14 max-w-xl items-center justify-center rounded-sm">
+          <p id="ad-mobile-label" class="font-sans text-[11px] uppercase tracking-[0.22em] text-ink-faint">
             광고 · AdSense 영역 · 320×50
           </p>
         </div>

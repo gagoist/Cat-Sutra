@@ -2,7 +2,10 @@ window.SUTRAS_TOC = [
   {
     "id": "journey",
     "slug": "journey",
-    "aliases": ["mind", "journey-of-the-mind"],
+    "aliases": [
+      "mind",
+      "journey-of-the-mind"
+    ],
     "ko": "마음의 여정",
     "hanja": "",
     "role": "",
@@ -16,7 +19,10 @@ window.SUTRAS_TOC = [
         "id": "journey-1",
         "no": 1,
         "slug": "beginning-this-journey",
-        "aliases": ["beginning", "how-this-journey-began"],
+        "aliases": [
+          "beginning",
+          "how-this-journey-began"
+        ],
         "ko": "이 길을 시작하며",
         "hanja": "",
         "en": "How This Journey Began",
@@ -27,7 +33,9 @@ window.SUTRAS_TOC = [
         "id": "journey-2",
         "no": 2,
         "slug": "roots-of-compassion",
-        "aliases": ["roots"],
+        "aliases": [
+          "roots"
+        ],
         "ko": "나눔의 뿌리",
         "hanja": "",
         "en": "Roots of Compassion",
@@ -38,7 +46,9 @@ window.SUTRAS_TOC = [
         "id": "journey-3",
         "no": 3,
         "slug": "story-of-myohyeonsa",
-        "aliases": ["myohyeonsa"],
+        "aliases": [
+          "myohyeonsa"
+        ],
         "ko": "묘현사의 이야기",
         "hanja": "",
         "en": "The Story of Myohyeonsa",
@@ -49,7 +59,9 @@ window.SUTRAS_TOC = [
         "id": "journey-4",
         "no": 4,
         "slug": "encountering-the-lotus-sutra",
-        "aliases": ["encountering-lotus"],
+        "aliases": [
+          "encountering-lotus"
+        ],
         "ko": "법화경을 만나다",
         "hanja": "",
         "en": "Encountering the Lotus Sutra",
@@ -61,7 +73,10 @@ window.SUTRAS_TOC = [
   {
     "id": "muryangui",
     "slug": "muryangui",
-    "aliases": ["opening", "opening-sutra"],
+    "aliases": [
+      "opening",
+      "opening-sutra"
+    ],
     "ko": "무량의경",
     "hanja": "無量義經",
     "role": "개경",
@@ -102,7 +117,10 @@ window.SUTRAS_TOC = [
   {
     "id": "lotus",
     "slug": "lotus",
-    "aliases": ["lotus-sutra", "main"],
+    "aliases": [
+      "lotus-sutra",
+      "main"
+    ],
     "ko": "묘법연화경",
     "hanja": "妙法蓮華經",
     "role": "본경",
@@ -370,7 +388,10 @@ window.SUTRAS_TOC = [
   {
     "id": "fugen",
     "slug": "fugen",
-    "aliases": ["closing", "closing-sutra"],
+    "aliases": [
+      "closing",
+      "closing-sutra"
+    ],
     "ko": "불설관보현보살행법경",
     "hanja": "佛說觀普賢菩薩行法經",
     "role": "결경",
