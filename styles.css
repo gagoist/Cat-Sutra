@@ -1367,6 +1367,33 @@ html[lang="en"] .sutra-measure {
   margin-top: 0.75em;
 }
 
+.sutra-body.is-essay .sutra-subhead {
+  margin: 2.6rem 0 1.05rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-serif);
+  font-size: 18.5px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--gold);
+}
+
+.sutra-body.is-essay .sutra-subhead::before {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 1px;
+  margin: 0 0 0.8em;
+  background: var(--gold);
+  opacity: 0.42;
+}
+
+.sutra-body.is-essay .sutra-subhead:first-child {
+  margin-top: 0.15rem;
+}
+
 .sutra-ko {
   font-family: var(--font-sans);
   font-size: 17.5px;
@@ -1447,6 +1474,21 @@ html[lang="en"] .sutra-measure {
     font-size: 17.5px;
     line-height: 1.85;
   }
+
+  .sutra-body.is-essay .sutra-subhead {
+    margin-top: 3.6rem;
+    margin-bottom: 1.3rem;
+    font-size: 21px;
+  }
+
+  .sutra-body.is-essay .sutra-subhead:first-child {
+    margin-top: 0.2rem;
+  }
+
+  .sutra-body.is-essay .sutra-subhead::before {
+    width: 40px;
+    margin-bottom: 0.9em;
+  }
 }
 
 .lang-switch {
@@ -1465,6 +1507,10 @@ html[lang="en"] .sutra-measure {
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid transparent;
+}
+
+.site-title-break {
+  display: none;
 }
 
 .progress-track {
@@ -1515,9 +1561,60 @@ html[lang="en"] .sutra-measure {
     transform: translateY(0);
   }
 
+  h1.site-title-heading {
+    overflow: visible;
+    white-space: normal;
+    font-size: 1.05rem;
+    line-height: 1.35;
+  }
+
+  .site-title-break {
+    display: block;
+  }
+
+  .page-heading-stage {
+    position: relative;
+    z-index: 50;
+  }
+
+  .cat-bar,
+  .cat-bar-inner {
+    overflow: visible;
+  }
+
   .cat-bar-inner {
     gap: 0.15rem 1.15rem;
-    overflow-x: auto;
+  }
+
+  .cat-item {
+    display: contents;
+  }
+
+  .cat-tab {
+    order: 0;
+  }
+
+  .cat-menu {
+    position: static;
+    order: 1;
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    margin-top: 0.15rem;
+    max-height: min(52vh, 24rem);
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+
+  .cat-item.is-open .cat-submenu {
+    display: block;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .cat-item.is-open .cat-work-btn .toc-chevron {
+    transform: rotate(90deg);
   }
 }
 

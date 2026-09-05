@@ -147,6 +147,21 @@
     if (el) el.textContent = value;
   }
 
+  function renderSiteTitle(title) {
+    var el = $("site-title");
+    if (!el) return;
+    var text = String(title || "");
+    var space = text.indexOf(" ");
+    if (state.lang === "ko" && space > 0) {
+      el.innerHTML =
+        escapeHtml(text.slice(0, space)) +
+        ' <br class="site-title-break">' +
+        escapeHtml(text.slice(space + 1));
+      return;
+    }
+    el.textContent = text;
+  }
+
   function pad2(n) {
     return String(n).padStart(2, "0");
   }
@@ -373,7 +388,7 @@
   function renderChrome() {
     var copy = t();
     setText("archive-label", copy.archive);
-    setText("site-title", copy.siteTitle);
+    renderSiteTitle(copy.siteTitle);
     setText("hanja-label", copy.hanja);
     setText("btn-prev-label", copy.prev);
     setText("btn-next-label", copy.next);
@@ -423,7 +438,59 @@
     }
   }
 
-  function readingParagraphs(text) {
+  var JOURNEY_SUBHEADS = {
+    "이 작은 공간을 만들게 된 이야기": 1,
+    "저에게도 남아 있던 일곱 글자": 1,
+    "한 권의 경전에서 시작된 생각": 1,
+    "작은 기록도 하나의 인연이 될 수 있기에": 1,
+    "작은 기록 하나도 누군가에게는 새로운 인연의 시작이 될 수 있다는 것.": 1,
+    "어머니께 드리는 작은 효도": 1,
+    "언젠가 다시 경전을 세상에 내놓을 수 있기를": 1,
+    "단 한 사람의 인연이라도": 1,
+    "연뿌리봉사단의 이야기": 1,
+    "묘현사의 이야기": 1,
+    "묘련대사": 1,
+    "묘각스님": 1,
+    "다시 세워진 도량": 1,
+    "그리고, 이곳에서 다시 시작되는 이야기": 1,
+    "부처님을 향한 오랜 믿음과 하나의 숙제": 1,
+    "어머니의 발자취를 따라, 나에게로 이어진 인연": 1,
+    "우리가 생각하는 광선유포와 세상으로 향하는 나눔": 1,
+    "받은 복을 세상에 나누며: 새로운 인연을 기다리며": 1,
+    "The Story Behind This Little Space": 1,
+    "The Seven Words That Remained With Me": 1,
+    "A Thought That Began With a Single Scripture": 1,
+    "Because Even a Small Record Can Become a New Connection": 1,
+    "Even a small record can become the beginning of a new connection for someone.": 1,
+    "A Small Offering to My Mother": 1,
+    "Hoping to Bring the Scriptures Back Into the World Someday": 1,
+    "If It Reaches Even One Person": 1,
+    "The Story of Yeonroot Volunteer Group": 1,
+    "The Story of Myohyeonsa": 1,
+    "Master Myoryeon": 1,
+    "Master Myogak": 1,
+    "A Temple Reborn": 1,
+    "A Continuing Connection": 1,
+    "A Lifelong Faith and a Long-Awaited Answer": 1,
+    "From Mother's Footsteps to My Own Path": 1,
+    "Our Vision of Propagation and Sharing with the World": 1,
+    "Sharing the Blessings We Have Received: Waiting for New Encounters": 1,
+  };
+
+  function normalizeSubheadKey(text) {
+    return String(text || "")
+      .replace(/^##\s+/, "")
+      .replace(/[\u2018\u2019\u02BC]/g, "'")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function isJourneySubhead(text) {
+    return !!JOURNEY_SUBHEADS[normalizeSubheadKey(text)];
+  }
+
+  function readingParagraphs(text, options) {
+    var allowSubheads = !!(options && options.subheads);
     var chunks = String(text || "")
       .replace(/\r\n/g, "\n")
       .split(/\n+/);
@@ -431,7 +498,11 @@
     var i;
     for (i = 0; i < chunks.length; i += 1) {
       if (!chunks[i].trim()) continue;
-      html += '<p class="sutra-para">' + escapeHtml(chunks[i]) + "</p>";
+      if (allowSubheads && isJourneySubhead(chunks[i])) {
+        html += '<h3 class="sutra-subhead">' + escapeHtml(normalizeSubheadKey(chunks[i])) + "</h3>";
+      } else {
+        html += '<p class="sutra-para">' + escapeHtml(chunks[i]) + "</p>";
+      }
     }
     return html;
   }
@@ -522,10 +593,10 @@
         columns.innerHTML = String(greetBody).trim()
           ? '<section class="sutra-section is-primary">' +
             '<div class="sutra-measure">' +
-            '<div class="sutra-body ' +
+            '<div class="sutra-body is-essay ' +
             (state.lang === "en" ? "sutra-en" : "sutra-ko") +
             '">' +
-            readingParagraphs(greetBody) +
+            readingParagraphs(greetBody, { subheads: true }) +
             "</div></div></section>"
           : "";
       }
