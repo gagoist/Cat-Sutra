@@ -44,7 +44,7 @@
       shareEmail: "메일",
       shareClose: "닫기",
       shareKakaoHint: "주소를 복사했습니다. 카카오톡에 붙여넣어 보내세요.",
-      shareText: "법화삼부경 {n}쪽부터 이어서 보기",
+      shareText: "{title} {n}쪽부터 이어서 보기",
     },
     en: {
       siteTitle: "Lotus Root & Sutra",
@@ -84,7 +84,7 @@
       shareEmail: "Email",
       shareClose: "Close",
       shareKakaoHint: "Link copied. Paste it into KakaoTalk to send.",
-      shareText: "Continue the Threefold Lotus Sutra from page {n}",
+      shareText: "Continue {title} from page {n}",
     },
   };
 
@@ -358,8 +358,8 @@
     var input = $("page-jump-input");
     if (!form || !input) return;
 
-    var total = scriptureCount();
-    var current = scriptureOrdinal(state.index);
+    var total = scopeCount(state.index);
+    var current = scopeOrdinal(state.index);
     input.min = "1";
     input.max = String(total);
     input.value = String(current);
@@ -375,12 +375,12 @@
   function submitPageJump(event) {
     if (event) event.preventDefault();
     var input = $("page-jump-input");
-    var total = scriptureCount();
+    var total = scopeCount(state.index);
     var raw = input ? String(input.value || "").trim() : "";
     var nextPage = parseInt(raw, 10);
     closePageJump();
     if (!nextPage || nextPage < 1 || nextPage > total) return;
-    var nextIndex = indexFromScriptureOrdinal(nextPage);
+    var nextIndex = indexFromScopeOrdinal(state.index, nextPage);
     if (nextIndex < 0) return;
     goTo(nextIndex, nextIndex >= state.index ? 1 : -1);
   }
@@ -547,8 +547,8 @@
 
     var copy = t();
     var greeting = isGreetingView();
-    var total = greeting ? state.sutras.length : scriptureCount();
-    var current = greeting ? state.index + 1 : scriptureOrdinal(state.index);
+    var total = scopeCount(state.index);
+    var current = scopeOrdinal(state.index);
     var columns = $("columns");
     var progress = $("progress-bar");
     var prevBtn = $("btn-prev");
@@ -648,7 +648,7 @@
   }
 
   function showResumeToast() {
-    showToast(t().resume + " · " + pad2(state.index + 1));
+    showToast(t().resume + " · " + pad2(scopeOrdinal(state.index)));
   }
 
   function hideResumeToast() {
@@ -791,6 +791,20 @@
   function pageNumOf(item) {
     var n = Number(item && item.startPage);
     return n > 0 ? n : 0;
+  }
+
+  function itemEndPage(item) {
+    var start = pageNumOf(item);
+    var end = Number(item && item.endPage);
+    if (!start) return 0;
+    if (!end || end < start) return start;
+    return end;
+  }
+
+  function itemPageCount(item) {
+    var start = pageNumOf(item);
+    var end = itemEndPage(item);
+    return start ? end - start + 1 : 0;
   }
 
   function itemCoversPage(item, pageNum) {
@@ -952,6 +966,7 @@
           var ch = sutra.chapters[c];
           var chActive = active.chapterId === ch.id;
           var chStart = pageNumOf(ch);
+          var chCount = itemPageCount(ch);
           html +=
             '<li><a class="toc-chapter' +
             (chActive ? " is-active" : "") +
@@ -960,7 +975,14 @@
             '" data-toc-chapter="' +
             escapeHtml(ch.id) +
             '">' +
+            '<span class="toc-chapter-name">' +
             chapterTitleHtml(ch, sutra) +
+            "</span>" +
+            (chCount
+              ? '<span class="toc-pages">' +
+                (state.lang === "en" ? chCount + " pp." : chCount + "쪽") +
+                "</span>"
+              : "") +
             "</a></li>";
         }
         html += "</ul>";
@@ -1204,6 +1226,51 @@
     return { sutra: scriptureSutras()[0] || state.toc[0] || null, chapter: null };
   }
 
+  function scopeItemOfIndex(index) {
+    var loc = locationOfIndex(index);
+    if (!loc) return null;
+    if (loc.chapter) return loc.chapter;
+    return loc.sutra || null;
+  }
+
+  function scopeOfIndex(index) {
+    var item = scopeItemOfIndex(index);
+    var startPage = pageNumOf(item);
+    var endPage = itemEndPage(item);
+    if (!startPage) {
+      return { startIndex: index, endIndex: index, item: item };
+    }
+    return {
+      startIndex: startPage - 1,
+      endIndex: endPage - 1,
+      item: item,
+    };
+  }
+
+  function scopeCount(index) {
+    var scope = scopeOfIndex(index);
+    return scope.endIndex - scope.startIndex + 1;
+  }
+
+  function scopeOrdinal(index) {
+    var scope = scopeOfIndex(index);
+    return index - scope.startIndex + 1;
+  }
+
+  function indexFromScopeOrdinal(fromIndex, ordinal) {
+    var scope = scopeOfIndex(fromIndex);
+    var next = scope.startIndex + ordinal - 1;
+    if (next < scope.startIndex || next > scope.endIndex) return -1;
+    return next;
+  }
+
+  function indexFromLocalPage(item, localPage) {
+    var start = pageNumOf(item);
+    var total = itemPageCount(item);
+    if (!start || !localPage || localPage < 1 || localPage > total) return -1;
+    return start - 1 + localPage - 1;
+  }
+
   function withHanja(name, hanja) {
     if (!hanja) return escapeHtml(name);
     return escapeHtml(name) + '<span class="chapter-hanja">(' + escapeHtml(hanja) + ")</span>";
@@ -1287,7 +1354,7 @@
       return segs;
     }
     if (loc.chapter) segs.push(chapterPrimarySlug(loc.chapter));
-    var ordinal = scriptureOrdinal(index);
+    var ordinal = scopeOrdinal(index);
     if (ordinal) segs.push(String(ordinal));
     return segs;
   }
@@ -1311,7 +1378,20 @@
   }
 
   function shareMessage() {
-    return t().shareText.replace("{n}", String(scriptureOrdinal(state.index)));
+    var parts = pageHeadingLines(state.index);
+    var title = "";
+    if (state.lang === "en") {
+      title = (parts.chapter && (parts.chapter.en || parts.chapter.ko)) || parts.sutraLine || "";
+    } else {
+      title = (parts.chapter && parts.chapter.ko) || parts.sutraLine || "";
+    }
+    var template = t().shareText;
+    if (!title) {
+      template = state.lang === "en"
+        ? "Continue the Threefold Lotus Sutra from page {n}"
+        : "법화삼부경 {n}쪽부터 이어서 보기";
+    }
+    return template.replace("{title}", title).replace("{n}", String(scopeOrdinal(state.index)));
   }
 
   function parsePageToken(token) {
@@ -1355,15 +1435,29 @@
       return firstStartPage(sutra) ? firstStartPage(sutra) - 1 : 0;
     }
 
+    if (chapterSlug && sutra) {
+      var chapter = findChapterBySlug(sutra, chapterSlug);
+      if (chapter) {
+        var chapterLocal = indexFromLocalPage(chapter, pageNum);
+        if (chapterLocal >= 0) return chapterLocal;
+        if (pageNum > itemPageCount(chapter)) {
+          var oldGlobal = indexFromScriptureOrdinal(pageNum);
+          if (oldGlobal >= 0) return oldGlobal;
+        }
+        if (pageNumOf(chapter)) return pageNumOf(chapter) - 1;
+      }
+    }
+
+    if (sutra && pageNum > 0) {
+      var sutraLocal = indexFromLocalPage(sutra, pageNum);
+      if (sutraLocal >= 0) return sutraLocal;
+    }
+
     if (pageNum > 0) {
       var fromOrdinal = indexFromScriptureOrdinal(pageNum);
       if (fromOrdinal >= 0) return fromOrdinal;
     }
 
-    if (chapterSlug && sutra) {
-      var chapter = findChapterBySlug(sutra, chapterSlug);
-      if (chapter && pageNumOf(chapter)) return pageNumOf(chapter) - 1;
-    }
     if (sutra && firstStartPage(sutra)) return firstStartPage(sutra) - 1;
     return -1;
   }
@@ -1378,7 +1472,7 @@
     var titleParts = [];
     if (chapterLabel) titleParts.push(chapterLabel);
     if (!isGreetingView()) {
-      titleParts.push(state.lang === "en" ? "Page " + scriptureOrdinal(state.index) : scriptureOrdinal(state.index) + "쪽");
+      titleParts.push(state.lang === "en" ? "Page " + scopeOrdinal(state.index) : scopeOrdinal(state.index) + "쪽");
     }
     document.title = titleParts.join(" · ") + " · " + t().siteTitle;
 

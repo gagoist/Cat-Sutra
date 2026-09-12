@@ -996,8 +996,11 @@ a.toc-chapter {
 }
 
 .toc-chapter {
-  display: block;
+  display: flex;
   width: 100%;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.7rem;
   border: 0;
   background: transparent;
   padding: 0.42rem 0.5rem;
@@ -1009,6 +1012,17 @@ a.toc-chapter {
   font-size: 0.8rem;
   line-height: 1.5;
   transition: background 0.25s ease, color 0.25s ease;
+}
+
+.toc-chapter-name {
+  min-width: 0;
+}
+
+.toc-pages {
+  flex-shrink: 0;
+  color: var(--text-faint);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
 }
 
 .toc-chapter .toc-hanja {
