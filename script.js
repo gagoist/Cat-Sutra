@@ -29,7 +29,10 @@
       categories: "카테고리",
       journey: "마음의 여정",
       scripture: "불경",
+      blessings: "가피",
+      dreams: "꿈",
       work: "법화삼부경",
+      comingSoon: "준비 중",
       share: "이 페이지 공유",
       shareTitle: "이 페이지 이어보기",
       shareHint: "이 주소를 보내면, 나중에 같은 쪽부터 다시 볼 수 있습니다.",
@@ -69,7 +72,10 @@
       categories: "Categories",
       journey: "Journey of the Mind",
       scripture: "Sutras",
+      blessings: "Blessings",
+      dreams: "Dreams",
       work: "Threefold Lotus Sutra",
+      comingSoon: "Coming soon",
       share: "Share this page",
       shareTitle: "Continue from this page",
       shareHint: "Send this link and you can open it later on the same page.",
@@ -117,6 +123,7 @@
   ];
 
   var SCRIPT_EL = document.currentScript;
+  var CATEGORY_LEVELS = ["journey", "blessings", "dreams"];
 
   var state = {
     sutras: [],
@@ -133,6 +140,8 @@
       scripture: false,
       work: false,
       journey: false,
+      blessings: false,
+      dreams: false,
     },
     shareOpen: false,
     shareCopyTimer: null,
@@ -411,6 +420,8 @@
     setText("site-footer", copy.footer);
     setText("toc-journey-label", copy.journey);
     setText("toc-scripture-label", copy.scripture);
+    setText("toc-blessings-label", copy.blessings);
+    setText("toc-dreams-label", copy.dreams);
     setText("toc-work-label", copy.work);
     var catBar = $("cat-bar");
     if (catBar) catBar.setAttribute("aria-label", copy.categories);
@@ -991,7 +1002,7 @@
     }
     root.innerHTML = html;
     root.scrollTop = savedScroll;
-    renderJourneyNav();
+    renderAllCategoryNavs();
 
     var activeEl = root.querySelector(".is-active");
     if (activeEl && typeof activeEl.scrollIntoView === "function") {
@@ -999,22 +1010,31 @@
     }
   }
 
-  function renderJourneyNav() {
-    var root = $("toc-journey-nav");
+  function renderAllCategoryNavs() {
+    for (var i = 0; i < CATEGORY_LEVELS.length; i += 1) {
+      renderCategoryNav(CATEGORY_LEVELS[i]);
+    }
+  }
+
+  function renderCategoryNav(sutraId) {
+    var root = $("toc-" + sutraId + "-nav");
     if (!root) return;
-    var journey = findSutra("journey");
-    if (!journey || !sutraHasChapters(journey)) {
-      root.innerHTML = "";
+    var sutra = findSutra(sutraId);
+    if (!sutra || !sutraHasChapters(sutra)) {
+      root.innerHTML =
+        '<ul class="cat-sections"><li><span class="cat-section is-empty" role="menuitem" aria-disabled="true">' +
+        escapeHtml(t().comingSoon) +
+        "</span></li></ul>";
       return;
     }
 
     var active = findActiveToc(state.index + 1);
     var html = '<ul class="cat-sections">';
-    for (var c = 0; c < journey.chapters.length; c += 1) {
-      var ch = journey.chapters[c];
+    for (var c = 0; c < sutra.chapters.length; c += 1) {
+      var ch = sutra.chapters[c];
       var chStart = pageNumOf(ch);
       var chActive = active.chapterId === ch.id;
-      var title = chapterTitleHtml(ch, journey);
+      var title = chapterTitleHtml(ch, sutra);
       if (chStart) {
         html +=
           '<li><a class="cat-section' +
@@ -1566,21 +1586,26 @@
 
   function closeCategoryMenu() {
     setTreeLevel("scripture", false);
-    setTreeLevel("journey", false);
+    for (var i = 0; i < CATEGORY_LEVELS.length; i += 1) {
+      setTreeLevel(CATEGORY_LEVELS[i], false);
+    }
   }
 
   function syncCategoryTabs() {
     var loc = locationOfIndex(state.index);
-    var onJourney = !!(loc && loc.sutra && isCategorySutra(loc.sutra));
-    var journeyWrap = $("toc-journey-wrap");
+    var activeId = loc && loc.sutra && isCategorySutra(loc.sutra) ? loc.sutra.id : null;
+    for (var i = 0; i < CATEGORY_LEVELS.length; i += 1) {
+      var id = CATEGORY_LEVELS[i];
+      var wrap = $("toc-" + id + "-wrap");
+      if (wrap) wrap.classList.toggle("is-current", activeId === id);
+    }
     var scriptureWrap = $("toc-scripture-wrap");
-    if (journeyWrap) journeyWrap.classList.toggle("is-current", onJourney);
-    if (scriptureWrap) scriptureWrap.classList.toggle("is-current", !onJourney);
+    if (scriptureWrap) scriptureWrap.classList.toggle("is-current", !activeId);
   }
 
-  function onJourneyClick(event) {
+  function onCategoryClick(event, level) {
     event.preventDefault();
-    toggleTreeLevel("journey");
+    toggleTreeLevel(level);
   }
 
   function goToPageNumber(pageNum) {
@@ -1611,26 +1636,47 @@
   function syncTreeOpen() {
     var scriptureWrap = $("toc-scripture-wrap");
     var workWrap = $("toc-work-wrap");
-    var journeyWrap = $("toc-journey-wrap");
     var scriptureBtn = $("toc-scripture");
     var workBtn = $("toc-work");
-    var journeyBtn = $("toc-journey");
     if (scriptureWrap) scriptureWrap.classList.toggle("is-open", !!state.treeOpen.scripture);
     if (workWrap) workWrap.classList.toggle("is-open", !!state.treeOpen.work);
-    if (journeyWrap) journeyWrap.classList.toggle("is-open", !!state.treeOpen.journey);
     if (scriptureBtn) scriptureBtn.setAttribute("aria-expanded", state.treeOpen.scripture ? "true" : "false");
     if (workBtn) workBtn.setAttribute("aria-expanded", state.treeOpen.work ? "true" : "false");
-    if (journeyBtn) journeyBtn.setAttribute("aria-expanded", state.treeOpen.journey ? "true" : "false");
+    for (var i = 0; i < CATEGORY_LEVELS.length; i += 1) {
+      var id = CATEGORY_LEVELS[i];
+      var wrap = $("toc-" + id + "-wrap");
+      var btn = $("toc-" + id);
+      if (wrap) wrap.classList.toggle("is-open", !!state.treeOpen[id]);
+      if (btn) btn.setAttribute("aria-expanded", state.treeOpen[id] ? "true" : "false");
+    }
+  }
+
+  function isCategoryLevel(level) {
+    return CATEGORY_LEVELS.indexOf(level) >= 0;
+  }
+
+  function anyCategoryMenuOpen() {
+    for (var i = 0; i < CATEGORY_LEVELS.length; i += 1) {
+      if (state.treeOpen[CATEGORY_LEVELS[i]]) return true;
+    }
+    return false;
   }
 
   function setTreeLevel(level, open) {
-    if (level !== "scripture" && level !== "work" && level !== "journey") return;
+    if (level !== "scripture" && level !== "work" && !isCategoryLevel(level)) return;
     state.treeOpen[level] = !!open;
     if (level === "scripture" && !open) state.treeOpen.work = false;
-    if (level === "scripture" && open) state.treeOpen.journey = false;
-    if (level === "journey" && open) {
+    if (level === "scripture" && open) {
+      for (var i = 0; i < CATEGORY_LEVELS.length; i += 1) {
+        state.treeOpen[CATEGORY_LEVELS[i]] = false;
+      }
+    }
+    if (isCategoryLevel(level) && open) {
       state.treeOpen.scripture = false;
       state.treeOpen.work = false;
+      for (var j = 0; j < CATEGORY_LEVELS.length; j += 1) {
+        if (CATEGORY_LEVELS[j] !== level) state.treeOpen[CATEGORY_LEVELS[j]] = false;
+      }
     }
     syncTreeOpen();
   }
@@ -1865,7 +1911,7 @@
         setShareSheet(false);
         return;
       }
-      if (event.key === "Escape" && (state.treeOpen.scripture || state.treeOpen.work || state.treeOpen.journey)) {
+      if (event.key === "Escape" && (state.treeOpen.scripture || state.treeOpen.work || anyCategoryMenuOpen())) {
         closeCategoryMenu();
         return;
       }
@@ -1882,12 +1928,26 @@
       }
     });
 
-    var journeyLink = $("toc-journey");
-    if (journeyLink) {
-      journeyLink.addEventListener("click", function (event) {
-        event.stopPropagation();
-        onJourneyClick(event);
-      });
+    for (var ci = 0; ci < CATEGORY_LEVELS.length; ci += 1) {
+      (function (level) {
+        var link = $("toc-" + level);
+        if (link) {
+          link.addEventListener("click", function (event) {
+            event.stopPropagation();
+            onCategoryClick(event, level);
+          });
+        }
+        var nav = $("toc-" + level + "-nav");
+        if (nav) {
+          nav.addEventListener("click", function (event) {
+            var chBtn = event.target.closest("[data-toc-chapter]");
+            if (!chBtn) return;
+            if (shouldLetBrowserNavigate(event)) return;
+            event.preventDefault();
+            onTocChapterClick(chBtn.getAttribute("data-toc-chapter"));
+          });
+        }
+      })(CATEGORY_LEVELS[ci]);
     }
     var scriptureBtn = $("toc-scripture");
     if (scriptureBtn) {
@@ -1907,18 +1967,8 @@
     document.addEventListener("click", function (event) {
       var bar = $("cat-bar");
       if (!bar || bar.contains(event.target)) return;
-      if (state.treeOpen.scripture || state.treeOpen.work || state.treeOpen.journey) closeCategoryMenu();
+      if (state.treeOpen.scripture || state.treeOpen.work || anyCategoryMenuOpen()) closeCategoryMenu();
     });
-    var journeyNav = $("toc-journey-nav");
-    if (journeyNav) {
-      journeyNav.addEventListener("click", function (event) {
-        var chBtn = event.target.closest("[data-toc-chapter]");
-        if (!chBtn) return;
-        if (shouldLetBrowserNavigate(event)) return;
-        event.preventDefault();
-        onTocChapterClick(chBtn.getAttribute("data-toc-chapter"));
-      });
-    }
     var tocNav = $("toc-nav");
     if (tocNav) {
       tocNav.addEventListener("click", function (event) {

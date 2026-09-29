@@ -71,6 +71,40 @@ window.SUTRAS_TOC = [
     ]
   },
   {
+    "id": "blessings",
+    "slug": "blessings",
+    "aliases": [
+      "gapi",
+      "blessing"
+    ],
+    "ko": "가피",
+    "hanja": "",
+    "role": "",
+    "en": "Blessings",
+    "roleEn": "",
+    "kind": "category",
+    "startPage": null,
+    "endPage": null,
+    "chapters": []
+  },
+  {
+    "id": "dreams",
+    "slug": "dreams",
+    "aliases": [
+      "kkum",
+      "dream"
+    ],
+    "ko": "꿈",
+    "hanja": "",
+    "role": "",
+    "en": "Dreams",
+    "roleEn": "",
+    "kind": "category",
+    "startPage": null,
+    "endPage": null,
+    "chapters": []
+  },
+  {
     "id": "muryangui",
     "slug": "muryangui",
     "aliases": [
