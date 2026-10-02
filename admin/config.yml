@@ -1,0 +1,106 @@
+backend:
+  name: github
+  repo: gagoist/Cat-Sutra
+  branch: main
+  site_domain: lotusrootkr.netlify.app
+
+locale: "ko"
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+site_url: "https://lotusrootkr.netlify.app"
+display_url: "https://lotusrootkr.netlify.app"
+
+collections:
+  - name: "blessings"
+    label: "가피"
+    label_singular: "가피 이야기"
+    folder: "content/blessings"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    fields:
+      - label: "제목"
+        name: title
+        widget: string
+      - label: "영문 제목"
+        name: titleEn
+        widget: string
+        required: false
+      - label: "작성일"
+        name: date
+        widget: datetime
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - label: "짧은 소개"
+        name: summary
+        widget: text
+        required: false
+      - label: "대표 이미지"
+        name: coverImage
+        widget: image
+        required: false
+      - label: "공개 여부"
+        name: published
+        widget: boolean
+        default: true
+      - label: "본문"
+        name: body
+        widget: markdown
+      - label: "영문 본문"
+        name: bodyEn
+        widget: markdown
+        required: false
+      - label: "태그"
+        name: tags
+        widget: list
+        required: false
+
+  - name: "dreams"
+    label: "꿈"
+    label_singular: "꿈 이야기"
+    folder: "content/dreams"
+    create: true
+    extension: "md"
+    format: "frontmatter"
+    slug: "{{slug}}"
+    fields:
+      - label: "제목"
+        name: title
+        widget: string
+      - label: "영문 제목"
+        name: titleEn
+        widget: string
+        required: false
+      - label: "작성일"
+        name: date
+        widget: datetime
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - label: "짧은 소개"
+        name: summary
+        widget: text
+        required: false
+      - label: "대표 이미지"
+        name: coverImage
+        widget: image
+        required: false
+      - label: "공개 여부"
+        name: published
+        widget: boolean
+        default: true
+      - label: "본문"
+        name: body
+        widget: markdown
+      - label: "영문 본문"
+        name: bodyEn
+        widget: markdown
+        required: false
+      - label: "태그"
+        name: tags
+        widget: list
+        required: false

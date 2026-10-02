@@ -145,6 +145,10 @@
     },
     shareOpen: false,
     shareCopyTimer: null,
+    cmsView: {
+      category: null,
+      slug: null,
+    },
   };
 
   function $(id) {
@@ -312,6 +316,12 @@
     storageSet(LANG_KEY, state.lang);
     document.documentElement.lang = state.lang === "ko" ? "ko" : "en";
     renderChrome();
+    if (state.cmsView && state.cmsView.slug) {
+      renderToc();
+      renderCmsPost(state.cmsView.category, state.cmsView.slug);
+      renderHealingCaption();
+      return;
+    }
     renderPage(false);
     renderHealingCaption();
     syncGreetingMode();
@@ -319,7 +329,9 @@
 
   function goTo(nextIndex, dir, options) {
     options = options || {};
-    if (nextIndex < 0 || nextIndex >= state.sutras.length || nextIndex === state.index) {
+    if (nextIndex < 0 || nextIndex >= state.sutras.length) return;
+    if (nextIndex === state.index) {
+      if (state.cmsView && state.cmsView.slug) renderPage(false);
       return;
     }
     state.direction = dir;
@@ -552,7 +564,98 @@
       .replace(/"/g, "&quot;");
   }
 
+  function safeMarkdownUrl(url) {
+    var value = String(url || "")
+      .replace(/&amp;/g, "&")
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .trim();
+    if (!value || /[\s"'<>]/.test(value) || value.indexOf("\\") >= 0) return "";
+    if (/^https?:\/\//i.test(value)) return escapeHtml(value);
+    if (value.charAt(0) === "/" && value.charAt(1) !== "/") return escapeHtml(value);
+    return "";
+  }
+
+  function renderInlineMarkdown(escaped) {
+    var html = String(escaped || "");
+    html = html.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, function (match, alt, url) {
+      var href = safeMarkdownUrl(url);
+      if (!href) return alt;
+      return '<img src="' + href + '" alt="' + alt + '">';
+    });
+    html = html.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (match, label, url) {
+      var href = safeMarkdownUrl(url);
+      if (!href) return label;
+      return '<a href="' + href + '">' + label + "</a>";
+    });
+    html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    html = html.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+    return html;
+  }
+
+  function isMarkdownBlockLine(line) {
+    return /^(?:#{2,3}\s+|-\s+|>\s?)/.test(line);
+  }
+
+  function renderSimpleMarkdown(markdown) {
+    var text = String(markdown || "").replace(/\r\n/g, "\n");
+    var lines = text.split("\n");
+    var html = "";
+    var i = 0;
+    while (i < lines.length) {
+      var line = lines[i];
+      if (!line.trim()) {
+        i += 1;
+        continue;
+      }
+      if (/^###\s+/.test(line)) {
+        html +=
+          '<h3 class="sutra-subhead">' +
+          renderInlineMarkdown(escapeHtml(line.replace(/^###\s+/, ""))) +
+          "</h3>";
+        i += 1;
+        continue;
+      }
+      if (/^##\s+/.test(line)) {
+        html +=
+          '<h2 class="sutra-subhead">' +
+          renderInlineMarkdown(escapeHtml(line.replace(/^##\s+/, ""))) +
+          "</h2>";
+        i += 1;
+        continue;
+      }
+      if (/^>\s?/.test(line)) {
+        var quote = [];
+        while (i < lines.length && /^>\s?/.test(lines[i])) {
+          quote.push(escapeHtml(lines[i].replace(/^>\s?/, "")));
+          i += 1;
+        }
+        html += "<blockquote>" + renderInlineMarkdown(quote.join("\n")).replace(/\n/g, "<br>") + "</blockquote>";
+        continue;
+      }
+      if (/^-\s+/.test(line)) {
+        html += "<ul>";
+        while (i < lines.length && /^-\s+/.test(lines[i])) {
+          html += "<li>" + renderInlineMarkdown(escapeHtml(lines[i].replace(/^-\s+/, ""))) + "</li>";
+          i += 1;
+        }
+        html += "</ul>";
+        continue;
+      }
+      var para = [];
+      while (i < lines.length && lines[i].trim() && !isMarkdownBlockLine(lines[i])) {
+        para.push(escapeHtml(lines[i]));
+        i += 1;
+      }
+      html += '<p class="sutra-para">' + renderInlineMarkdown(para.join("\n")).replace(/\n/g, "<br>") + "</p>";
+    }
+    return html;
+  }
+
   function renderPage(animate) {
+    clearCmsView();
     var page = currentPage();
     if (!page) return;
 
@@ -1016,9 +1119,213 @@
     }
   }
 
+  function getCmsPosts(categoryId) {
+    var content = window.LOTUS_CONTENT;
+    if (!content) return [];
+    if (categoryId !== "blessings" && categoryId !== "dreams") return [];
+    var posts = content[categoryId];
+    return Array.isArray(posts) ? posts : [];
+  }
+
+  function getCmsPost(categoryId, slug) {
+    var posts = getCmsPosts(categoryId);
+    var key = String(slug || "");
+    for (var i = 0; i < posts.length; i += 1) {
+      if (String((posts[i] && posts[i].slug) || "") === key) return posts[i];
+    }
+    return null;
+  }
+
+  function cmsPathParts(pathname) {
+    var path = String(pathname || "").split("?")[0].split("#")[0];
+    path = path.replace(/\/index\.html$/i, "");
+    return path.split("/").filter(function (part) {
+      return part !== "";
+    });
+  }
+
+  function parseCmsRoute(pathname) {
+    var parts = cmsPathParts(pathname);
+    if (parts.length < 2) return null;
+    var category = parts[parts.length - 2];
+    if (category !== "blessings" && category !== "dreams") return null;
+    var slug = parts[parts.length - 1];
+    try {
+      slug = decodeURIComponent(slug);
+    } catch (err) {
+      return null;
+    }
+    if (!slug) return null;
+    return { category: category, slug: slug };
+  }
+
+  function repairCmsDocumentBase() {
+    if (location.protocol === "file:") return;
+    var parts = cmsPathParts(location.pathname);
+    if (parts.length < 2) return;
+    var category = parts[parts.length - 2];
+    if (category !== "blessings" && category !== "dreams") return;
+    var prefixParts = parts.slice(0, -2);
+    var prefix = prefixParts.length ? "/" + prefixParts.join("/") + "/" : "/";
+    var baseEl = document.querySelector("base");
+    if (!baseEl) return;
+    baseEl.setAttribute("href", location.origin + prefix);
+  }
+
+  function cmsPostUrl(categoryId, slug) {
+    var encoded = encodeURIComponent(String(slug || ""));
+    var rel = String(categoryId || "") + "/" + encoded + "/";
+    if (location.protocol === "file:") return "#/" + rel;
+    return appBase() + rel + preservedSearch();
+  }
+
+  function updateCmsDocumentTitle(categoryId, post) {
+    var copy = t();
+    var categoryLabel = categoryId === "dreams" ? copy.dreams : copy.blessings;
+    var articleTitle = post
+      ? cmsPostTitle(post)
+      : state.lang === "en"
+        ? "Post not found."
+        : "글을 찾을 수 없습니다.";
+    document.title = articleTitle + " | " + categoryLabel + " | Lotus Root";
+  }
+
+  function cmsPostTitle(post) {
+    if (!post) return "";
+    if (state.lang === "en") return post.titleEn || post.title || "";
+    return post.title || "";
+  }
+
+  function cmsBodySource(post) {
+    if (!post) return "";
+    if (state.lang === "en") return post.bodyEn || post.bodyMarkdown || "";
+    return post.bodyMarkdown || "";
+  }
+
+  function setCmsChrome(active) {
+    var rails = document.querySelectorAll(".page-nav-rail");
+    var i;
+    for (i = 0; i < rails.length; i += 1) rails[i].hidden = !!active;
+    var pageNav = $("page-nav");
+    if (pageNav) pageNav.hidden = !!active;
+  }
+
+  function clearCmsView() {
+    if (state.cmsView) {
+      state.cmsView.category = null;
+      state.cmsView.slug = null;
+    }
+    setCmsChrome(false);
+  }
+
+  function renderCmsPost(categoryId, slug) {
+    if (categoryId !== "blessings" && categoryId !== "dreams") return;
+    var post = getCmsPost(categoryId, slug);
+    state.cmsView.category = categoryId;
+    state.cmsView.slug = String((post && post.slug) || slug || "");
+    setCmsChrome(true);
+    document.body.classList.remove("is-greeting");
+    if (!state.healingTimer) restartHealingTimer();
+
+    var copy = t();
+    var categoryLabel = categoryId === "dreams" ? copy.dreams : copy.blessings;
+    var articleTitle = post
+      ? cmsPostTitle(post)
+      : state.lang === "en"
+        ? "Post not found."
+        : "글을 찾을 수 없습니다.";
+    var titleEl = $("chapter-title");
+    if (titleEl) {
+      titleEl.classList.remove("turn-next", "turn-prev");
+      titleEl.innerHTML =
+        '<span class="chapter-line is-sutra">' +
+        escapeHtml(categoryLabel) +
+        '</span><span class="chapter-line is-chapter">' +
+        escapeHtml(articleTitle) +
+        "</span>";
+    }
+
+    var hanjaText = $("hanja-text");
+    var hanjaHeader = hanjaText && hanjaText.closest("header");
+    if (hanjaHeader) hanjaHeader.hidden = true;
+
+    var card = $("sutra-card");
+    if (card) card.hidden = false;
+    var columns = $("columns");
+    if (!post) {
+      if (columns) {
+        columns.innerHTML =
+          '<section class="sutra-section is-primary"><div class="sutra-measure cms-article">' +
+          '<p class="sutra-para">' +
+          escapeHtml(articleTitle) +
+          "</p></div></section>";
+      }
+      updateCmsDocumentTitle(categoryId, null);
+      syncCategoryTabs();
+      if (state.shareOpen) fillShareUrl();
+      return;
+    }
+    if (columns) {
+      var html = '<section class="sutra-section is-primary"><div class="sutra-measure cms-article">';
+      if (String(post.date || "").trim()) {
+        html += '<p class="column-kicker">' + escapeHtml(post.date) + "</p>";
+      }
+      var cover = safeMarkdownUrl(post.coverImage || "");
+      if (cover) {
+        html += '<img class="cms-cover" src="' + cover + '" alt="' + escapeHtml(cmsPostTitle(post)) + '">';
+      }
+      if (String(post.summary || "").trim()) {
+        html +=
+          '<p class="cms-summary">' +
+          escapeHtml(post.summary).replace(/\r\n/g, "\n").replace(/\n/g, "<br>") +
+          "</p>";
+      }
+      html +=
+        '<div class="sutra-body is-essay ' +
+        (state.lang === "en" ? "sutra-en" : "sutra-ko") +
+        '">' +
+        renderSimpleMarkdown(cmsBodySource(post)) +
+        "</div>";
+      var tags = Array.isArray(post.tags) ? post.tags : [];
+      var tagHtml = "";
+      for (var tIndex = 0; tIndex < tags.length; tIndex += 1) {
+        if (!String(tags[tIndex] || "").trim()) continue;
+        tagHtml += "<li>" + escapeHtml(tags[tIndex]) + "</li>";
+      }
+      if (tagHtml) html += '<ul class="cms-tags">' + tagHtml + "</ul>";
+      html += "</div></section>";
+      columns.innerHTML = html;
+    }
+    updateCmsDocumentTitle(categoryId, post);
+    syncCategoryTabs();
+    if (state.shareOpen) fillShareUrl();
+  }
+
   function renderCategoryNav(sutraId) {
     var root = $("toc-" + sutraId + "-nav");
     if (!root) return;
+    if (sutraId === "blessings" || sutraId === "dreams") {
+      var posts = getCmsPosts(sutraId);
+      if (posts.length) {
+        var cmsHtml = '<ul class="cat-sections">';
+        for (var p = 0; p < posts.length; p += 1) {
+          var post = posts[p] || {};
+          var label =
+            state.lang === "en" ? post.titleEn || post.title || "" : post.title || "";
+          cmsHtml +=
+            '<li><span class="cat-section" data-cms-category="' +
+            escapeHtml(sutraId) +
+            '" data-cms-slug="' +
+            escapeHtml(post.slug || "") +
+            '">' +
+            escapeHtml(label) +
+            "</span></li>";
+        }
+        cmsHtml += "</ul>";
+        root.innerHTML = cmsHtml;
+        return;
+      }
+    }
     var sutra = findSutra(sutraId);
     if (!sutra || !sutraHasChapters(sutra)) {
       root.innerHTML =
@@ -1545,6 +1852,7 @@
   }
 
   function syncUrl(replace) {
+    if (state.cmsView && state.cmsView.slug) return;
     if (typeof history === "undefined" || !history.pushState) return;
     var next = pathForIndex(state.index);
     try {
@@ -1564,10 +1872,16 @@
   }
 
   function applyLocationFromUrl() {
+    var cmsRoute = parseCmsRoute(location.pathname);
+    if (cmsRoute) {
+      renderCmsPost(cmsRoute.category, cmsRoute.slug);
+      return;
+    }
     var idx = indexFromLocation();
     if (idx < 0) idx = 0;
     if (idx === state.index) {
-      updateDocumentMeta();
+      if (state.cmsView && state.cmsView.slug) renderPage(false);
+      else updateDocumentMeta();
       return;
     }
     goTo(idx, idx >= state.index ? 1 : -1, { skipUrl: true });
@@ -1593,7 +1907,8 @@
 
   function syncCategoryTabs() {
     var loc = locationOfIndex(state.index);
-    var activeId = loc && loc.sutra && isCategorySutra(loc.sutra) ? loc.sutra.id : null;
+    var cmsCategory = state.cmsView && state.cmsView.slug ? state.cmsView.category : null;
+    var activeId = cmsCategory || (loc && loc.sutra && isCategorySutra(loc.sutra) ? loc.sutra.id : null);
     for (var i = 0; i < CATEGORY_LEVELS.length; i += 1) {
       var id = CATEGORY_LEVELS[i];
       var wrap = $("toc-" + id + "-wrap");
@@ -1691,7 +2006,7 @@
 
   function fillShareUrl() {
     var input = $("share-url");
-    if (input) input.value = publicUrlForIndex(state.index);
+    if (input) input.value = currentShareUrl();
   }
 
   function renderShareChrome() {
@@ -1786,6 +2101,7 @@
   }
 
   function currentShareUrl() {
+    if (state.cmsView && state.cmsView.slug) return location.href;
     return publicUrlForIndex(state.index);
   }
 
@@ -1918,6 +2234,7 @@
       if (isPageJumpOpen()) return;
       if (state.shareOpen) return;
       if (isGreetingView()) return;
+      if (state.cmsView && state.cmsView.slug) return;
       if (event.key === "ArrowLeft") goPrev();
       if (event.key === "ArrowRight") goNext();
     });
@@ -1940,6 +2257,30 @@
         var nav = $("toc-" + level + "-nav");
         if (nav) {
           nav.addEventListener("click", function (event) {
+            var cmsItem = event.target.closest("[data-cms-category][data-cms-slug]");
+            if (cmsItem) {
+              if (shouldLetBrowserNavigate(event)) return;
+              event.preventDefault();
+              var cmsCategory = cmsItem.getAttribute("data-cms-category");
+              var cmsSlug = cmsItem.getAttribute("data-cms-slug");
+              renderCmsPost(cmsCategory, cmsSlug);
+              if (history && history.pushState) {
+                var cmsNext = cmsPostUrl(cmsCategory, cmsSlug);
+                var cmsCurrent =
+                  location.protocol === "file:" || location.hash.indexOf("#/") === 0
+                    ? location.hash || ""
+                    : location.pathname + location.search;
+                if (cmsCurrent !== cmsNext) {
+                  history.pushState(
+                    { cms: true, category: cmsCategory, slug: cmsSlug },
+                    "",
+                    cmsNext
+                  );
+                }
+              }
+              closeCategoryMenu();
+              return;
+            }
             var chBtn = event.target.closest("[data-toc-chapter]");
             if (!chBtn) return;
             if (shouldLetBrowserNavigate(event)) return;
@@ -2041,14 +2382,16 @@
     var firstScripture = scriptureSutras()[0];
     if (firstScripture) state.tocOpen[firstScripture.id] = true;
     state.lang = readSavedLang();
-    var fromUrl = indexFromLocation();
+    var cmsRoute = parseCmsRoute(location.pathname);
+    if (cmsRoute) repairCmsDocumentBase();
+    var fromUrl = cmsRoute ? -1 : indexFromLocation();
     var saved = readSavedIndex(state.sutras);
     var usedResume = false;
     if (fromUrl >= 0) {
       state.index = fromUrl;
     } else {
       state.index = saved.index;
-      usedResume = saved.resumed;
+      usedResume = cmsRoute ? false : saved.resumed;
     }
     ensureActiveTocOpen();
     storageSet(PAGE_KEY, String(currentPage().id));
@@ -2060,8 +2403,13 @@
 
     bindEvents();
     renderChrome();
-    renderPage(false);
-    syncUrl(true);
+    if (cmsRoute) {
+      renderToc();
+      renderCmsPost(cmsRoute.category, cmsRoute.slug);
+    } else {
+      renderPage(false);
+      syncUrl(true);
+    }
     applyMoment(pickMoment());
     if (!isGreetingView()) restartHealingTimer();
 
