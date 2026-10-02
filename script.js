@@ -1136,6 +1136,46 @@
     return null;
   }
 
+  function parseCmsRoute(pathname) {
+    var path = String(pathname || "").split("?")[0].split("#")[0];
+    path = path.replace(/\/index\.html$/i, "");
+    var base = appBase();
+    if (base && base !== "/" && path.indexOf(base) === 0) {
+      path = "/" + path.slice(base.length);
+    }
+    var parts = path.split("/").filter(function (part) {
+      return part !== "";
+    });
+    if (parts.length !== 2) return null;
+    if (parts[0] !== "blessings" && parts[0] !== "dreams") return null;
+    var slug = parts[1];
+    try {
+      slug = decodeURIComponent(slug);
+    } catch (err) {
+      return null;
+    }
+    if (!slug) return null;
+    return { category: parts[0], slug: slug };
+  }
+
+  function cmsPostUrl(categoryId, slug) {
+    var encoded = encodeURIComponent(String(slug || ""));
+    var rel = String(categoryId || "") + "/" + encoded + "/";
+    if (location.protocol === "file:") return "#/" + rel;
+    return appBase() + rel + preservedSearch();
+  }
+
+  function updateCmsDocumentTitle(categoryId, post) {
+    var copy = t();
+    var categoryLabel = categoryId === "dreams" ? copy.dreams : copy.blessings;
+    var articleTitle = post
+      ? cmsPostTitle(post)
+      : state.lang === "en"
+        ? "Post not found."
+        : "글을 찾을 수 없습니다.";
+    document.title = articleTitle + " | " + categoryLabel + " | Lotus Root";
+  }
+
   function cmsPostTitle(post) {
     if (!post) return "";
     if (state.lang === "en") return post.titleEn || post.title || "";
@@ -1165,16 +1205,21 @@
   }
 
   function renderCmsPost(categoryId, slug) {
+    if (categoryId !== "blessings" && categoryId !== "dreams") return;
     var post = getCmsPost(categoryId, slug);
-    if (!post) return;
     state.cmsView.category = categoryId;
-    state.cmsView.slug = String(post.slug || slug || "");
+    state.cmsView.slug = String((post && post.slug) || slug || "");
     setCmsChrome(true);
     document.body.classList.remove("is-greeting");
     if (!state.healingTimer) restartHealingTimer();
 
     var copy = t();
     var categoryLabel = categoryId === "dreams" ? copy.dreams : copy.blessings;
+    var articleTitle = post
+      ? cmsPostTitle(post)
+      : state.lang === "en"
+        ? "Post not found."
+        : "글을 찾을 수 없습니다.";
     var titleEl = $("chapter-title");
     if (titleEl) {
       titleEl.classList.remove("turn-next", "turn-prev");
@@ -1182,7 +1227,7 @@
         '<span class="chapter-line is-sutra">' +
         escapeHtml(categoryLabel) +
         '</span><span class="chapter-line is-chapter">' +
-        escapeHtml(cmsPostTitle(post)) +
+        escapeHtml(articleTitle) +
         "</span>";
     }
 
@@ -1193,6 +1238,19 @@
     var card = $("sutra-card");
     if (card) card.hidden = false;
     var columns = $("columns");
+    if (!post) {
+      if (columns) {
+        columns.innerHTML =
+          '<section class="sutra-section is-primary"><div class="sutra-measure cms-article">' +
+          '<p class="sutra-para">' +
+          escapeHtml(articleTitle) +
+          "</p></div></section>";
+      }
+      updateCmsDocumentTitle(categoryId, null);
+      syncCategoryTabs();
+      if (state.shareOpen) fillShareUrl();
+      return;
+    }
     if (columns) {
       var html = '<section class="sutra-section is-primary"><div class="sutra-measure cms-article">';
       if (String(post.date || "").trim()) {
@@ -1224,6 +1282,7 @@
       html += "</div></section>";
       columns.innerHTML = html;
     }
+    updateCmsDocumentTitle(categoryId, post);
     syncCategoryTabs();
     if (state.shareOpen) fillShareUrl();
   }
@@ -1779,6 +1838,7 @@
   }
 
   function syncUrl(replace) {
+    if (state.cmsView && state.cmsView.slug) return;
     if (typeof history === "undefined" || !history.pushState) return;
     var next = pathForIndex(state.index);
     try {
@@ -1798,10 +1858,16 @@
   }
 
   function applyLocationFromUrl() {
+    var cmsRoute = parseCmsRoute(location.pathname);
+    if (cmsRoute) {
+      renderCmsPost(cmsRoute.category, cmsRoute.slug);
+      return;
+    }
     var idx = indexFromLocation();
     if (idx < 0) idx = 0;
     if (idx === state.index) {
-      updateDocumentMeta();
+      if (state.cmsView && state.cmsView.slug) renderPage(false);
+      else updateDocumentMeta();
       return;
     }
     goTo(idx, idx >= state.index ? 1 : -1, { skipUrl: true });
@@ -1926,7 +1992,7 @@
 
   function fillShareUrl() {
     var input = $("share-url");
-    if (input) input.value = publicUrlForIndex(state.index);
+    if (input) input.value = currentShareUrl();
   }
 
   function renderShareChrome() {
@@ -2021,6 +2087,7 @@
   }
 
   function currentShareUrl() {
+    if (state.cmsView && state.cmsView.slug) return location.href;
     return publicUrlForIndex(state.index);
   }
 
@@ -2180,10 +2247,23 @@
             if (cmsItem) {
               if (shouldLetBrowserNavigate(event)) return;
               event.preventDefault();
-              renderCmsPost(
-                cmsItem.getAttribute("data-cms-category"),
-                cmsItem.getAttribute("data-cms-slug")
-              );
+              var cmsCategory = cmsItem.getAttribute("data-cms-category");
+              var cmsSlug = cmsItem.getAttribute("data-cms-slug");
+              renderCmsPost(cmsCategory, cmsSlug);
+              if (history && history.pushState) {
+                var cmsNext = cmsPostUrl(cmsCategory, cmsSlug);
+                var cmsCurrent =
+                  location.protocol === "file:" || location.hash.indexOf("#/") === 0
+                    ? location.hash || ""
+                    : location.pathname + location.search;
+                if (cmsCurrent !== cmsNext) {
+                  history.pushState(
+                    { cms: true, category: cmsCategory, slug: cmsSlug },
+                    "",
+                    cmsNext
+                  );
+                }
+              }
               closeCategoryMenu();
               return;
             }
@@ -2288,14 +2368,15 @@
     var firstScripture = scriptureSutras()[0];
     if (firstScripture) state.tocOpen[firstScripture.id] = true;
     state.lang = readSavedLang();
-    var fromUrl = indexFromLocation();
+    var cmsRoute = parseCmsRoute(location.pathname);
+    var fromUrl = cmsRoute ? -1 : indexFromLocation();
     var saved = readSavedIndex(state.sutras);
     var usedResume = false;
     if (fromUrl >= 0) {
       state.index = fromUrl;
     } else {
       state.index = saved.index;
-      usedResume = saved.resumed;
+      usedResume = cmsRoute ? false : saved.resumed;
     }
     ensureActiveTocOpen();
     storageSet(PAGE_KEY, String(currentPage().id));
@@ -2307,8 +2388,12 @@
 
     bindEvents();
     renderChrome();
-    renderPage(false);
-    syncUrl(true);
+    if (cmsRoute) {
+      renderCmsPost(cmsRoute.category, cmsRoute.slug);
+    } else {
+      renderPage(false);
+      syncUrl(true);
+    }
     applyMoment(pickMoment());
     if (!isGreetingView()) restartHealingTimer();
 
