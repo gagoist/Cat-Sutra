@@ -1016,9 +1016,39 @@
     }
   }
 
+  function getCmsPosts(categoryId) {
+    var content = window.LOTUS_CONTENT;
+    if (!content) return [];
+    if (categoryId !== "blessings" && categoryId !== "dreams") return [];
+    var posts = content[categoryId];
+    return Array.isArray(posts) ? posts : [];
+  }
+
   function renderCategoryNav(sutraId) {
     var root = $("toc-" + sutraId + "-nav");
     if (!root) return;
+    if (sutraId === "blessings" || sutraId === "dreams") {
+      var posts = getCmsPosts(sutraId);
+      if (posts.length) {
+        var cmsHtml = '<ul class="cat-sections">';
+        for (var p = 0; p < posts.length; p += 1) {
+          var post = posts[p] || {};
+          var label =
+            state.lang === "en" ? post.titleEn || post.title || "" : post.title || "";
+          cmsHtml +=
+            '<li><span class="cat-section" data-cms-category="' +
+            escapeHtml(sutraId) +
+            '" data-cms-slug="' +
+            escapeHtml(post.slug || "") +
+            '">' +
+            escapeHtml(label) +
+            "</span></li>";
+        }
+        cmsHtml += "</ul>";
+        root.innerHTML = cmsHtml;
+        return;
+      }
+    }
     var sutra = findSutra(sutraId);
     if (!sutra || !sutraHasChapters(sutra)) {
       root.innerHTML =
