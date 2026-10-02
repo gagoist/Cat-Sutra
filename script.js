@@ -1136,26 +1136,40 @@
     return null;
   }
 
-  function parseCmsRoute(pathname) {
+  function cmsPathParts(pathname) {
     var path = String(pathname || "").split("?")[0].split("#")[0];
     path = path.replace(/\/index\.html$/i, "");
-    var base = appBase();
-    if (base && base !== "/" && path.indexOf(base) === 0) {
-      path = "/" + path.slice(base.length);
-    }
-    var parts = path.split("/").filter(function (part) {
+    return path.split("/").filter(function (part) {
       return part !== "";
     });
-    if (parts.length !== 2) return null;
-    if (parts[0] !== "blessings" && parts[0] !== "dreams") return null;
-    var slug = parts[1];
+  }
+
+  function parseCmsRoute(pathname) {
+    var parts = cmsPathParts(pathname);
+    if (parts.length < 2) return null;
+    var category = parts[parts.length - 2];
+    if (category !== "blessings" && category !== "dreams") return null;
+    var slug = parts[parts.length - 1];
     try {
       slug = decodeURIComponent(slug);
     } catch (err) {
       return null;
     }
     if (!slug) return null;
-    return { category: parts[0], slug: slug };
+    return { category: category, slug: slug };
+  }
+
+  function repairCmsDocumentBase() {
+    if (location.protocol === "file:") return;
+    var parts = cmsPathParts(location.pathname);
+    if (parts.length < 2) return;
+    var category = parts[parts.length - 2];
+    if (category !== "blessings" && category !== "dreams") return;
+    var prefixParts = parts.slice(0, -2);
+    var prefix = prefixParts.length ? "/" + prefixParts.join("/") + "/" : "/";
+    var baseEl = document.querySelector("base");
+    if (!baseEl) return;
+    baseEl.setAttribute("href", location.origin + prefix);
   }
 
   function cmsPostUrl(categoryId, slug) {
@@ -2369,6 +2383,7 @@
     if (firstScripture) state.tocOpen[firstScripture.id] = true;
     state.lang = readSavedLang();
     var cmsRoute = parseCmsRoute(location.pathname);
+    if (cmsRoute) repairCmsDocumentBase();
     var fromUrl = cmsRoute ? -1 : indexFromLocation();
     var saved = readSavedIndex(state.sutras);
     var usedResume = false;
@@ -2389,6 +2404,7 @@
     bindEvents();
     renderChrome();
     if (cmsRoute) {
+      renderToc();
       renderCmsPost(cmsRoute.category, cmsRoute.slug);
     } else {
       renderPage(false);
