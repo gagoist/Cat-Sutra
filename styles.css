@@ -1648,3 +1648,54 @@ html[lang="en"] .sutra-measure {
     transition: none !important;
   }
 }
+
+.cms-article .cms-cover,
+.cms-article .sutra-body img {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0.35rem 0 1.35rem;
+}
+
+.cms-article .cms-summary {
+  margin: 0 0 1.35rem;
+  color: var(--text);
+  font-family: var(--font-serif);
+  line-height: 1.75;
+}
+
+.cms-article .sutra-body ul {
+  margin: 0.8rem 0 1rem;
+  padding-left: 1.2rem;
+}
+
+.cms-article .sutra-body blockquote {
+  margin: 1rem 0;
+  padding-left: 0.9rem;
+  border-left: 1px solid var(--gold);
+}
+
+.cms-article .sutra-body a {
+  color: var(--gold-bright);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.cms-article .cms-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1.8rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cms-article .cms-tags li {
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--line);
+  color: var(--text-faint);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+}
