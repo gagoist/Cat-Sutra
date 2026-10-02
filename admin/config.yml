@@ -1,7 +1,7 @@
 backend:
   name: github
   repo: gagoist/Cat-Sutra
-  branch: feature/content-admin
+  branch: main
   site_domain: lotusrootkr.netlify.app
 
 locale: "ko"
