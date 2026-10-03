@@ -137,8 +137,8 @@ function readBlock(lines, start, indicator) {
     i += 1;
   }
   var text = content.join("\n");
-  if (indicator === "|-") text = text.replace(/\n+$/, "");
-  else if (indicator === "|") text = text.replace(/\n+$/, "") + "\n";
+  if (indicator === "|-" || indicator === ">-") text = text.replace(/\n+$/, "");
+  else if (indicator === "|" || indicator === ">") text = text.replace(/\n+$/, "") + "\n";
   return { text: text, next: i };
 }
 
@@ -176,7 +176,14 @@ function parseFrontmatter(src) {
     }
     var key = match[1];
     var raw = match[2].trim();
-    if (raw === "|" || raw === "|-" || raw === "|+") {
+    if (
+      raw === "|" ||
+      raw === "|-" ||
+      raw === "|+" ||
+      raw === ">" ||
+      raw === ">-" ||
+      raw === ">+"
+    ) {
       var block = readBlock(lines, i + 1, raw);
       data[key] = block.text;
       i = block.next;
