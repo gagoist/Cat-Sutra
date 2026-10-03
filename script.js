@@ -48,6 +48,10 @@
       shareClose: "닫기",
       shareKakaoHint: "주소를 복사했습니다. 카카오톡에 붙여넣어 보내세요.",
       shareText: "{title} {n}쪽부터 이어서 보기",
+      footerAbout: "About",
+      footerPrivacy: "개인정보처리방침",
+      footerContact: "문의",
+      footerNav: "사이트 정보",
     },
     en: {
       siteTitle: "Lotus Root & Sutra",
@@ -91,6 +95,10 @@
       shareClose: "Close",
       shareKakaoHint: "Link copied. Paste it into KakaoTalk to send.",
       shareText: "Continue {title} from page {n}",
+      footerAbout: "About",
+      footerPrivacy: "Privacy Policy",
+      footerContact: "Contact",
+      footerNav: "Site information",
     },
   };
 
@@ -149,6 +157,10 @@
       category: null,
       slug: null,
     },
+    infoPage: null,
+    contactSent: false,
+    contactSending: false,
+    contactDraft: null,
   };
 
   function $(id) {
@@ -316,6 +328,12 @@
     storageSet(LANG_KEY, state.lang);
     document.documentElement.lang = state.lang === "ko" ? "ko" : "en";
     renderChrome();
+    if (state.infoPage) {
+      renderToc();
+      renderInfoPage(state.infoPage);
+      renderHealingCaption();
+      return;
+    }
     if (state.cmsView && state.cmsView.slug) {
       renderToc();
       renderCmsPost(state.cmsView.category, state.cmsView.slug);
@@ -331,7 +349,10 @@
     options = options || {};
     if (nextIndex < 0 || nextIndex >= state.sutras.length) return;
     if (nextIndex === state.index) {
-      if (state.cmsView && state.cmsView.slug) renderPage(false);
+      if ((state.cmsView && state.cmsView.slug) || state.infoPage) {
+        renderPage(false);
+        syncUrl(false);
+      }
       return;
     }
     state.direction = dir;
@@ -459,6 +480,7 @@
         "rounded-full px-3.5 py-1.5 font-sans text-sm tracking-wide transition-all duration-300 sm:px-4 " +
         (!koOn ? "bg-seal text-paper-deep" : "text-ink-muted hover:text-ivory");
     }
+    renderSiteInfoFooter();
   }
 
   var JOURNEY_SUBHEADS = {
@@ -656,6 +678,7 @@
 
   function renderPage(animate) {
     clearCmsView();
+    leaveInfoPage();
     var page = currentPage();
     if (!page) return;
 
@@ -1144,6 +1167,630 @@
     });
   }
 
+  var CONTACT_TOPICS = [
+    {
+      value: "경전·번역 오류 / Scripture or translation",
+      ko: "경전·번역 오류",
+      en: "Scripture or translation",
+    },
+    {
+      value: "사이트 오류 / Site issue",
+      ko: "사이트 오류",
+      en: "Site issue",
+    },
+    {
+      value: "콘텐츠 관련 / Content",
+      ko: "콘텐츠 관련",
+      en: "Content",
+    },
+    {
+      value: "기타 문의 / Other",
+      ko: "기타 문의",
+      en: "Other",
+    },
+  ];
+
+  var INFO = {
+    ko: {
+      about: {
+        title: "Lotus Root 소개",
+        blocks: [
+          {
+            p: "Lotus Root는 법화경과 불교의 가르침을 더 많은 사람이 쉽게 접하고, 관련된 기록과 경험을 오래 보존하기 위해 만들어진 온라인 공간입니다.",
+          },
+          {
+            p: "이곳에는 법화삼부경의 원문과 번역, 해설을 비롯해 불교를 믿으며 살아가는 사람들이 경험한 가피와 꿈, 그리고 신앙과 삶에 관한 여러 기록을 차근차근 담아가고 있습니다.",
+          },
+          { h: "법화삼부경과 Lotus Root" },
+          {
+            p: "Lotus Root에서 소개하는 법화삼부경 관련 자료 중 일부는 묘현사 묘각스님이 소유한 자료를 바탕으로 하고 있습니다.",
+          },
+          {
+            p: "관련 자료의 출처와 권리를 존중하며, 경전의 내용을 더 많은 사람이 읽고 오래 보존할 수 있는 방법을 찾아가는 것을 중요한 목표로 삼고 있습니다.",
+          },
+          {
+            p: "장기적으로는 온라인에서 경전을 보다 편리하게 읽을 수 있는 환경을 만들고, 종이 경전과 전자 경전 등 새로운 형태로 다시 전할 수 있는 방법도 차근차근 준비하고자 합니다.",
+          },
+          { h: "기록에서 실천으로" },
+          {
+            p: "Lotus Root는 경전을 읽고 기록하는 것에만 머무르지 않고, 그 인연이 작은 실천과 나눔으로 이어질 수 있는 공간을 지향합니다.",
+          },
+          {
+            p: "사이트를 운영하며 만들어지는 여러 자원 역시 가능한 범위에서 경전 제작과 보존, 불교 콘텐츠, 나눔과 불교를 알리는 활동에 다시 활용하고자 합니다.",
+          },
+          {
+            p: "앞으로 여건이 마련된다면 과거 연뿌리 봉사단의 활동과 새로운 나눔의 기록 역시 이곳에 차근차근 담아가려고 합니다.",
+          },
+          {
+            p: "지금은 작은 온라인 공간이지만, 시간이 지나면서 경전과 사람, 그리고 또 다른 인연을 이어주는 하나의 뿌리가 되기를 바랍니다.",
+          },
+        ],
+      },
+      privacy: {
+        title: "개인정보처리방침",
+        blocks: [
+          {
+            p: "Lotus Root는 이용자의 개인정보를 소중히 여기며, 이 페이지에서 개인정보를 어떻게 다루는지 안내합니다.",
+          },
+          { h: "1. 회원가입", legal: 1 },
+          { p: "이 사이트는 별도의 회원가입 기능을 두지 않습니다." },
+          { h: "2. 문의를 통해 수집하는 정보", legal: 1 },
+          {
+            p: "문의 기능을 이용할 경우, 이름 또는 닉네임(선택), 이메일 주소, 문의 내용이 수집될 수 있습니다.",
+          },
+          { h: "3. 이용 과정에서 처리될 수 있는 정보", legal: 1 },
+          {
+            p: "호스팅과 보안 과정에서 IP 주소, 브라우저 및 기기 정보, 접속 기록 등이 기술적으로 처리될 수 있습니다.",
+          },
+          { h: "4. 이용 목적", legal: 1 },
+          {
+            p: "수집한 정보는 문의 확인과 답변, 사이트 운영, 보안, 오류 확인을 위해 사용합니다.",
+          },
+          { h: "5. 외부 서비스 제공자", legal: 1 },
+          {
+            p: "사이트 운영을 위해 Netlify 등 외부 서비스 제공자를 이용할 수 있습니다.",
+          },
+          { h: "6. 광고", legal: 1 },
+          {
+            p: "향후 Google AdSense 등 제3자 광고 서비스를 사용할 수 있습니다. 광고 서비스가 적용되는 경우, Google 등 제3자가 쿠키(cookies), 웹 비콘(web beacons), IP 주소 또는 그 밖의 식별자(identifiers)를 사용할 수 있습니다.",
+          },
+          {
+            rich: [
+              "광고 서비스가 적용되는 경우, Google 및 파트너사는 방문 정보를 바탕으로 광고를 제공할 수 있습니다. 맞춤 광고 설정은 ",
+              {
+                external: 1,
+                href: "https://adssettings.google.com/",
+                label: "Google 광고 설정",
+              },
+              "에서 관리할 수 있습니다.",
+            ],
+          },
+          { h: "7. 외부 사이트", legal: 1 },
+          {
+            p: "이 사이트에서 연결되는 외부 사이트에는 해당 사이트의 개인정보처리방침이 적용됩니다.",
+          },
+          { h: "8. 방침의 변경", legal: 1 },
+          { p: "이 방침은 서비스의 변경에 따라 수정될 수 있습니다." },
+          { p: "시행일: 2026-10-03" },
+          {
+            rich: [
+              "개인정보 문의는 ",
+              { page: "contact", label: "문의" },
+              " 페이지를 이용해 주세요.",
+            ],
+          },
+        ],
+      },
+      contact: {
+        title: "문의",
+        blocks: [
+          { p: "Lotus Root의 콘텐츠에 관한 의견이나 문의를 남겨주세요." },
+          {
+            p: "법화경 원문이나 번역·표기의 오류, 사이트 이용 중 발견한 문제, 콘텐츠와 관련된 제안도 환영합니다.",
+          },
+          {
+            p: "모든 문의에 답변을 드리지는 못할 수 있지만, 보내주신 내용은 사이트를 운영하고 자료를 정리하는 데 참고하겠습니다.",
+          },
+        ],
+        nameLabel: "이름 또는 닉네임",
+        nameOptional: "선택",
+        emailLabel: "이메일",
+        topicLabel: "문의 유형",
+        topicPlaceholder: "선택해 주세요",
+        messageLabel: "문의 내용",
+        consentBefore:
+          "문의 답변을 위해 이름 또는 닉네임(선택), 이메일 주소 및 문의 내용을 수집·이용합니다. 이메일 주소와 문의 내용은 문의 처리를 위해 사용되며, ",
+        consentLink: "개인정보처리방침",
+        consentAfter:
+          "에 따라 관리됩니다. 개인정보 수집·이용에 동의하지 않을 수 있으나 이 경우 문의 접수가 어렵습니다.",
+        submit: "보내기",
+        success: "문의가 접수되었습니다. 감사합니다.",
+        error: "문의 전송 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.",
+      },
+    },
+    en: {
+      about: {
+        title: "About Lotus Root",
+        blocks: [
+          {
+            p: "Lotus Root is an online space created so that more people can come to the Lotus Sutra and the teachings of Buddhism with ease, and so that the records and experiences around them can be kept for a long time.",
+          },
+          {
+            p: "It is slowly gathering the original text, translations, and commentary of the Threefold Lotus Sutra, together with blessings and dreams experienced by people who live their Buddhist faith, and other records of faith and daily life.",
+          },
+          { h: "The Threefold Lotus Sutra and Lotus Root" },
+          {
+            p: "Some of the Threefold Lotus Sutra materials presented on Lotus Root are based on sources held by Venerable Myogak of Myohyeonsa.",
+          },
+          {
+            p: "The site respects the origin and rights of those materials. An important aim is to find ways for more people to read the scriptures, and for the scriptures to be preserved over time.",
+          },
+          {
+            p: "Over the long term, Lotus Root hopes to make the sutras easier to read online, and to prepare, step by step, for passing them on again in new forms, including printed editions and electronic texts.",
+          },
+          { h: "From Record to Practice" },
+          {
+            p: "Lotus Root is not meant to stop at reading and recording. It hopes to be a place where that connection can continue into small acts of practice and sharing.",
+          },
+          {
+            p: "Resources that come from running the site will, wherever possible, be used again for making and preserving the scriptures, for Buddhist writing, and for sharing Buddhism with others.",
+          },
+          {
+            p: "If the time comes, the earlier work of the Yeonroot Volunteer Group, and new records of giving, will also be gathered here little by little.",
+          },
+          {
+            p: "This is still a small online space. With time, we hope it becomes a root that joins the scriptures, the people who read them, and connections still to come.",
+          },
+        ],
+      },
+      privacy: {
+        title: "Privacy Policy",
+        blocks: [
+          {
+            p: "Lotus Root cares about your privacy. This page explains how personal information is handled on the site.",
+          },
+          { h: "1. Accounts", legal: 1 },
+          { p: "Lotus Root does not offer a separate sign-up or membership feature." },
+          { h: "2. Information collected through the contact form", legal: 1 },
+          {
+            p: "If you use the contact form, we may collect your name or nickname (optional), email address, and the content of your message.",
+          },
+          { h: "3. Information processed while you use the site", legal: 1 },
+          {
+            p: "In the course of hosting and security, an IP address, browser and device information, and access logs may be processed for technical reasons.",
+          },
+          { h: "4. How the information is used", legal: 1 },
+          {
+            p: "Information that is collected is used to read and reply to inquiries, to operate the site, to keep it secure, and to look into errors.",
+          },
+          { h: "5. Service providers", legal: 1 },
+          { p: "Lotus Root may use outside service providers, such as Netlify, to operate the site." },
+          { h: "6. Advertising", legal: 1 },
+          {
+            p: "In the future, Lotus Root may use third-party advertising services such as Google AdSense. If an advertising service is applied, third parties such as Google may use cookies, web beacons, IP addresses, or other identifiers.",
+          },
+          {
+            rich: [
+              "If an advertising service is applied, Google and its partners may serve ads based on information about your visit. You can manage personalized ads in ",
+              {
+                external: 1,
+                href: "https://adssettings.google.com/",
+                label: "Google Ads Settings",
+              },
+              ".",
+            ],
+          },
+          { h: "7. Links to other sites", legal: 1 },
+          { p: "When this site links to another website, that website's own privacy policy applies." },
+          { h: "8. Changes to this policy", legal: 1 },
+          { p: "This policy may be updated as the service changes." },
+          { p: "Effective date: 2026-10-03" },
+          {
+            rich: [
+              "For questions about your personal information, please use the ",
+              { page: "contact", label: "Contact" },
+              " page.",
+            ],
+          },
+        ],
+      },
+      contact: {
+        title: "Contact",
+        blocks: [
+          { p: "Please leave a note or a question about anything on Lotus Root." },
+          {
+            p: "You are welcome to tell us about errors in the Lotus Sutra text, its translation, or its wording, problems you find while using the site, and suggestions about the content.",
+          },
+          {
+            p: "We may not be able to reply to every message. What you send will still help us run the site and organize its materials.",
+          },
+        ],
+        nameLabel: "Name or nickname",
+        nameOptional: "Optional",
+        emailLabel: "Email",
+        topicLabel: "Type of inquiry",
+        messageLabel: "Message",
+        topicPlaceholder: "Please choose",
+        consentBefore:
+          "To reply to your message, we collect and use your name or nickname (optional), your email address, and your message. Your email address and message are used to handle the inquiry and are managed under the ",
+        consentLink: "Privacy Policy",
+        consentAfter: ". You may decline, but if you do, we will not be able to receive your inquiry.",
+        submit: "Send",
+        success: "Your message has been received. Thank you.",
+        error: "Something went wrong while sending your message. Please try again in a moment.",
+      },
+    },
+  };
+
+  function infoModel(page) {
+    var pack = INFO[state.lang] || INFO.ko;
+    return pack[page] || pack.about;
+  }
+
+  function infoPageUrl(page) {
+    if (location.protocol === "file:") return "#/" + page;
+    return appBase() + page + "/" + preservedSearch();
+  }
+
+  function infoAbsoluteUrl(page) {
+    if (location.protocol === "file:") return location.href.split("#")[0] + "#/" + page;
+    try {
+      return new URL(appBase() + page + "/", location.origin).href;
+    } catch (err) {
+      return location.origin + appBase() + page + "/";
+    }
+  }
+
+  function parseInfoRoute() {
+    var route = "";
+    if (location.hash.indexOf("#/") === 0) {
+      route = location.hash.slice(2);
+    } else {
+      var parts = cmsPathParts(location.pathname);
+      if (parts.length >= 2) {
+        var prev = String(parts[parts.length - 2] || "").toLowerCase();
+        if (prev === "blessings" || prev === "dreams") return null;
+      }
+      route = parts.length ? parts[parts.length - 1] : "";
+    }
+    route = String(route || "")
+      .replace(/^\/+|\/+$/g, "")
+      .toLowerCase();
+    if (route === "about" || route === "privacy" || route === "contact") return route;
+    return null;
+  }
+
+  function repairInfoDocumentBase() {
+    if (location.protocol === "file:") return;
+    var parts = cmsPathParts(location.pathname);
+    if (!parts.length) return;
+    var last = String(parts[parts.length - 1] || "").toLowerCase();
+    if (last !== "about" && last !== "privacy" && last !== "contact") return;
+    if (parts.length >= 2) {
+      var prev = String(parts[parts.length - 2] || "").toLowerCase();
+      if (prev === "blessings" || prev === "dreams") return;
+    }
+    var prefixParts = parts.slice(0, -1);
+    var prefix = prefixParts.length ? "/" + prefixParts.join("/") + "/" : "/";
+    var baseEl = document.querySelector("base");
+    if (!baseEl) return;
+    baseEl.setAttribute("href", location.origin + prefix);
+  }
+
+  function renderSiteInfoFooter() {
+    var copy = t();
+    var nav = $("site-info-nav");
+    if (nav) nav.setAttribute("aria-label", copy.footerNav);
+    setText("footer-about", copy.footerAbout);
+    setText("footer-privacy", copy.footerPrivacy);
+    setText("footer-contact", copy.footerContact);
+    var pages = ["about", "privacy", "contact"];
+    for (var i = 0; i < pages.length; i += 1) {
+      var link = $("footer-" + pages[i]);
+      if (!link) continue;
+      link.setAttribute("href", infoPageUrl(pages[i]));
+      if (state.infoPage === pages[i]) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    }
+  }
+
+  function leaveInfoPage() {
+    state.infoPage = null;
+    state.contactSent = false;
+    state.contactDraft = null;
+    state.contactSending = false;
+    document.body.classList.remove("is-info");
+    var actions = document.querySelector(".page-actions");
+    if (actions) actions.hidden = false;
+    renderSiteInfoFooter();
+  }
+
+  function infoRichParagraph(parts) {
+    var html = "";
+    for (var i = 0; i < parts.length; i += 1) {
+      var part = parts[i];
+      if (typeof part === "string") html += escapeHtml(part);
+      else if (part && part.external) {
+        html +=
+          '<a href="' +
+          escapeHtml(part.href) +
+          '" target="_blank" rel="noopener noreferrer">' +
+          escapeHtml(part.label) +
+          "</a>";
+      } else if (part && part.page) {
+        html +=
+          '<a href="' +
+          escapeHtml(infoPageUrl(part.page)) +
+          '" data-info-page="' +
+          escapeHtml(part.page) +
+          '">' +
+          escapeHtml(part.label) +
+          "</a>";
+      }
+    }
+    return '<p class="sutra-para">' + html + "</p>";
+  }
+
+  function renderInfoBlocks(blocks) {
+    var html = "";
+    for (var i = 0; i < blocks.length; i += 1) {
+      var block = blocks[i];
+      if (!block) continue;
+      if (block.h) {
+        html +=
+          '<h3 class="' +
+          (block.legal ? "info-heading" : "sutra-subhead") +
+          '">' +
+          escapeHtml(block.h) +
+          "</h3>";
+      } else if (block.rich) html += infoRichParagraph(block.rich);
+      else if (block.p) html += '<p class="sutra-para">' + escapeHtml(block.p) + "</p>";
+    }
+    return html;
+  }
+
+  function contactBodyHtml(model) {
+    if (state.contactSent) {
+      return (
+        '<p id="contact-status" class="contact-status" role="status" tabindex="-1">' +
+        escapeHtml(model.success) +
+        "</p>"
+      );
+    }
+    var topics = "";
+    for (var i = 0; i < CONTACT_TOPICS.length; i += 1) {
+      var topic = CONTACT_TOPICS[i];
+      var label = state.lang === "en" ? topic.en : topic.ko;
+      topics += '<option value="' + escapeHtml(topic.value) + '">' + escapeHtml(label) + "</option>";
+    }
+    return (
+      '<form id="contact-form" class="contact-form" name="lotus-contact" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field">' +
+      '<input type="hidden" name="form-name" value="lotus-contact">' +
+      '<p hidden><label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>' +
+      '<div class="contact-field"><label for="contact-name">' +
+      escapeHtml(model.nameLabel) +
+      ' <span class="contact-optional">' +
+      escapeHtml(model.nameOptional) +
+      "</span></label>" +
+      '<input id="contact-name" name="name" type="text" autocomplete="name" maxlength="80"></div>' +
+      '<div class="contact-field"><label for="contact-email">' +
+      escapeHtml(model.emailLabel) +
+      "</label>" +
+      '<input id="contact-email" name="email" type="email" autocomplete="email" required maxlength="200"></div>' +
+      '<div class="contact-field"><label for="contact-topic">' +
+      escapeHtml(model.topicLabel) +
+      "</label>" +
+      '<select id="contact-topic" name="topic" required><option value="" selected disabled>' +
+      escapeHtml(model.topicPlaceholder) +
+      "</option>" +
+      topics +
+      "</select></div>" +
+      '<div class="contact-field"><label for="contact-message">' +
+      escapeHtml(model.messageLabel) +
+      "</label>" +
+      '<textarea id="contact-message" name="message" required maxlength="5000"></textarea></div>' +
+      '<div class="contact-consent"><input id="contact-consent" name="consent" type="checkbox" value="yes" required>' +
+      '<label class="contact-consent-text" for="contact-consent">' +
+      escapeHtml(model.consentBefore) +
+      '<a href="' +
+      escapeHtml(infoPageUrl("privacy")) +
+      '" data-info-page="privacy">' +
+      escapeHtml(model.consentLink) +
+      "</a>" +
+      escapeHtml(model.consentAfter) +
+      "</label></div>" +
+      '<button class="contact-submit" type="submit">' +
+      escapeHtml(model.submit) +
+      "</button></form>" +
+      '<p id="contact-status" class="contact-status" role="status" aria-live="polite"></p>'
+    );
+  }
+
+  function captureContactDraft() {
+    var form = $("contact-form");
+    if (!form || !form.elements) return;
+    state.contactDraft = {
+      name: form.elements.name ? form.elements.name.value : "",
+      email: form.elements.email ? form.elements.email.value : "",
+      topic: form.elements.topic ? form.elements.topic.value : "",
+      message: form.elements.message ? form.elements.message.value : "",
+      consent: !!(form.elements.consent && form.elements.consent.checked),
+    };
+  }
+
+  function restoreContactDraft() {
+    var draft = state.contactDraft;
+    var form = $("contact-form");
+    if (!draft || !form || !form.elements) return;
+    if (form.elements.name) form.elements.name.value = draft.name || "";
+    if (form.elements.email) form.elements.email.value = draft.email || "";
+    if (form.elements.topic && draft.topic) form.elements.topic.value = draft.topic;
+    if (form.elements.message) form.elements.message.value = draft.message || "";
+    if (form.elements.consent) form.elements.consent.checked = !!draft.consent;
+  }
+
+  function updateInfoDocumentMeta(page, model) {
+    document.title = model.title + " · " + t().siteTitle;
+    var desc = "";
+    var blocks = model.blocks || [];
+    for (var i = 0; i < blocks.length; i += 1) {
+      if (blocks[i] && blocks[i].p) {
+        desc = blocks[i].p;
+        break;
+      }
+    }
+    desc = String(desc).replace(/\s+/g, " ").trim().slice(0, 180);
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta && desc) meta.setAttribute("content", desc);
+    var absUrl = infoAbsoluteUrl(page);
+    var canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement("link");
+      canonical.setAttribute("rel", "canonical");
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute("href", absUrl);
+    var ogTitle = document.querySelector('meta[property="og:title"]');
+    var ogDesc = document.querySelector('meta[property="og:description"]');
+    var ogUrl = document.querySelector('meta[property="og:url"]');
+    var twTitle = document.querySelector('meta[name="twitter:title"]');
+    var twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (ogTitle) ogTitle.setAttribute("content", document.title);
+    if (ogDesc && desc) ogDesc.setAttribute("content", desc);
+    if (ogUrl) ogUrl.setAttribute("content", absUrl);
+    if (twTitle) twTitle.setAttribute("content", document.title);
+    if (twDesc && desc) twDesc.setAttribute("content", desc);
+  }
+
+  function renderInfoPage(page) {
+    if (page !== "about" && page !== "privacy" && page !== "contact") return;
+    var stayingOnContact = page === "contact" && state.infoPage === "contact";
+    if (stayingOnContact && !state.contactSent) captureContactDraft();
+    if (page !== "contact") {
+      state.contactSent = false;
+      state.contactDraft = null;
+      state.contactSending = false;
+    }
+    clearCmsView();
+    state.infoPage = page;
+    document.body.classList.add("is-info");
+    document.body.classList.remove("is-greeting");
+    setCmsChrome(true);
+    var actions = document.querySelector(".page-actions");
+    if (actions) actions.hidden = true;
+    if (state.shareOpen) setShareSheet(false);
+    closeCategoryMenu();
+    closePageJump();
+    if (!state.healingTimer) restartHealingTimer();
+
+    var model = infoModel(page);
+    var titleEl = $("chapter-title");
+    if (titleEl) {
+      titleEl.classList.remove("turn-next", "turn-prev");
+      titleEl.innerHTML = '<span class="chapter-line is-sutra">' + escapeHtml(model.title) + "</span>";
+    }
+    var hanjaText = $("hanja-text");
+    var hanjaHeader = hanjaText && hanjaText.closest("header");
+    if (hanjaHeader) hanjaHeader.hidden = true;
+    var card = $("sutra-card");
+    if (card) card.hidden = false;
+    var progress = $("progress-bar");
+    if (progress) progress.style.width = "0%";
+
+    var columns = $("columns");
+    if (columns) {
+      var html =
+        '<section class="sutra-section is-primary"><div class="sutra-measure info-prose"><div class="sutra-body is-essay ' +
+        (state.lang === "en" ? "sutra-en" : "sutra-ko") +
+        '">';
+      html += renderInfoBlocks(model.blocks || []);
+      if (page === "contact") html += contactBodyHtml(model);
+      html += "</div></div></section>";
+      columns.innerHTML = html;
+      if (page === "contact" && !state.contactSent) restoreContactDraft();
+    }
+    updateInfoDocumentMeta(page, model);
+    syncCategoryTabs();
+    renderSiteInfoFooter();
+  }
+
+  function openInfoPage(page) {
+    if (page !== "about" && page !== "privacy" && page !== "contact") return;
+    if (state.infoPage === page) return;
+    if (page === "contact") {
+      state.contactSent = false;
+      state.contactDraft = null;
+    }
+    renderInfoPage(page);
+    if (!history || !history.pushState) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    var next = infoPageUrl(page);
+    try {
+      var current =
+        location.protocol === "file:" || location.hash.indexOf("#/") === 0
+          ? location.hash || ""
+          : location.pathname + location.search;
+      if (current !== next) history.pushState({ info: page }, "", next);
+    } catch (err) {
+      /* ignore */
+    }
+    window.scrollTo(0, 0);
+  }
+
+  function normalizeInfoUrl(page) {
+    if (location.protocol === "file:" || !history || !history.replaceState) return;
+    var next = infoPageUrl(page);
+    var current = location.pathname + location.search;
+    if (current === next) return;
+    try {
+      history.replaceState({ info: page }, "", next);
+    } catch (err) {
+      /* ignore */
+    }
+  }
+
+  function submitContactForm(form) {
+    if (!form || state.contactSending) return;
+    state.contactSending = true;
+    var button = form.querySelector("button[type='submit']");
+    var status = $("contact-status");
+    if (button) button.disabled = true;
+    if (status) {
+      status.textContent = "";
+      status.classList.remove("is-error");
+    }
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams(new FormData(form)).toString(),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("form failed");
+        state.contactSending = false;
+        state.contactSent = true;
+        state.contactDraft = null;
+        if (state.infoPage === "contact") {
+          renderInfoPage("contact");
+          var done = $("contact-status");
+          if (done && done.focus) done.focus();
+        }
+      })
+      .catch(function () {
+        state.contactSending = false;
+        var currentForm = $("contact-form");
+        var currentButton = currentForm ? currentForm.querySelector("button[type='submit']") : button;
+        var currentStatus = $("contact-status");
+        var model = infoModel("contact");
+        if (currentButton) currentButton.disabled = false;
+        if (currentStatus) {
+          currentStatus.textContent = model && model.error ? model.error : "";
+          currentStatus.classList.add("is-error");
+        }
+      });
+  }
+
   function parseCmsRoute(pathname) {
     var parts = cmsPathParts(pathname);
     if (parts.length < 2) return null;
@@ -1220,6 +1867,7 @@
 
   function renderCmsPost(categoryId, slug) {
     if (categoryId !== "blessings" && categoryId !== "dreams") return;
+    leaveInfoPage();
     var post = getCmsPost(categoryId, slug);
     state.cmsView.category = categoryId;
     state.cmsView.slug = String((post && post.slug) || slug || "");
@@ -1852,6 +2500,7 @@
   }
 
   function syncUrl(replace) {
+    if (state.infoPage) return;
     if (state.cmsView && state.cmsView.slug) return;
     if (typeof history === "undefined" || !history.pushState) return;
     var next = pathForIndex(state.index);
@@ -1872,6 +2521,11 @@
   }
 
   function applyLocationFromUrl() {
+    var infoPage = parseInfoRoute();
+    if (infoPage) {
+      renderInfoPage(infoPage);
+      return;
+    }
     var cmsRoute = parseCmsRoute(location.pathname);
     if (cmsRoute) {
       renderCmsPost(cmsRoute.category, cmsRoute.slug);
@@ -1880,7 +2534,7 @@
     var idx = indexFromLocation();
     if (idx < 0) idx = 0;
     if (idx === state.index) {
-      if (state.cmsView && state.cmsView.slug) renderPage(false);
+      if ((state.cmsView && state.cmsView.slug) || state.infoPage) renderPage(false);
       else updateDocumentMeta();
       return;
     }
@@ -1908,14 +2562,16 @@
   function syncCategoryTabs() {
     var loc = locationOfIndex(state.index);
     var cmsCategory = state.cmsView && state.cmsView.slug ? state.cmsView.category : null;
-    var activeId = cmsCategory || (loc && loc.sutra && isCategorySutra(loc.sutra) ? loc.sutra.id : null);
+    var activeId = state.infoPage
+      ? null
+      : cmsCategory || (loc && loc.sutra && isCategorySutra(loc.sutra) ? loc.sutra.id : null);
     for (var i = 0; i < CATEGORY_LEVELS.length; i += 1) {
       var id = CATEGORY_LEVELS[i];
       var wrap = $("toc-" + id + "-wrap");
       if (wrap) wrap.classList.toggle("is-current", activeId === id);
     }
     var scriptureWrap = $("toc-scripture-wrap");
-    if (scriptureWrap) scriptureWrap.classList.toggle("is-current", !activeId);
+    if (scriptureWrap) scriptureWrap.classList.toggle("is-current", !state.infoPage && !activeId);
   }
 
   function onCategoryClick(event, level) {
@@ -2235,6 +2891,7 @@
       if (state.shareOpen) return;
       if (isGreetingView()) return;
       if (state.cmsView && state.cmsView.slug) return;
+      if (state.infoPage) return;
       if (event.key === "ArrowLeft") goPrev();
       if (event.key === "ArrowRight") goNext();
     });
@@ -2373,6 +3030,22 @@
         shareVia(channelBtn.getAttribute("data-share"));
       });
     }
+
+    document.addEventListener("click", function (event) {
+      var link = event.target && event.target.closest ? event.target.closest("a[data-info-page]") : null;
+      if (!link) return;
+      if (shouldLetBrowserNavigate(event)) return;
+      var page = link.getAttribute("data-info-page");
+      if (page !== "about" && page !== "privacy" && page !== "contact") return;
+      event.preventDefault();
+      openInfoPage(page);
+    });
+    document.addEventListener("submit", function (event) {
+      var form = event.target;
+      if (!form || form.id !== "contact-form") return;
+      event.preventDefault();
+      submitContactForm(form);
+    });
   }
 
   function init(sutras) {
@@ -2382,16 +3055,18 @@
     var firstScripture = scriptureSutras()[0];
     if (firstScripture) state.tocOpen[firstScripture.id] = true;
     state.lang = readSavedLang();
-    var cmsRoute = parseCmsRoute(location.pathname);
+    var infoPage = parseInfoRoute();
+    if (infoPage) repairInfoDocumentBase();
+    var cmsRoute = infoPage ? null : parseCmsRoute(location.pathname);
     if (cmsRoute) repairCmsDocumentBase();
-    var fromUrl = cmsRoute ? -1 : indexFromLocation();
+    var fromUrl = cmsRoute || infoPage ? -1 : indexFromLocation();
     var saved = readSavedIndex(state.sutras);
     var usedResume = false;
     if (fromUrl >= 0) {
       state.index = fromUrl;
     } else {
       state.index = saved.index;
-      usedResume = cmsRoute ? false : saved.resumed;
+      usedResume = cmsRoute || infoPage ? false : saved.resumed;
     }
     ensureActiveTocOpen();
     storageSet(PAGE_KEY, String(currentPage().id));
@@ -2403,7 +3078,11 @@
 
     bindEvents();
     renderChrome();
-    if (cmsRoute) {
+    if (infoPage) {
+      renderToc();
+      renderInfoPage(infoPage);
+      normalizeInfoUrl(infoPage);
+    } else if (cmsRoute) {
       renderToc();
       renderCmsPost(cmsRoute.category, cmsRoute.slug);
     } else {

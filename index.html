@@ -18,6 +18,9 @@
           myohyeonsa: 1,
           "encountering-the-lotus-sutra": 1,
           "encountering-lotus": 1,
+          about: 1,
+          privacy: 1,
+          contact: 1,
           muryangui: 1,
           lotus: 1,
           fugen: 1,
@@ -125,6 +128,27 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body class="min-h-svh">
+    <form
+      name="lotus-contact"
+      method="POST"
+      action="/"
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
+      hidden
+    >
+      <input type="hidden" name="form-name" value="lotus-contact" />
+      <input name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <select name="topic">
+        <option value="경전·번역 오류 / Scripture or translation">경전·번역 오류 / Scripture or translation</option>
+        <option value="사이트 오류 / Site issue">사이트 오류 / Site issue</option>
+        <option value="콘텐츠 관련 / Content">콘텐츠 관련 / Content</option>
+        <option value="기타 문의 / Other">기타 문의 / Other</option>
+      </select>
+      <textarea name="message"></textarea>
+      <input type="checkbox" name="consent" value="yes" />
+    </form>
     <div class="zen-atmosphere" aria-hidden="true">
       <div class="zen-mist zen-mist-1"></div>
       <div class="zen-mist zen-mist-2"></div>
@@ -346,6 +370,14 @@
 
         <footer id="site-footer" class="mt-16 mb-4 text-center font-serif text-xs tracking-[0.28em] text-ink-faint">
           한 장의 경전, 한 번의 숨.
+        </footer>
+        <footer id="site-info" class="site-info-footer">
+          <p class="site-info-copy">© Lotus Root</p>
+          <nav id="site-info-nav" class="site-info-nav" aria-label="사이트 정보">
+            <a id="footer-about" data-info-page="about" href="/about/">About</a>
+            <a id="footer-privacy" data-info-page="privacy" href="/privacy/">개인정보처리방침</a>
+            <a id="footer-contact" data-info-page="contact" href="/contact/">문의</a>
+          </nav>
         </footer>
         </div>
       </main>
