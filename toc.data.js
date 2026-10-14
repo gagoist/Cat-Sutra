@@ -238,7 +238,7 @@ window.SUTRAS_TOC = [
       {
         "id": "lotus-9",
         "no": 9,
-        "ko": "수학무학인기수기품",
+        "ko": "수학무학인기품",
         "hanja": "授學無學人記品",
         "en": "Prophecy for Learners and Adepts",
         "startPage": null,
