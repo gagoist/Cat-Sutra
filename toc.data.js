@@ -229,8 +229,8 @@ window.SUTRAS_TOC = [
       {
         "id": "lotus-8",
         "no": 8,
-        "ko": "오백인기수기품",
-        "hanja": "五百人記得授記品",
+        "ko": "오백제자 수기품",
+        "hanja": "五百弟子授記品",
         "en": "Prophecy for Five Hundred Disciples",
         "startPage": null,
         "endPage": null

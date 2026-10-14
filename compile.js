@@ -96,9 +96,15 @@ function containsToken(hay, token) {
   return !!(token && hay.indexOf(token) >= 0);
 }
 
+function tokenHitLength(hay, token) {
+  if (!token || hay.indexOf(token) < 0) return 0;
+  return String(token).length;
+}
+
 function matchPageToToc(page, toc, lastMatch) {
   var hay = haystackOf(page);
   var found = null;
+  var foundLen = -1;
   for (var i = 0; i < toc.length; i += 1) {
     var sutra = toc[i];
     var sutraHit =
@@ -109,17 +115,18 @@ function matchPageToToc(page, toc, lastMatch) {
     if (chapters.length) {
       for (var c = 0; c < chapters.length; c += 1) {
         var chapter = chapters[c];
-        var chapterHit =
-          containsToken(hay, chapter.ko) ||
-          containsToken(hay, chapter.hanja) ||
-          containsToken(hay, chapter.en);
-        if (chapterHit && (sutraHit || !found)) {
+        var hitLen = Math.max(
+          tokenHitLength(hay, chapter.ko),
+          tokenHitLength(hay, chapter.hanja),
+          tokenHitLength(hay, chapter.en)
+        );
+        if (hitLen > foundLen && (sutraHit || !found)) {
           found = { sutra: sutra, chapter: chapter };
-          if (sutraHit) return found;
+          foundLen = hitLen;
         }
       }
-    } else if (sutraHit) {
-      return { sutra: sutra, chapter: null };
+    } else if (sutraHit && !found) {
+      found = { sutra: sutra, chapter: null };
     }
   }
   return found || lastMatch || null;

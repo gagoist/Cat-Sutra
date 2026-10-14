@@ -2127,6 +2127,7 @@
 
     var hay = haystackOf(page);
     var found = null;
+    var foundLen = -1;
     for (var i = 0; i < state.toc.length; i += 1) {
       var sutra = state.toc[i];
       var sutraHit =
@@ -2136,13 +2137,14 @@
       if (sutraHasChapters(sutra)) {
         for (var c = 0; c < sutra.chapters.length; c += 1) {
           var chapter = sutra.chapters[c];
-          var chapterHit =
-            containsToken(hay, chapter.ko) ||
-            containsToken(hay, chapter.hanja) ||
-            containsToken(hay, chapter.en);
-          if (chapterHit && (sutraHit || !found)) {
+          var hitLen = Math.max(
+            chapter.ko && hay.indexOf(chapter.ko) >= 0 ? chapter.ko.length : 0,
+            chapter.hanja && hay.indexOf(chapter.hanja) >= 0 ? chapter.hanja.length : 0,
+            chapter.en && hay.indexOf(chapter.en) >= 0 ? chapter.en.length : 0
+          );
+          if (hitLen > foundLen && (sutraHit || !found)) {
             found = { sutra: sutra, chapter: chapter };
-            if (sutraHit) return found;
+            foundLen = hitLen;
           }
         }
       } else if (sutraHit) {
